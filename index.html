@@ -1,0 +1,3196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>SHARK BYTE: Mechanical Keyboard Edition</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700;800&family=Orbitron:wght@600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --accent: #06b6d4;
+      --accent-bright: #67e8f9;
+      --accent-glow: rgba(6, 182, 212, 0.5);
+      --accent-soft: rgba(6, 182, 212, 0.16);
+    }
+
+    * {
+      box-sizing: border-box;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: #020813;
+      font-family: 'Inter', sans-serif;
+      color: #f8fafc;
+    }
+
+    .font-display {
+      font-family: 'Orbitron', sans-serif;
+    }
+
+    .font-mono-code {
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    /* Diver Loadout Accent Themes */
+    body[data-theme="scuba"] {
+      --accent: #06b6d4;
+      --accent-bright: #67e8f9;
+      --accent-glow: rgba(6, 182, 212, 0.52);
+      --accent-soft: rgba(6, 182, 212, 0.18);
+    }
+
+    body[data-theme="mech"] {
+      --accent: #f59e0b;
+      --accent-bright: #fcd34d;
+      --accent-glow: rgba(245, 158, 11, 0.52);
+      --accent-soft: rgba(245, 158, 11, 0.18);
+    }
+
+    body[data-theme="ninja"] {
+      --accent: #10b981;
+      --accent-bright: #6ee7b7;
+      --accent-glow: rgba(16, 185, 129, 0.52);
+      --accent-soft: rgba(16, 185, 129, 0.18);
+    }
+
+    .accent-text {
+      color: var(--accent-bright);
+    }
+
+    .accent-border {
+      border-color: var(--accent);
+    }
+
+    .accent-bg {
+      background-color: var(--accent);
+    }
+
+    /* Realistic 3D Mechanical Keycap Styling */
+    .mech-keycap {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 40px;
+      height: 42px;
+      padding: 0 10px;
+      border-radius: 9px;
+      background: linear-gradient(180deg, #273449 0%, #141d2e 100%);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      border-bottom: 5px solid #070b14;
+      box-shadow:
+        0 6px 14px rgba(0, 0, 0, 0.65),
+        0 0 14px var(--accent-glow),
+        inset 0 1px 1px rgba(255, 255, 255, 0.22);
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 800;
+      font-size: 0.9rem;
+      color: var(--accent-bright);
+      text-shadow: 0 0 8px var(--accent-glow);
+      transform: translateY(0);
+      transition: transform 0.075s cubic-bezier(0.2, 0.9, 0.3, 1), box-shadow 0.12s ease;
+      animation: keycapPopIn 0.15s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+    }
+
+    .mech-keycap.wide-key {
+      min-width: 78px;
+      font-size: 0.78rem;
+      letter-spacing: 0.06em;
+    }
+
+    .mech-keycap::after {
+      content: '';
+      position: absolute;
+      inset: 3px 4px 5px 4px;
+      border-radius: 6px;
+      background: radial-gradient(circle at 50% 25%, rgba(255, 255, 255, 0.09), transparent 70%);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      pointer-events: none;
+    }
+
+    .mech-keycap.pressed {
+      transform: translateY(4px);
+      border-bottom-width: 1.5px;
+      box-shadow:
+        0 2px 5px rgba(0, 0, 0, 0.85),
+        0 0 24px var(--accent-glow),
+        inset 0 0 12px var(--accent-soft);
+    }
+
+    .mech-keycap.error {
+      color: #fca5a5;
+      border-color: #ef4444;
+      border-bottom-color: #7f1d1d;
+      box-shadow: 0 4px 16px rgba(239, 68, 68, 0.7);
+      animation: keycapShake 0.25s ease-in-out;
+    }
+
+    .mech-keycap.emp {
+      background: linear-gradient(180deg, var(--accent) 0%, #0f172a 140%);
+      color: #ffffff;
+      border-color: var(--accent-bright);
+    }
+
+    .word-shake {
+      animation: keycapShake 0.26s ease-in-out;
+      border-color: rgba(239, 68, 68, 0.8) !important;
+      box-shadow: 0 0 18px rgba(239, 68, 68, 0.45);
+    }
+
+    @keyframes keycapPopIn {
+      0% {
+        opacity: 0;
+        transform: translateY(8px) scale(0.84);
+      }
+      50% {
+        opacity: 1;
+        transform: translateY(4px) scale(1.03);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @keyframes keycapShake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      75% { transform: translateX(5px); }
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { box-shadow: 0 0 14px var(--accent-glow); }
+      50% { box-shadow: 0 0 28px var(--accent-glow), 0 0 8px var(--accent-bright); }
+    }
+
+    .emp-ready-pulse {
+      animation: pulseGlow 1.1s infinite ease-in-out;
+    }
+
+    .ocean-panel {
+      background: rgba(6, 17, 34, 0.86);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(148, 163, 184, 0.16);
+    }
+
+    .select-card {
+      transition: all 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .select-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(148, 163, 184, 0.55);
+    }
+
+    .select-card.selected {
+      border-color: var(--accent);
+      background: rgba(12, 29, 56, 0.96);
+      box-shadow: 0 10px 26px -8px rgba(0, 0, 0, 0.75), 0 0 20px var(--accent-glow);
+    }
+
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(148, 163, 184, 0.3);
+      border-radius: 3px;
+    }
+  </style>
+</head>
+<body data-theme="scuba" class="relative w-full h-full overflow-hidden select-none">
+
+  <!-- Fullscreen Game Canvas -->
+  <canvas id="gameCanvas" class="block w-full h-full"></canvas>
+
+  <!-- Hidden Input for Mobile / Touch Keyboard Support -->
+  <input
+    id="mobileKeyboardInput"
+    type="text"
+    autocomplete="off"
+    autocorrect="off"
+    autocapitalize="off"
+    spellcheck="false"
+    aria-label="Typing input"
+    class="fixed opacity-0 pointer-events-none -top-20 left-0 w-1 h-1"
+  />
+
+  <!-- TOP HUD BAR (Visible during active gameplay) -->
+  <header id="topHud" class="hidden fixed top-0 left-0 right-0 z-20 px-3 sm:px-6 pt-3 pointer-events-none">
+    <div class="max-w-7xl mx-auto ocean-panel rounded-2xl px-3 sm:px-5 py-2.5 flex flex-wrap items-center justify-between gap-2 shadow-2xl pointer-events-auto">
+      
+      <!-- Left: Loadout Badges, Wave & Hull Hearts -->
+      <div class="flex items-center gap-2.5 sm:gap-4">
+        <div class="flex items-center gap-1.5">
+          <span id="hudDifficultyBadge" class="px-2.5 py-1 rounded-lg text-[11px] font-display font-bold tracking-wider uppercase bg-slate-800/90 border accent-border accent-text">
+            EASY
+          </span>
+          <span id="hudLoadoutBadge" class="hidden xl:inline-block px-2.5 py-1 rounded-lg text-[11px] font-mono-code font-bold bg-slate-900/90 border border-slate-700 text-slate-300">
+            SCUBA ACE vs GREAT WHITE
+          </span>
+          <div class="text-xs sm:text-sm font-display font-bold text-slate-300 ml-1">
+            WAVE <span id="hudWave" class="text-white text-base">1</span>
+          </div>
+        </div>
+
+        <!-- Hull Hearts -->
+        <div class="flex items-center gap-1.5" title="Hull Integrity Hearts">
+          <span class="text-[11px] uppercase tracking-wider text-slate-400 hidden md:inline font-semibold mr-0.5">HULL</span>
+          <div id="hudLives" class="flex items-center gap-1">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Center: Score & Combo -->
+      <div class="flex items-center gap-4 sm:gap-7">
+        <div class="text-center">
+          <div class="text-[10px] uppercase tracking-widest text-slate-400 font-semibold">Score</div>
+          <div id="hudScore" class="font-display font-extrabold text-lg sm:text-2xl text-white tracking-wide">0</div>
+        </div>
+        <div class="text-center">
+          <div class="text-[10px] uppercase tracking-widest text-slate-400 font-semibold">Combo</div>
+          <div id="hudCombo" class="font-display font-extrabold text-base sm:text-xl accent-text">1.0x</div>
+        </div>
+      </div>
+
+      <!-- Right: Live WPM, Accuracy & Controls (Top-Right Mute/Unmute Toggle) -->
+      <div class="flex items-center gap-2.5 sm:gap-4">
+        <div class="hidden sm:flex items-center gap-3.5 bg-slate-950/60 px-3.5 py-1.5 rounded-xl border border-slate-800">
+          <div class="text-right">
+            <div class="text-[10px] uppercase tracking-wider text-slate-400 font-semibold">Live WPM</div>
+            <div id="hudWpm" class="font-mono-code font-bold text-sm sm:text-base text-emerald-400">0</div>
+          </div>
+          <div class="w-px h-6 bg-slate-800"></div>
+          <div class="text-right">
+            <div class="text-[10px] uppercase tracking-wider text-slate-400 font-semibold">Accuracy</div>
+            <div id="hudAccuracy" class="font-mono-code font-bold text-sm sm:text-base text-sky-300">100%</div>
+          </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex items-center gap-1.5">
+          <button id="btnTouchType" title="Open On-Screen Keyboard" class="sm:hidden p-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-200 border border-slate-700 transition">
+            ⌨️
+          </button>
+          <button id="btnSoundHud" title="Mute / Unmute Switch Audio" class="px-2.5 py-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-200 border border-slate-700 transition text-xs font-mono-code font-bold flex items-center gap-1">
+            <span>🔊</span>
+          </button>
+          <button id="btnPause" title="Pause Game (P)" class="px-3 py-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-200 border border-slate-700 font-display text-xs font-bold tracking-wider transition">
+            II
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- BOTTOM MECHANICAL KEYBOARD TELEMETRY HUD -->
+  <footer id="bottomHud" class="hidden fixed bottom-0 left-0 right-0 z-20 px-3 sm:px-6 pb-3 pointer-events-none">
+    <div class="max-w-6xl mx-auto ocean-panel rounded-2xl px-4 py-2.5 flex flex-col md:flex-row items-center justify-between gap-3 shadow-2xl pointer-events-auto">
+      
+      <!-- Left: Sonar EMP Shockwave Charge Meter -->
+      <div class="w-full md:w-60 flex flex-col gap-1 shrink-0">
+        <div class="flex items-center justify-between text-xs">
+          <span class="font-display font-bold tracking-wider text-slate-300 flex items-center gap-1.5">
+            <span>📡 SONAR EMP</span>
+          </span>
+          <span id="empStatusText" class="font-mono-code font-bold text-[11px] text-slate-400">0%</span>
+        </div>
+        <div id="empBarContainer" class="w-full h-3 bg-slate-950 rounded-full overflow-hidden border border-slate-700/80 p-0.5">
+          <div id="empBarFill" class="h-full rounded-full accent-bg transition-all duration-150" style="width: 0%;"></div>
+        </div>
+        <div id="empHintText" class="text-[10px] text-slate-400 font-mono-code truncate">
+          Build streak to charge Sonar EMP
+        </div>
+      </div>
+
+      <!-- Center: Active Target Word Progress + Live 3D Mechanical Keycap Visualizer -->
+      <div class="flex-1 flex flex-col items-center justify-center gap-1.5 w-full overflow-hidden">
+        <!-- Active Target Word Progress Bar -->
+        <div id="activeWordBox" class="px-4 py-1 rounded-xl bg-slate-950/85 border border-slate-700/80 min-h-[32px] flex items-center justify-center transition-colors">
+          <span id="activeWordDisplay" class="font-mono-code font-extrabold text-sm sm:text-base tracking-wider text-slate-400">
+            TYPE FIRST LETTER TO LOCK TARGET
+          </span>
+        </div>
+
+        <!-- Live 3D Keycap Stream -->
+        <div id="keycapStream" class="flex items-center justify-center gap-1.5 min-h-[44px] px-1">
+          <div class="text-[11px] font-mono-code text-slate-500 tracking-wide">
+            [ MECHANICAL SWITCH TELEMETRY READY ]
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: Keybind Legend -->
+      <div class="hidden lg:flex flex-col items-end text-[11px] font-mono-code text-slate-400 gap-1 shrink-0">
+        <div><kbd class="px-1.5 py-0.5 bg-slate-800 border border-slate-600 rounded text-slate-200">ESC</kbd> / <kbd class="px-1.5 py-0.5 bg-slate-800 border border-slate-600 rounded text-slate-200">TAB</kbd> Drop Lock</div>
+        <div><kbd class="px-1.5 py-0.5 bg-slate-800 border border-slate-600 rounded text-slate-200">SPACE</kbd> / <kbd class="px-1.5 py-0.5 bg-slate-800 border border-slate-600 rounded text-slate-200">ENTER</kbd> Sonar EMP</div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- START SCREEN OVERLAY -->
+  <section id="startScreen" class="fixed inset-0 z-30 flex items-center justify-center p-3 sm:p-4 overflow-y-auto bg-slate-950/60 backdrop-blur-sm">
+    <div class="max-w-6xl w-full ocean-panel rounded-3xl p-4 sm:p-7 shadow-2xl border border-slate-700/60 my-auto">
+      
+      <!-- Top Row: Title & Top-Right Sound Toggle -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-800">
+        <div>
+          <div class="inline-flex items-center gap-2 px-3 py-0.5 rounded-full text-[11px] font-mono-code font-bold uppercase tracking-widest bg-slate-900/90 border accent-border accent-text mb-1.5">
+            <span>⌨️ Tactile Switch Calibrator • Underwater Arcade</span>
+          </div>
+          <h1 class="font-display font-black text-2xl sm:text-4xl tracking-tight text-white">
+            SHARK <span class="accent-text">BYTE</span>
+          </h1>
+          <p class="text-slate-300 text-xs sm:text-sm mt-0.5">
+            Select your deep-sea Diver, choose your Apex Shark predator, and test your mechanical keyboard.
+          </p>
+        </div>
+
+        <!-- Top-Right Mute/Unmute Toggle -->
+        <button id="btnSoundStart" class="self-start sm:self-center flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-900/90 hover:bg-slate-800 border border-slate-700 text-xs sm:text-sm font-semibold text-slate-200 transition shrink-0">
+          <span id="soundStartIcon" class="text-base">🔊</span>
+          <span id="soundStartLabel">Audio: ON</span>
+        </button>
+      </div>
+
+      <!-- STEP 1: CHOOSE YOUR CHARACTER (DIVER) -->
+      <div class="mt-4">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-xs font-display font-bold uppercase tracking-wider text-slate-300">
+            1. Choose Your Character (Diver)
+          </span>
+          <span id="selectedDiverPerkHint" class="text-xs font-mono-code accent-text">
+            Perk: +15% Sonar EMP Charge Speed
+          </span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+          <!-- SCUBA ACE -->
+          <button type="button" data-diver="scuba" class="diver-card select-card selected flex items-center gap-3 p-3 rounded-2xl bg-slate-900/90 border-2 border-slate-800 text-left">
+            <canvas class="preview-canvas w-20 h-20 rounded-xl bg-slate-950/90 border border-slate-800 shrink-0" data-preview-type="diver" data-preview-id="scuba"></canvas>
+            <div class="min-w-0">
+              <div class="font-display font-extrabold text-sm text-white truncate">SCUBA ACE</div>
+              <p class="text-[11px] text-slate-300 leading-snug mt-0.5">
+                Sleek cyan-and-yellow diver with twin O₂ tanks &amp; plasma harpoon.
+              </p>
+              <div class="inline-block mt-1.5 px-2 py-0.5 rounded-md text-[10px] font-mono-code font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">
+                ⚡ +15% Sonar EMP Charge
+              </div>
+            </div>
+          </button>
+
+          <!-- MECH-SUIT MK.IV -->
+          <button type="button" data-diver="mech" class="diver-card select-card flex items-center gap-3 p-3 rounded-2xl bg-slate-900/90 border-2 border-slate-800 text-left">
+            <canvas class="preview-canvas w-20 h-20 rounded-xl bg-slate-950/90 border border-slate-800 shrink-0" data-preview-type="diver" data-preview-id="mech"></canvas>
+            <div class="min-w-0">
+              <div class="font-display font-extrabold text-sm text-white truncate">MECH-SUIT MK.IV</div>
+              <p class="text-[11px] text-slate-300 leading-snug mt-0.5">
+                Heavy orange-gold armored suit with hydraulic claws &amp; rail-harpoon.
+              </p>
+              <div class="inline-block mt-1.5 px-2 py-0.5 rounded-md text-[10px] font-mono-code font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40">
+                ❤️ +1 Extra Hull Heart (4)
+              </div>
+            </div>
+          </button>
+
+          <!-- CYBER-NINJA SUB -->
+          <button type="button" data-diver="ninja" class="diver-card select-card flex items-center gap-3 p-3 rounded-2xl bg-slate-900/90 border-2 border-slate-800 text-left">
+            <canvas class="preview-canvas w-20 h-20 rounded-xl bg-slate-950/90 border border-slate-800 shrink-0" data-preview-type="diver" data-preview-id="ninja"></canvas>
+            <div class="min-w-0">
+              <div class="font-display font-extrabold text-sm text-white truncate">CYBER-NINJA SUB</div>
+              <p class="text-[11px] text-slate-300 leading-snug mt-0.5">
+                Stealth black-and-emerald freediver with neon katana-harpoons &amp; thrusters.
+              </p>
+              <div class="inline-block mt-1.5 px-2 py-0.5 rounded-md text-[10px] font-mono-code font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+                🔥 +20% Combo Multiplier
+              </div>
+            </div>
+          </button>
+        </div>
+      </div>
+
+      <!-- STEP 2: CHOOSE APEX SHARK (ENEMY PREDATOR) -->
+      <div class="mt-4">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-xs font-display font-bold uppercase tracking-wider text-slate-300">
+            2. Choose Apex Shark (Enemy Predator)
+          </span>
+          <span id="selectedSharkTraitHint" class="text-xs font-mono-code text-sky-300">
+            Trait: Balanced speed + Feeding Frenzy dash bursts
+          </span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+          <!-- GREAT WHITE -->
+          <button type="button" data-shark="great_white" class="shark-card select-card selected flex items-center gap-3 p-3 rounded-2xl bg-slate-900/90 border-2 border-slate-800 text-left">
+            <canvas class="preview-canvas w-20 h-20 rounded-xl bg-slate-950/90 border border-slate-800 shrink-0" data-preview-type="shark" data-preview-id="great_white"></canvas>
+            <div class="min-w-0">
+              <div class="font-display font-extrabold text-sm text-white truncate">GREAT WHITE</div>
+              <p class="text-[11px] text-slate-300 leading-snug mt-0.5">
+                Classic slate-grey &amp; white apex predator with serrated snapping jaws.
+              </p>
+              <div class="inline-block mt-1.5 px-2 py-0.5 rounded-md text-[10px] font-mono-code font-bold bg-sky-500/20 text-sky-300 border border-sky-500/40">
+                🦈 Feeding Frenzy Dashes
+              </div>
+            </div>
+          </button>
+
+          <!-- CYBER HAMMERHEAD -->
+          <button type="button" data-shark="hammerhead" class="shark-card select-card flex items-center gap-3 p-3 rounded-2xl bg-slate-900/90 border-2 border-slate-800 text-left">
+            <canvas class="preview-canvas w-20 h-20 rounded-xl bg-slate-950/90 border border-slate-800 shrink-0" data-preview-type="shark" data-preview-id="hammerhead"></canvas>
+            <div class="min-w-0">
+              <div class="font-display font-extrabold text-sm text-white truncate">CYBER HAMMERHEAD</div>
+              <p class="text-[11px] text-slate-300 leading-snug mt-0.5">
+                Gunmetal-teal armored hammerhead with glowing crimson scanner eyes.
+              </p>
+              <div class="inline-block mt-1.5 px-2 py-0.5 rounded-md text-[10px] font-mono-code font-bold bg-teal-500/20 text-teal-300 border border-teal-500/40">
+                🛡️ Heavy Armor &amp; Sparks
+              </div>
+            </div>
+          </button>
+
+          <!-- ABYSSAL GOBLIN -->
+          <button type="button" data-shark="goblin" class="shark-card select-card flex items-center gap-3 p-3 rounded-2xl bg-slate-900/90 border-2 border-slate-800 text-left">
+            <canvas class="preview-canvas w-20 h-20 rounded-xl bg-slate-950/90 border border-slate-800 shrink-0" data-preview-type="shark" data-preview-id="goblin"></canvas>
+            <div class="min-w-0">
+              <div class="font-display font-extrabold text-sm text-white truncate">ABYSSAL GOBLIN</div>
+              <p class="text-[11px] text-slate-300 leading-snug mt-0.5">
+                Bioluminescent purple-crimson ancient shark with elongated snout &amp; neon veins.
+              </p>
+              <div class="inline-block mt-1.5 px-2 py-0.5 rounded-md text-[10px] font-mono-code font-bold bg-fuchsia-500/20 text-fuchsia-300 border border-fuchsia-500/40">
+                💎 Ink Ambush &amp; 2x Points
+              </div>
+            </div>
+          </button>
+        </div>
+      </div>
+
+      <!-- STEP 3: DIFFICULTY LEVEL & LAUNCH CTA -->
+      <div class="mt-4">
+        <div class="text-xs font-display font-bold uppercase tracking-wider text-slate-300 mb-2">
+          3. Select Difficulty Level
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+          <!-- EASY -->
+          <button type="button" data-difficulty="easy" class="difficulty-card select-card selected p-3.5 rounded-2xl bg-slate-900/95 border-2 border-slate-800 text-left">
+            <div class="flex items-center justify-between mb-1">
+              <span class="px-2 py-0.5 rounded text-[10px] font-display font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+                EASY
+              </span>
+              <span class="text-[11px] font-mono-code text-slate-400">3–5 Letters</span>
+            </div>
+            <div class="font-display font-extrabold text-base text-white">Reef Patrol</div>
+            <p class="text-[11px] text-slate-300 mt-1">
+              Relaxed swim speed &amp; common words to warm up your switches.
+            </p>
+          </button>
+
+          <!-- MEDIUM -->
+          <button type="button" data-difficulty="medium" class="difficulty-card select-card p-3.5 rounded-2xl bg-slate-900/95 border-2 border-slate-800 text-left">
+            <div class="flex items-center justify-between mb-1">
+              <span class="px-2 py-0.5 rounded text-[10px] font-display font-bold bg-sky-500/20 text-sky-300 border border-sky-500/40">
+                MEDIUM
+              </span>
+              <span class="text-[11px] font-mono-code text-slate-400">5–8 Letters</span>
+            </div>
+            <div class="font-display font-extrabold text-base text-white">Deep Trench</div>
+            <p class="text-[11px] text-slate-300 mt-1">
+              Faster hunting packs &amp; 2-word armored sharks.
+            </p>
+          </button>
+
+          <!-- HARD -->
+          <button type="button" data-difficulty="hard" class="difficulty-card select-card p-3.5 rounded-2xl bg-slate-900/95 border-2 border-slate-800 text-left">
+            <div class="flex items-center justify-between mb-1">
+              <span class="px-2 py-0.5 rounded text-[10px] font-display font-bold bg-rose-500/20 text-rose-300 border border-rose-500/40">
+                HARD
+              </span>
+              <span class="text-[11px] font-mono-code text-slate-400">8–13 Chars</span>
+            </div>
+            <div class="font-display font-extrabold text-base text-white">Abyssal Frenzy</div>
+            <p class="text-[11px] text-slate-300 mt-1">
+              Tech/keyboard terms with hyphens &amp; numbers, rapid rushes &amp; 3-word Boss Sharks.
+            </p>
+          </button>
+        </div>
+      </div>
+
+      <!-- Launch Action Bar -->
+      <div class="mt-5 pt-4 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-3">
+        <div class="text-xs text-slate-400 flex flex-wrap items-center gap-x-4 gap-y-1">
+          <span>🎯 Auto-lock on 1st keystroke</span>
+          <span>🔄 <kbd class="px-1.5 py-0.5 bg-slate-800 rounded text-slate-200 font-mono-code">ESC/TAB</kbd> Switch target</span>
+          <span>📡 <kbd class="px-1.5 py-0.5 bg-slate-800 rounded text-slate-200 font-mono-code">SPACE/ENTER</kbd> Sonar EMP</span>
+        </div>
+
+        <button id="btnLaunchDive" type="button" class="w-full sm:w-auto px-8 py-3.5 rounded-2xl accent-bg text-slate-950 font-display font-black text-sm sm:text-base tracking-wider hover:brightness-110 transition shadow-xl">
+          LAUNCH DIVE →
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- PAUSE OVERLAY -->
+  <section id="pauseScreen" class="hidden fixed inset-0 z-30 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-md">
+    <div class="max-w-md w-full ocean-panel rounded-3xl p-7 text-center shadow-2xl border border-slate-700">
+      <div class="text-xs font-mono-code uppercase tracking-widest accent-text mb-1">Submersible Standby</div>
+      <h2 class="font-display font-black text-3xl text-white mb-6">GAME PAUSED</h2>
+      <div class="flex flex-col gap-3">
+        <button id="btnResume" class="w-full py-3.5 rounded-xl accent-bg text-slate-950 font-display font-extrabold text-sm tracking-wider hover:brightness-110 transition">
+          RESUME DIVE (P)
+        </button>
+        <button id="btnRestartFromPause" class="w-full py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-display font-bold text-xs tracking-wider border border-slate-600 transition">
+          RESTART DIVE
+        </button>
+        <button id="btnMenuFromPause" class="w-full py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 font-display font-bold text-xs tracking-wider border border-slate-800 transition">
+          CHANGE DIVER / SHARK
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- GAME OVER SUMMARY OVERLAY -->
+  <section id="gameOverScreen" class="hidden fixed inset-0 z-30 flex items-center justify-center p-4 overflow-y-auto bg-slate-950/75 backdrop-blur-md">
+    <div class="max-w-xl w-full ocean-panel rounded-3xl p-6 sm:p-8 shadow-2xl border border-slate-700/80 my-auto">
+      <div class="text-center pb-4 border-b border-slate-800">
+        <span id="summaryDifficultyBadge" class="inline-block px-3 py-1 rounded-full text-xs font-display font-bold uppercase tracking-widest bg-slate-900 border accent-border accent-text mb-2">
+          EASY • REEF PATROL
+        </span>
+        <h2 class="font-display font-black text-3xl sm:text-4xl text-white">HULL BREACHED</h2>
+        <p class="text-slate-400 text-sm mt-1">Typing Performance &amp; Telemetry Report</p>
+      </div>
+
+      <!-- Chosen Loadout Pill -->
+      <div class="mt-4 flex flex-wrap items-center justify-center gap-2 text-xs font-mono-code">
+        <span id="summaryDiverBadge" class="px-3 py-1 rounded-lg bg-slate-900 border border-slate-700 text-slate-200">
+          🤿 SCUBA ACE
+        </span>
+        <span class="text-slate-500">VS</span>
+        <span id="summarySharkBadge" class="px-3 py-1 rounded-lg bg-slate-900 border border-slate-700 text-slate-200">
+          🦈 GREAT WHITE
+        </span>
+      </div>
+
+      <!-- Primary Score Banner -->
+      <div class="my-4 p-4 rounded-2xl bg-slate-950/70 border border-slate-800 text-center">
+        <div class="text-xs font-display uppercase tracking-widest text-slate-400">Final Score</div>
+        <div id="finalScore" class="font-display font-black text-4xl sm:text-5xl accent-text mt-1">0</div>
+      </div>
+
+      <!-- Detailed Metrics Grid -->
+      <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-6">
+        <div class="p-3.5 rounded-2xl bg-slate-900/90 border border-slate-800">
+          <div class="text-[11px] uppercase tracking-wider text-slate-400">Average WPM</div>
+          <div id="finalAvgWpm" class="font-mono-code font-extrabold text-xl text-emerald-400 mt-0.5">0</div>
+        </div>
+        <div class="p-3.5 rounded-2xl bg-slate-900/90 border border-slate-800">
+          <div class="text-[11px] uppercase tracking-wider text-slate-400">Peak WPM</div>
+          <div id="finalPeakWpm" class="font-mono-code font-extrabold text-xl text-teal-300 mt-0.5">0</div>
+        </div>
+        <div class="p-3.5 rounded-2xl bg-slate-900/90 border border-slate-800">
+          <div class="text-[11px] uppercase tracking-wider text-slate-400">Accuracy</div>
+          <div id="finalAccuracy" class="font-mono-code font-extrabold text-xl text-sky-300 mt-0.5">100%</div>
+        </div>
+        <div class="p-3.5 rounded-2xl bg-slate-900/90 border border-slate-800">
+          <div class="text-[11px] uppercase tracking-wider text-slate-400">Sharks Defeated</div>
+          <div id="finalSharks" class="font-mono-code font-extrabold text-xl text-white mt-0.5">0</div>
+        </div>
+        <div class="p-3.5 rounded-2xl bg-slate-900/90 border border-slate-800">
+          <div class="text-[11px] uppercase tracking-wider text-slate-400">Max Streak</div>
+          <div id="finalStreak" class="font-mono-code font-extrabold text-xl accent-text mt-0.5">0</div>
+        </div>
+        <div class="p-3.5 rounded-2xl bg-slate-900/90 border border-slate-800">
+          <div class="text-[11px] uppercase tracking-wider text-slate-400">Wave Reached</div>
+          <div id="finalWave" class="font-mono-code font-extrabold text-xl text-purple-300 mt-0.5">1</div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <button id="btnReplay" class="py-3.5 px-5 rounded-xl accent-bg text-slate-950 font-display font-extrabold text-sm tracking-wider hover:brightness-110 transition shadow-lg">
+          PLAY AGAIN
+        </button>
+        <button id="btnChangeDifficulty" class="py-3.5 px-5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-display font-bold text-sm tracking-wider border border-slate-600 transition">
+          CHANGE DIVER / SHARK
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    /**
+     * ============================================================================
+     * SHARK BYTE: MECHANICAL KEYBOARD EDITION
+     * Single-file underwater arcade typing game with Diver & Apex Shark selection,
+     * live procedural Canvas previews, and synthesized tactile switch acoustics.
+     * ============================================================================
+     */
+
+    (() => {
+      'use strict';
+
+      // =========================================================================
+      // 1. DIVERS, APEX SHARKS, WORD BANKS & DIFFICULTY CONFIGURATIONS
+      // =========================================================================
+      const DIVERS = {
+        scuba: {
+          id: 'scuba',
+          name: 'SCUBA ACE',
+          accent: '#06b6d4',
+          bright: '#67e8f9',
+          perkText: 'Perk: +15% Sonar EMP Charge Speed',
+          maxHearts: 3,
+          empChargeMult: 1.15,
+          comboBonusMult: 1.0
+        },
+        mech: {
+          id: 'mech',
+          name: 'MECH-SUIT MK.IV',
+          accent: '#f59e0b',
+          bright: '#fcd34d',
+          perkText: 'Perk: +1 Extra Hull Heart [4 Hearts]',
+          maxHearts: 4,
+          empChargeMult: 1.0,
+          comboBonusMult: 1.0
+        },
+        ninja: {
+          id: 'ninja',
+          name: 'CYBER-NINJA SUB',
+          accent: '#10b981',
+          bright: '#6ee7b7',
+          perkText: 'Perk: +20% Combo Score Multiplier',
+          maxHearts: 3,
+          empChargeMult: 1.0,
+          comboBonusMult: 1.2
+        }
+      };
+
+      const SHARK_SPECIES = {
+        great_white: {
+          id: 'great_white',
+          name: 'GREAT WHITE',
+          traitText: 'Trait: Balanced speed with sudden Feeding Frenzy dash bursts',
+          scoreMult: 1.0,
+          armorChance: 0.0,
+          frenzyDash: true,
+          inkAmbush: false
+        },
+        hammerhead: {
+          id: 'hammerhead',
+          name: 'CYBER HAMMERHEAD',
+          traitText: 'Trait: Heavy armored variants & metallic spark deflection',
+          scoreMult: 1.25,
+          armorChance: 0.35,
+          frenzyDash: false,
+          inkAmbush: false
+        },
+        goblin: {
+          id: 'goblin',
+          name: 'ABYSSAL GOBLIN',
+          traitText: 'Trait: Fast ambush lunges from ink clouds & 2x points',
+          scoreMult: 2.0,
+          armorChance: 0.0,
+          frenzyDash: false,
+          inkAmbush: true
+        }
+      };
+
+      const WORD_BANK = {
+        easy: [
+          'reef', 'wave', 'tide', 'deep', 'swim', 'fish', 'kelp', 'glow', 'blue',
+          'dive', 'hull', 'fins', 'gills', 'coral', 'pearl', 'shell', 'shark',
+          'ocean', 'abyss', 'drift', 'foam', 'salt', 'sand', 'seal', 'orca',
+          'crab', 'clam', 'ship', 'mast', 'deck', 'helm', 'port', 'star', 'beam',
+          'bolt', 'zap', 'type', 'keys', 'fast', 'lock', 'ping', 'sonar', 'tank',
+          'aqua', 'wake', 'surge', 'crest', 'shoal', 'ray', 'eel', 'tuna', 'cod',
+          'pike', 'bass', 'gulf', 'cove', 'isle', 'pier', 'buoy', 'knot', 'rope',
+          'iron', 'gold', 'neon', 'spark', 'pulse', 'flash', 'byte', 'code', 'grid'
+        ],
+        medium: [
+          'dolphin', 'octopus', 'current', 'harpoon', 'turbine', 'torpedo',
+          'voltage', 'circuit', 'tactile', 'mercury', 'phantom', 'tsunami',
+          'narwhal', 'manatee', 'anemone', 'plankton', 'urchin', 'lobster',
+          'seagull', 'pelican', 'compass', 'captain', 'nautical', 'mariner',
+          'horizon', 'tempest', 'cyclone', 'monsoon', 'typhoon', 'vortex',
+          'reactor', 'battery', 'thruster', 'chamber', 'pressure', 'keycaps',
+          'switches', 'clicky', 'linear', 'backlit', 'firmware', 'latency',
+          'polling', 'chassis', 'spring', 'housing', 'actuate', 'stingray',
+          'predator', 'trident', 'atlantis', 'treasure', 'galleon', 'barnacle'
+        ],
+        hard: [
+          'Mechanical', 'Polycarbonate', 'Gasket-Mount', 'Lubricated', 'Stabilizer',
+          'Actuation-45g', 'Submersible', 'Bioluminescent', 'Hydrothermal',
+          'Thunderbolt-4', 'Overclocked', 'Cybernetic', 'Leviathan-X',
+          'Decompression', 'Bathysphere', 'Electro-Pulse', 'Abyssal-Zone',
+          'Tactile-Bump', 'Hot-Swappable', 'South-Facing', 'Cherry-Profile',
+          'Double-Shot', 'Braided-Cable', 'Anti-Ghosting', 'N-Key-Rollover',
+          'Mariana-Trench', 'Cephalopod', 'Cartilaginous', 'Electroreception',
+          'Hydrodynamic', 'Thermocline', 'Bathyscaphe', 'Phosphorescence',
+          'Cryptocurrency', 'Asynchrony', 'Microcontroller', 'Oscilloscope',
+          'Turbocharger', 'Magnetosphere', 'Superconductor', 'Quantum-Core',
+          'Switch-Opener', 'Keycap-Puller', 'Plate-Mounted', 'Acoustic-Foam'
+        ]
+      };
+
+      const DIFFICULTY_CONFIG = {
+        easy: {
+          id: 'easy',
+          label: 'EASY • REEF PATROL',
+          shortLabel: 'EASY',
+          maxSharks: 3,
+          baseSpeed: 48,
+          speedPerWave: 4.5,
+          spawnInterval: 2.5,
+          minSpawnInterval: 1.45,
+          caseSensitive: false,
+          armoredChance: 0.0,
+          allowBoss: false
+        },
+        medium: {
+          id: 'medium',
+          label: 'MEDIUM • DEEP TRENCH',
+          shortLabel: 'MEDIUM',
+          maxSharks: 5,
+          baseSpeed: 68,
+          speedPerWave: 6.0,
+          spawnInterval: 2.0,
+          minSpawnInterval: 1.1,
+          caseSensitive: false,
+          armoredChance: 0.35, // 2-word armored sharks!
+          allowBoss: false
+        },
+        hard: {
+          id: 'hard',
+          label: 'HARD • ABYSSAL FRENZY',
+          shortLabel: 'HARD',
+          maxSharks: 6,
+          baseSpeed: 84,
+          speedPerWave: 7.2,
+          spawnInterval: 1.85,
+          minSpawnInterval: 0.95,
+          caseSensitive: true,
+          armoredChance: 0.30,
+          allowBoss: true // 3-word Boss Sharks!
+        }
+      };
+
+      // =========================================================================
+      // 2. WEB AUDIO API SYNTHESIZER (Lubed Tactile-Thock, Stabilizers & Combat)
+      // =========================================================================
+      class SoundEngine {
+        constructor() {
+          this.enabled = true;
+          this.ctx = null;
+        }
+
+        ensureContext() {
+          if (!this.enabled) return false;
+          if (!this.ctx) {
+            const AudioCtx = window.AudioContext || window.webkitAudioContext;
+            if (AudioCtx) {
+              this.ctx = new AudioCtx();
+            }
+          }
+          if (this.ctx && this.ctx.state === 'suspended') {
+            this.ctx.resume().catch(() => {});
+          }
+          return !!this.ctx;
+        }
+
+        toggle() {
+          this.enabled = !this.enabled;
+          if (this.enabled) {
+            this.ensureContext();
+            this.playKeystroke(1, false);
+          }
+          return this.enabled;
+        }
+
+        // Lubed tactile-thock keystroke + deeper stabilizer thud for Space/Enter + plasma harpoon shot
+        playKeystroke(combo = 1, isStabilizer = false) {
+          if (!this.ensureContext()) return;
+          const now = this.ctx.currentTime;
+
+          // 1) Tactile stem bump transient
+          const clickOsc = this.ctx.createOscillator();
+          const clickGain = this.ctx.createGain();
+          clickOsc.type = 'triangle';
+          clickOsc.frequency.setValueAtTime(isStabilizer ? 820 : 1280, now);
+          clickOsc.frequency.exponentialRampToValueAtTime(isStabilizer ? 190 : 310, now + 0.028);
+
+          clickGain.gain.setValueAtTime(0.16, now);
+          clickGain.gain.exponentialRampToValueAtTime(0.001, now + 0.032);
+
+          clickOsc.connect(clickGain);
+          clickGain.connect(this.ctx.destination);
+          clickOsc.start(now);
+          clickOsc.stop(now + 0.035);
+
+          // 2) Deep PBT bottom-out "thock" body resonance
+          const thockOsc = this.ctx.createOscillator();
+          const thockGain = this.ctx.createGain();
+          thockOsc.type = 'sine';
+          thockOsc.frequency.setValueAtTime(isStabilizer ? 210 : 310, now + 0.006);
+          thockOsc.frequency.exponentialRampToValueAtTime(isStabilizer ? 68 : 96, now + 0.055);
+
+          thockGain.gain.setValueAtTime(isStabilizer ? 0.28 : 0.21, now + 0.006);
+          thockGain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
+
+          thockOsc.connect(thockGain);
+          thockGain.connect(this.ctx.destination);
+          thockOsc.start(now + 0.006);
+          thockOsc.stop(now + 0.065);
+
+          // 3) Harpoon plasma pulse pitched gently with streak combo
+          const zapOsc = this.ctx.createOscillator();
+          const zapGain = this.ctx.createGain();
+          const pitchBoost = Math.min(combo * 16, 420);
+          zapOsc.type = 'sawtooth';
+          zapOsc.frequency.setValueAtTime(660 + pitchBoost, now);
+          zapOsc.frequency.exponentialRampToValueAtTime(185, now + 0.065);
+
+          zapGain.gain.setValueAtTime(0.06, now);
+          zapGain.gain.exponentialRampToValueAtTime(0.001, now + 0.07);
+
+          zapOsc.connect(zapGain);
+          zapGain.connect(this.ctx.destination);
+          zapOsc.start(now);
+          zapOsc.stop(now + 0.075);
+        }
+
+        // Distinctive hollow error clack on typo
+        playError() {
+          if (!this.ensureContext()) return;
+          const now = this.ctx.currentTime;
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = 'square';
+          osc.frequency.setValueAtTime(175, now);
+          osc.frequency.exponentialRampToValueAtTime(82, now + 0.12);
+
+          gain.gain.setValueAtTime(0.15, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.13);
+
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(now);
+          osc.stop(now + 0.14);
+        }
+
+        // Shark hit crunch or metallic spark ping (for Cyber Hammerhead)
+        playSharkHit(isMetallic = false) {
+          if (!this.ensureContext()) return;
+          const now = this.ctx.currentTime;
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+
+          if (isMetallic) {
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(1850, now);
+            osc.frequency.exponentialRampToValueAtTime(920, now + 0.08);
+            gain.gain.setValueAtTime(0.11, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.09);
+          } else {
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(240, now);
+            osc.frequency.exponentialRampToValueAtTime(95, now + 0.07);
+            gain.gain.setValueAtTime(0.12, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.075);
+          }
+
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(now);
+          osc.stop(now + 0.095);
+        }
+
+        playSharkDefeat(isBoss = false) {
+          if (!this.ensureContext()) return;
+          const now = this.ctx.currentTime;
+
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(isBoss ? 155 : 210, now);
+          osc.frequency.exponentialRampToValueAtTime(36, now + (isBoss ? 0.45 : 0.24));
+
+          gain.gain.setValueAtTime(isBoss ? 0.32 : 0.22, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + (isBoss ? 0.48 : 0.26));
+
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(now);
+          osc.stop(now + (isBoss ? 0.5 : 0.28));
+
+          const chime = this.ctx.createOscillator();
+          const chimeGain = this.ctx.createGain();
+          chime.type = 'triangle';
+          chime.frequency.setValueAtTime(523.25, now + 0.03);
+          chime.frequency.setValueAtTime(659.25, now + 0.09);
+          if (isBoss) chime.frequency.setValueAtTime(1046.5, now + 0.16);
+
+          chimeGain.gain.setValueAtTime(0.11, now + 0.03);
+          chimeGain.gain.exponentialRampToValueAtTime(0.001, now + 0.28);
+
+          chime.connect(chimeGain);
+          chimeGain.connect(this.ctx.destination);
+          chime.start(now + 0.03);
+          chime.stop(now + 0.3);
+        }
+
+        // Deep Sonar EMP Shockwave Boom
+        playEmpBlast() {
+          if (!this.ensureContext()) return;
+          const now = this.ctx.currentTime;
+
+          // Sub-bass boom
+          const boom = this.ctx.createOscillator();
+          const boomGain = this.ctx.createGain();
+          boom.type = 'sine';
+          boom.frequency.setValueAtTime(140, now);
+          boom.frequency.exponentialRampToValueAtTime(28, now + 0.65);
+          boomGain.gain.setValueAtTime(0.35, now);
+          boomGain.gain.exponentialRampToValueAtTime(0.001, now + 0.68);
+          boom.connect(boomGain);
+          boomGain.connect(this.ctx.destination);
+          boom.start(now);
+          boom.stop(now + 0.7);
+
+          // High sonar ping ring
+          const ping = this.ctx.createOscillator();
+          const pingGain = this.ctx.createGain();
+          ping.type = 'sine';
+          ping.frequency.setValueAtTime(1480, now);
+          ping.frequency.exponentialRampToValueAtTime(320, now + 0.55);
+          pingGain.gain.setValueAtTime(0.22, now);
+          pingGain.gain.exponentialRampToValueAtTime(0.001, now + 0.58);
+          ping.connect(pingGain);
+          pingGain.connect(this.ctx.destination);
+          ping.start(now);
+          ping.stop(now + 0.6);
+        }
+
+        playDamage() {
+          if (!this.ensureContext()) return;
+          const now = this.ctx.currentTime;
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(115, now);
+          osc.frequency.exponentialRampToValueAtTime(42, now + 0.35);
+          gain.gain.setValueAtTime(0.24, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.38);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(now);
+          osc.stop(now + 0.4);
+        }
+
+        playUnlock() {
+          if (!this.ensureContext()) return;
+          const now = this.ctx.currentTime;
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(480, now);
+          osc.frequency.exponentialRampToValueAtTime(310, now + 0.07);
+          gain.gain.setValueAtTime(0.09, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(now);
+          osc.stop(now + 0.085);
+        }
+      }
+
+      const sound = new SoundEngine();
+
+      // =========================================================================
+      // 3. GAME STATE & DOM REFERENCES
+      // =========================================================================
+      const canvas = document.getElementById('gameCanvas');
+      const ctx = canvas.getContext('2d');
+
+      const ui = {
+        startScreen: document.getElementById('startScreen'),
+        pauseScreen: document.getElementById('pauseScreen'),
+        gameOverScreen: document.getElementById('gameOverScreen'),
+        topHud: document.getElementById('topHud'),
+        bottomHud: document.getElementById('bottomHud'),
+        hudDifficultyBadge: document.getElementById('hudDifficultyBadge'),
+        hudLoadoutBadge: document.getElementById('hudLoadoutBadge'),
+        hudWave: document.getElementById('hudWave'),
+        hudLives: document.getElementById('hudLives'),
+        hudScore: document.getElementById('hudScore'),
+        hudCombo: document.getElementById('hudCombo'),
+        hudWpm: document.getElementById('hudWpm'),
+        hudAccuracy: document.getElementById('hudAccuracy'),
+        empStatusText: document.getElementById('empStatusText'),
+        empBarContainer: document.getElementById('empBarContainer'),
+        empBarFill: document.getElementById('empBarFill'),
+        empHintText: document.getElementById('empHintText'),
+        activeWordBox: document.getElementById('activeWordBox'),
+        activeWordDisplay: document.getElementById('activeWordDisplay'),
+        keycapStream: document.getElementById('keycapStream'),
+        selectedDiverPerkHint: document.getElementById('selectedDiverPerkHint'),
+        selectedSharkTraitHint: document.getElementById('selectedSharkTraitHint'),
+        soundStartIcon: document.getElementById('soundStartIcon'),
+        soundStartLabel: document.getElementById('soundStartLabel'),
+        btnSoundHud: document.getElementById('btnSoundHud'),
+        mobileInput: document.getElementById('mobileKeyboardInput'),
+        // Summary fields
+        summaryDifficultyBadge: document.getElementById('summaryDifficultyBadge'),
+        summaryDiverBadge: document.getElementById('summaryDiverBadge'),
+        summarySharkBadge: document.getElementById('summarySharkBadge'),
+        finalScore: document.getElementById('finalScore'),
+        finalAvgWpm: document.getElementById('finalAvgWpm'),
+        finalPeakWpm: document.getElementById('finalPeakWpm'),
+        finalAccuracy: document.getElementById('finalAccuracy'),
+        finalSharks: document.getElementById('finalSharks'),
+        finalStreak: document.getElementById('finalStreak'),
+        finalWave: document.getElementById('finalWave')
+      };
+
+      const state = {
+        status: 'menu', // 'menu' | 'playing' | 'paused' | 'gameover'
+        selectedDiver: 'scuba',
+        selectedShark: 'great_white',
+        difficulty: 'easy',
+        width: window.innerWidth,
+        height: window.innerHeight,
+        dpr: Math.min(window.devicePixelRatio || 1, 2),
+
+        // Core gameplay metrics
+        score: 0,
+        wave: 1,
+        lives: 3,
+        maxLives: 3,
+        combo: 1.0,
+        streak: 0,
+        longestStreak: 0,
+        empCharge: 0,
+        empMax: 25,
+        sharksDefeated: 0,
+        waveKills: 0,
+        killsPerWave: 8,
+
+        // Typing telemetry
+        correctKeystrokes: 0,
+        totalKeystrokes: 0,
+        activeTimeSeconds: 0,
+        peakWpm: 0,
+        wpmSampleTimer: 0,
+
+        // Entities & Effects
+        sharks: [],
+        lockedSharkId: null,
+        bolts: [],
+        particles: [],
+        inkClouds: [],
+        floatingTexts: [],
+        shockwaves: [],
+        bubbles: [],
+        kelp: [],
+        lightRays: [],
+        usedWords: new Set(),
+
+        // Timers & Camera Juice
+        spawnTimer: 0.6,
+        nextSharkId: 1,
+        screenShake: 0,
+        damageFlash: 0,
+        shieldBubbleAlpha: 0,
+        subRecoil: 0,
+        subAimAngle: 0,
+        globalTime: 0
+      };
+
+      // =========================================================================
+      // 4. SHARED PROCEDURAL 2D SPRITE RENDERERS (Used in Previews & Main Canvas)
+      // =========================================================================
+      function renderDiverSprite(targetCtx, diverId, time, options = {}) {
+        const recoil = options.recoil || 0;
+        const aimAngle = options.aimAngle || 0;
+        const shieldAlpha = options.shieldAlpha || 0;
+        const scale = options.scale || 1;
+
+        targetCtx.save();
+        targetCtx.scale(scale, scale);
+        targetCtx.translate(-recoil, Math.sin(time * 2.6) * 4);
+
+        const finKick = Math.sin(time * 7.5) * 0.28;
+
+        if (diverId === 'scuba') {
+          // --- SCUBA ACE: Sleek cyan-and-yellow deep-sea diver with twin oxygen tanks & plasma harpoon ---
+          // Animated Swim Fins
+          targetCtx.save();
+          targetCtx.translate(-34, 8);
+          targetCtx.rotate(finKick);
+          targetCtx.fillStyle = '#facc15';
+          targetCtx.beginPath();
+          targetCtx.moveTo(0, 0);
+          targetCtx.lineTo(-22, -7);
+          targetCtx.lineTo(-20, 4);
+          targetCtx.closePath();
+          targetCtx.fill();
+          targetCtx.restore();
+
+          targetCtx.save();
+          targetCtx.translate(-34, 13);
+          targetCtx.rotate(-finKick);
+          targetCtx.fillStyle = '#0891b2';
+          targetCtx.beginPath();
+          targetCtx.moveTo(0, 0);
+          targetCtx.lineTo(-22, 6);
+          targetCtx.lineTo(-19, -3);
+          targetCtx.closePath();
+          targetCtx.fill();
+          targetCtx.restore();
+
+          // Twin Yellow Oxygen Tanks on back
+          targetCtx.fillStyle = '#eab308';
+          targetCtx.strokeStyle = '#fef08a';
+          targetCtx.lineWidth = 1.2;
+          targetCtx.beginPath();
+          targetCtx.roundRect(-24, -18, 30, 9, 4);
+          targetCtx.fill();
+          targetCtx.stroke();
+
+          targetCtx.fillStyle = '#ca8a04';
+          targetCtx.beginPath();
+          targetCtx.roundRect(-22, -12, 28, 7, 3.5);
+          targetCtx.fill();
+
+          // Sleek Cyan Wetsuit Torso & Legs
+          const suitGrad = targetCtx.createLinearGradient(-30, -6, 20, 14);
+          suitGrad.addColorStop(0, '#0e7490');
+          suitGrad.addColorStop(0.5, '#06b6d4');
+          suitGrad.addColorStop(1, '#22d3ee');
+          targetCtx.fillStyle = suitGrad;
+          targetCtx.beginPath();
+          targetCtx.moveTo(-36, 10);
+          targetCtx.quadraticCurveTo(-12, -4, 18, -2);
+          targetCtx.quadraticCurveTo(24, 8, 12, 14);
+          targetCtx.quadraticCurveTo(-14, 15, -36, 10);
+          targetCtx.fill();
+
+          // Yellow Racing Trim
+          targetCtx.strokeStyle = '#fde047';
+          targetCtx.lineWidth = 2.2;
+          targetCtx.beginPath();
+          targetCtx.moveTo(-26, 8);
+          targetCtx.lineTo(10, 5);
+          targetCtx.stroke();
+
+          // Diver Helmet & Glowing Cyan Visor
+          targetCtx.fillStyle = '#0f172a';
+          targetCtx.beginPath();
+          targetCtx.arc(21, -2, 11.5, 0, Math.PI * 2);
+          targetCtx.fill();
+
+          const visorGrad = targetCtx.createRadialGradient(25, -4, 1, 24, -2, 9);
+          visorGrad.addColorStop(0, '#ffffff');
+          visorGrad.addColorStop(0.45, '#67e8f9');
+          visorGrad.addColorStop(1, '#0284c7');
+          targetCtx.fillStyle = visorGrad;
+          targetCtx.beginPath();
+          targetCtx.ellipse(25, -2, 6.5, 8, 0.15, -Math.PI * 0.55, Math.PI * 0.55);
+          targetCtx.fill();
+
+          // Plasma Harpoon Launcher
+          targetCtx.save();
+          targetCtx.translate(14, 10);
+          targetCtx.rotate(Math.max(-0.5, Math.min(0.5, aimAngle)));
+          targetCtx.fillStyle = '#1e293b';
+          targetCtx.strokeStyle = '#67e8f9';
+          targetCtx.lineWidth = 1.4;
+          targetCtx.beginPath();
+          targetCtx.roundRect(-4, -3.5, 32, 7, 3);
+          targetCtx.fill();
+          targetCtx.stroke();
+          // Glowing harpoon tip
+          targetCtx.fillStyle = '#67e8f9';
+          targetCtx.beginPath();
+          targetCtx.moveTo(28, -4);
+          targetCtx.lineTo(37, 0);
+          targetCtx.lineTo(28, 4);
+          targetCtx.closePath();
+          targetCtx.fill();
+          targetCtx.restore();
+
+        } else if (diverId === 'mech') {
+          // --- MECH-SUIT MK.IV: Heavy armored orange-gold atmospheric diving suit with hydraulic claws & rail-harpoon ---
+          // Rear Hydro-Thruster Pack
+          const thrusterGlow = 8 + Math.sin(time * 24) * 3;
+          const tGrad = targetCtx.createRadialGradient(-36, 0, 1, -36, 0, thrusterGlow + 8);
+          tGrad.addColorStop(0, '#fef08a');
+          tGrad.addColorStop(0.5, '#f59e0b');
+          tGrad.addColorStop(1, 'rgba(245, 158, 11, 0)');
+          targetCtx.fillStyle = tGrad;
+          targetCtx.beginPath();
+          targetCtx.arc(-36, 0, thrusterGlow + 8, 0, Math.PI * 2);
+          targetCtx.fill();
+
+          // Armored Legs / Stabilizer Pods
+          targetCtx.fillStyle = '#78350f';
+          targetCtx.beginPath();
+          targetCtx.roundRect(-34, 6, 22, 10, 4);
+          targetCtx.fill();
+
+          // Heavy Orange-Gold Exosuit Hull
+          const mechGrad = targetCtx.createLinearGradient(0, -24, 0, 22);
+          mechGrad.addColorStop(0, '#fbbf24');
+          mechGrad.addColorStop(0.5, '#d97706');
+          mechGrad.addColorStop(1, '#78350f');
+          targetCtx.fillStyle = mechGrad;
+          targetCtx.strokeStyle = '#fef3c7';
+          targetCtx.lineWidth = 1.6;
+          targetCtx.beginPath();
+          targetCtx.roundRect(-26, -21, 48, 38, 14);
+          targetCtx.fill();
+          targetCtx.stroke();
+
+          // Shoulder Pauldron & Rivets
+          targetCtx.fillStyle = '#b45309';
+          targetCtx.beginPath();
+          targetCtx.arc(-4, -12, 11, 0, Math.PI * 2);
+          targetCtx.fill();
+
+          // Domed Viewport Helmet
+          const domeGrad = targetCtx.createRadialGradient(18, -8, 2, 16, -6, 12);
+          domeGrad.addColorStop(0, '#ffffff');
+          domeGrad.addColorStop(0.5, '#38bdf8');
+          domeGrad.addColorStop(1, '#0c4a6e');
+          targetCtx.fillStyle = domeGrad;
+          targetCtx.beginPath();
+          targetCtx.arc(16, -6, 10.5, -Math.PI * 0.45, Math.PI * 0.45);
+          targetCtx.fill();
+
+          // Hydraulic Claw + Heavy Rail-Harpoon
+          targetCtx.save();
+          targetCtx.translate(14, 11);
+          targetCtx.rotate(Math.max(-0.5, Math.min(0.5, aimAngle)));
+          targetCtx.fillStyle = '#1e293b';
+          targetCtx.strokeStyle = '#fcd34d';
+          targetCtx.lineWidth = 1.6;
+          targetCtx.fillRect(-2, -5, 34, 10);
+          targetCtx.strokeRect(-2, -5, 34, 10);
+          // Rail coils
+          targetCtx.fillStyle = '#f59e0b';
+          targetCtx.fillRect(6, -6.5, 4, 13);
+          targetCtx.fillRect(16, -6.5, 4, 13);
+          targetCtx.fillRect(26, -6.5, 4, 13);
+          targetCtx.restore();
+
+        } else {
+          // --- CYBER-NINJA SUB: Stealth black-and-emerald freediver with neon katana-harpoons & twin thrusters ---
+          // Twin Emerald Ion Thrusters
+          const pulse = 9 + Math.sin(time * 28) * 3;
+          const eGrad = targetCtx.createRadialGradient(-38, 2, 1, -38, 2, pulse + 9);
+          eGrad.addColorStop(0, '#a7f3d0');
+          eGrad.addColorStop(0.5, '#10b981');
+          eGrad.addColorStop(1, 'rgba(16, 185, 129, 0)');
+          targetCtx.fillStyle = eGrad;
+          targetCtx.beginPath();
+          targetCtx.arc(-38, 2, pulse + 9, 0, Math.PI * 2);
+          targetCtx.fill();
+
+          // Back-Mounted Dual Neon Katana-Harpoons
+          targetCtx.strokeStyle = '#34d399';
+          targetCtx.shadowColor = '#10b981';
+          targetCtx.shadowBlur = 8;
+          targetCtx.lineWidth = 2.4;
+          targetCtx.beginPath();
+          targetCtx.moveTo(-14, -4);
+          targetCtx.lineTo(-36, -22);
+          targetCtx.moveTo(-8, -4);
+          targetCtx.lineTo(-28, -24);
+          targetCtx.stroke();
+          targetCtx.shadowBlur = 0;
+
+          // Sleek Obsidian Stealth Body
+          targetCtx.fillStyle = '#090d16';
+          targetCtx.strokeStyle = '#10b981';
+          targetCtx.lineWidth = 1.5;
+          targetCtx.beginPath();
+          targetCtx.moveTo(-36, 6 + finKick * 12);
+          targetCtx.quadraticCurveTo(-10, -8, 24, -4);
+          targetCtx.lineTo(30, 3);
+          targetCtx.quadraticCurveTo(-8, 13, -36, 6 + finKick * 12);
+          targetCtx.closePath();
+          targetCtx.fill();
+          targetCtx.stroke();
+
+          // Glowing Emerald Cyber-Visor Slit
+          targetCtx.fillStyle = '#6ee7b7';
+          targetCtx.shadowColor = '#10b981';
+          targetCtx.shadowBlur = 10;
+          targetCtx.beginPath();
+          targetCtx.moveTo(16, -3);
+          targetCtx.lineTo(28, -1);
+          targetCtx.lineTo(25, 2.5);
+          targetCtx.lineTo(15, 0.5);
+          targetCtx.closePath();
+          targetCtx.fill();
+          targetCtx.shadowBlur = 0;
+
+          // Emerald Pulse Emitter
+          targetCtx.save();
+          targetCtx.translate(14, 8);
+          targetCtx.rotate(Math.max(-0.5, Math.min(0.5, aimAngle)));
+          targetCtx.fillStyle = '#0f172a';
+          targetCtx.strokeStyle = '#34d399';
+          targetCtx.lineWidth = 1.4;
+          targetCtx.beginPath();
+          targetCtx.roundRect(-2, -3, 30, 6, 2);
+          targetCtx.fill();
+          targetCtx.stroke();
+          targetCtx.restore();
+        }
+
+        // Protective Energy Shield Bubble (when hit or active)
+        if (shieldAlpha > 0.02) {
+          targetCtx.save();
+          targetCtx.globalAlpha = shieldAlpha;
+          const sGrad = targetCtx.createRadialGradient(0, 0, 18, 0, 0, 48);
+          sGrad.addColorStop(0, 'rgba(56, 189, 248, 0)');
+          sGrad.addColorStop(0.75, 'rgba(56, 189, 248, 0.25)');
+          sGrad.addColorStop(1, 'rgba(125, 211, 252, 0.85)');
+          targetCtx.fillStyle = sGrad;
+          targetCtx.beginPath();
+          targetCtx.arc(0, 0, 48, 0, Math.PI * 2);
+          targetCtx.fill();
+          targetCtx.restore();
+        }
+
+        targetCtx.restore();
+      }
+
+      function renderSharkSprite(targetCtx, speciesId, time, scale = 1, options = {}) {
+        const hitFlash = options.hitFlash || 0;
+        const isArmored = options.isArmored || false;
+        const isBoss = options.isBoss || false;
+        const isStunned = options.isStunned || false;
+        const frenzyActive = options.frenzyActive || false;
+        const jawSnapBoost = options.jawSnapBoost || 0;
+
+        targetCtx.save();
+        targetCtx.scale(scale, scale);
+
+        const tailWag = Math.sin(time * 7.5) * 13;
+        const jawOpen = Math.min(0.55, 0.14 + Math.sin(time * 5.2) * 0.12 + jawSnapBoost);
+
+        // Frenzy Speed Aura for Great White dash
+        if (frenzyActive) {
+          targetCtx.save();
+          targetCtx.strokeStyle = 'rgba(248, 113, 113, 0.65)';
+          targetCtx.lineWidth = 2.2;
+          for (let l = -1; l <= 1; l++) {
+            targetCtx.beginPath();
+            targetCtx.moveTo(45, l * 14);
+            targetCtx.lineTo(88, l * 16);
+            targetCtx.stroke();
+          }
+          targetCtx.restore();
+        }
+
+        if (speciesId === 'hammerhead') {
+          // --- CYBER HAMMERHEAD: Metallic gunmetal-teal with crimson scanner eyes & armor plates ---
+          let hullTop = hitFlash > 0.1 ? '#ffffff' : '#1e3a4c';
+          let hullBelly = '#64748b';
+
+          // Caudal Tail Fin
+          targetCtx.fillStyle = hullTop;
+          targetCtx.beginPath();
+          targetCtx.moveTo(40, 0);
+          targetCtx.lineTo(74, -24 + tailWag);
+          targetCtx.lineTo(63, tailWag * 0.4);
+          targetCtx.lineTo(72, 20 + tailWag);
+          targetCtx.closePath();
+          targetCtx.fill();
+
+          // Angular Cyber Dorsal Fin
+          targetCtx.beginPath();
+          targetCtx.moveTo(-4, -15);
+          targetCtx.lineTo(10, -42);
+          targetCtx.lineTo(22, -14);
+          targetCtx.closePath();
+          targetCtx.fill();
+
+          // Armored Fuselage
+          targetCtx.fillStyle = hullTop;
+          targetCtx.beginPath();
+          targetCtx.moveTo(-46, 0);
+          targetCtx.quadraticCurveTo(-14, -24, 46, 0);
+          targetCtx.quadraticCurveTo(-14, 22, -46, 0);
+          targetCtx.fill();
+
+          targetCtx.fillStyle = hullBelly;
+          targetCtx.beginPath();
+          targetCtx.moveTo(-40, 2);
+          targetCtx.quadraticCurveTo(-10, 20, 40, 2);
+          targetCtx.quadraticCurveTo(-10, 7, -40, 2);
+          targetCtx.fill();
+
+          // Riveted Gunmetal Armor Plates
+          targetCtx.fillStyle = '#334155';
+          targetCtx.strokeStyle = '#2dd4bf';
+          targetCtx.lineWidth = 1.3;
+          targetCtx.beginPath();
+          targetCtx.roundRect(-24, -13, 26, 14, 4);
+          targetCtx.fill();
+          targetCtx.stroke();
+
+          if (isArmored || isBoss) {
+            targetCtx.strokeStyle = '#fbbf24';
+            targetCtx.lineWidth = 2;
+            targetCtx.strokeRect(-22, -11, 22, 10);
+          }
+
+          // Iconic T-Shaped Hammerhead Cephalofoil + Glowing Crimson Scanner Eyes
+          targetCtx.fillStyle = '#0f172a';
+          targetCtx.strokeStyle = '#2dd4bf';
+          targetCtx.lineWidth = 1.5;
+          targetCtx.beginPath();
+          targetCtx.roundRect(-54, -21, 15, 42, 5);
+          targetCtx.fill();
+          targetCtx.stroke();
+
+          // Crimson Scanner Eyes on both tips of the hammer
+          targetCtx.fillStyle = '#ef4444';
+          targetCtx.shadowColor = '#ef4444';
+          targetCtx.shadowBlur = 10;
+          targetCtx.beginPath();
+          targetCtx.arc(-50, -16, 3.2, 0, Math.PI * 2);
+          targetCtx.arc(-50, 16, 3.2, 0, Math.PI * 2);
+          targetCtx.fill();
+          targetCtx.shadowBlur = 0;
+
+          // Pectoral Fin
+          targetCtx.fillStyle = hullTop;
+          targetCtx.beginPath();
+          targetCtx.moveTo(-6, 10);
+          targetCtx.lineTo(10, 28 + Math.sin(time * 7.5) * 3);
+          targetCtx.lineTo(16, 10);
+          targetCtx.closePath();
+          targetCtx.fill();
+
+        } else if (speciesId === 'goblin') {
+          // --- ABYSSAL GOBLIN: Bioluminescent deep-purple/crimson ancient shark with elongated snout & neon veins ---
+          let bodyTop = hitFlash > 0.1 ? '#ffffff' : '#3b0764';
+          let bodyBelly = '#881337';
+
+          // Long Whip-Like Tail
+          targetCtx.fillStyle = bodyTop;
+          targetCtx.beginPath();
+          targetCtx.moveTo(38, 0);
+          targetCtx.lineTo(78, -20 + tailWag);
+          targetCtx.lineTo(66, tailWag * 0.45);
+          targetCtx.lineTo(72, 16 + tailWag);
+          targetCtx.closePath();
+          targetCtx.fill();
+
+          // Low Ancient Dorsal Fin
+          targetCtx.beginPath();
+          targetCtx.moveTo(0, -14);
+          targetCtx.quadraticCurveTo(14, -34, 26, -13);
+          targetCtx.closePath();
+          targetCtx.fill();
+
+          // Main Body
+          targetCtx.beginPath();
+          targetCtx.moveTo(-42, 0);
+          targetCtx.quadraticCurveTo(-12, -23, 44, 0);
+          targetCtx.quadraticCurveTo(-12, 21, -42, 0);
+          targetCtx.fill();
+
+          targetCtx.fillStyle = bodyBelly;
+          targetCtx.beginPath();
+          targetCtx.moveTo(-36, 2);
+          targetCtx.quadraticCurveTo(-10, 19, 38, 2);
+          targetCtx.quadraticCurveTo(-10, 7, -36, 2);
+          targetCtx.fill();
+
+          // Elongated Blade-Like Goblin Snout
+          targetCtx.fillStyle = '#581c87';
+          targetCtx.beginPath();
+          targetCtx.moveTo(-34, -6);
+          targetCtx.lineTo(-68, -2);
+          targetCtx.lineTo(-34, 3);
+          targetCtx.closePath();
+          targetCtx.fill();
+
+          // Protruding Needle-Tooth Jaws underneath snout
+          targetCtx.fillStyle = '#1f0933';
+          targetCtx.beginPath();
+          targetCtx.moveTo(-44, 3);
+          targetCtx.lineTo(-22, 6 + jawOpen * 20);
+          targetCtx.lineTo(-20, 3);
+          targetCtx.closePath();
+          targetCtx.fill();
+
+          targetCtx.fillStyle = '#fda4af';
+          for (let t = 0; t < 5; t++) {
+            const tx = -41 + t * 4.2;
+            targetCtx.beginPath();
+            targetCtx.moveTo(tx, 3);
+            targetCtx.lineTo(tx + 1.5, 8.5);
+            targetCtx.lineTo(tx + 3, 3);
+            targetCtx.fill();
+          }
+
+          // Glowing Bioluminescent Neon Veins
+          targetCtx.strokeStyle = '#f43f5e';
+          targetCtx.shadowColor = '#e879f9';
+          targetCtx.shadowBlur = 8;
+          targetCtx.lineWidth = 1.6;
+          targetCtx.beginPath();
+          targetCtx.moveTo(-26, -6);
+          targetCtx.lineTo(-8, -11);
+          targetCtx.lineTo(12, -5);
+          targetCtx.lineTo(28, -8);
+          targetCtx.moveTo(-14, 5);
+          targetCtx.lineTo(8, 8);
+          targetCtx.stroke();
+          targetCtx.shadowBlur = 0;
+
+          // Glowing Neon Eye
+          targetCtx.fillStyle = '#f43f5e';
+          targetCtx.shadowColor = '#f43f5e';
+          targetCtx.shadowBlur = 8;
+          targetCtx.beginPath();
+          targetCtx.arc(-32, -4, 3.2, 0, Math.PI * 2);
+          targetCtx.fill();
+          targetCtx.shadowBlur = 0;
+
+          // Pectoral Fin
+          targetCtx.fillStyle = bodyTop;
+          targetCtx.beginPath();
+          targetCtx.moveTo(-6, 10);
+          targetCtx.lineTo(9, 27 + Math.sin(time * 7.5) * 3);
+          targetCtx.lineTo(15, 10);
+          targetCtx.closePath();
+          targetCtx.fill();
+
+        } else {
+          // --- GREAT WHITE: Classic slate-grey & crisp white apex shark with serrated jaws ---
+          let topColor = hitFlash > 0.1 ? '#ffffff' : '#3b556e';
+          let bellyColor = '#f1f5f9';
+
+          // Caudal Tail Fin
+          targetCtx.fillStyle = topColor;
+          targetCtx.beginPath();
+          targetCtx.moveTo(42, 0);
+          targetCtx.lineTo(74, -25 + tailWag);
+          targetCtx.lineTo(63, tailWag * 0.4);
+          targetCtx.lineTo(72, 21 + tailWag);
+          targetCtx.closePath();
+          targetCtx.fill();
+
+          // Tall Iconic Dorsal Fin
+          targetCtx.beginPath();
+          targetCtx.moveTo(-6, -16);
+          targetCtx.quadraticCurveTo(8, -46, 20, -15);
+          targetCtx.closePath();
+          targetCtx.fill();
+
+          // Torpedo Fuselage
+          targetCtx.beginPath();
+          targetCtx.moveTo(-50, 0);
+          targetCtx.quadraticCurveTo(-18, -26, 48, 0);
+          targetCtx.quadraticCurveTo(-18, 23, -50, 0);
+          targetCtx.fill();
+
+          // Crisp White Underbelly
+          targetCtx.fillStyle = bellyColor;
+          targetCtx.beginPath();
+          targetCtx.moveTo(-44, 2);
+          targetCtx.quadraticCurveTo(-12, 22, 42, 2);
+          targetCtx.quadraticCurveTo(-12, 7, -44, 2);
+          targetCtx.fill();
+
+          // Armored Trim if multi-word variant
+          if (isArmored || isBoss) {
+            targetCtx.strokeStyle = '#38bdf8';
+            targetCtx.lineWidth = 2;
+            targetCtx.beginPath();
+            targetCtx.moveTo(-26, -12);
+            targetCtx.lineTo(14, -12);
+            targetCtx.stroke();
+          }
+
+          // Snapping Jaws & Serrated Teeth
+          targetCtx.fillStyle = '#0f172a';
+          targetCtx.beginPath();
+          targetCtx.moveTo(-44, 3);
+          targetCtx.lineTo(-22, 5 + jawOpen * 19);
+          targetCtx.lineTo(-20, 3);
+          targetCtx.closePath();
+          targetCtx.fill();
+
+          targetCtx.fillStyle = '#ffffff';
+          for (let t = 0; t < 4; t++) {
+            const tx = -39 + t * 5.2;
+            targetCtx.beginPath();
+            targetCtx.moveTo(tx, 3);
+            targetCtx.lineTo(tx + 2.2, 8);
+            targetCtx.lineTo(tx + 4.4, 3);
+            targetCtx.fill();
+          }
+
+          // Pectoral Fin
+          targetCtx.fillStyle = topColor;
+          targetCtx.beginPath();
+          targetCtx.moveTo(-8, 10);
+          targetCtx.lineTo(8, 29 + Math.sin(time * 7.5) * 3);
+          targetCtx.lineTo(15, 10);
+          targetCtx.closePath();
+          targetCtx.fill();
+
+          // Gill Slits
+          targetCtx.strokeStyle = 'rgba(15, 23, 42, 0.75)';
+          targetCtx.lineWidth = 1.6;
+          for (let g = 0; g < 3; g++) {
+            targetCtx.beginPath();
+            targetCtx.moveTo(-12 + g * 4.5, -5);
+            targetCtx.lineTo(-13 + g * 4.5, 5);
+            targetCtx.stroke();
+          }
+
+          // Predator Eye
+          targetCtx.fillStyle = frenzyActive ? '#ef4444' : '#fbbf24';
+          targetCtx.beginPath();
+          targetCtx.arc(-34, -5, 3.2, 0, Math.PI * 2);
+          targetCtx.fill();
+
+          targetCtx.fillStyle = '#020617';
+          targetCtx.beginPath();
+          targetCtx.arc(-34.8, -5, 1.5, 0, Math.PI * 2);
+          targetCtx.fill();
+        }
+
+        // Stunned Electric Arcs if hit by Sonar EMP
+        if (isStunned) {
+          targetCtx.strokeStyle = '#67e8f9';
+          targetCtx.lineWidth = 1.8;
+          targetCtx.beginPath();
+          targetCtx.moveTo(-30, -24);
+          targetCtx.lineTo(-10, -32);
+          targetCtx.lineTo(8, -22);
+          targetCtx.lineTo(25, -30);
+          targetCtx.stroke();
+        }
+
+        targetCtx.restore();
+      }
+
+      // Render Live Animated Canvas Previews inside Start Screen Cards
+      function renderStartScreenPreviews(time) {
+        if (state.status !== 'menu') return;
+        const previewCanvases = document.querySelectorAll('.preview-canvas');
+        previewCanvases.forEach(c => {
+          const rect = c.getBoundingClientRect();
+          if (rect.width === 0 || rect.height === 0) return;
+
+          const dpr = Math.min(window.devicePixelRatio || 1, 2);
+          const targetW = Math.floor(rect.width * dpr);
+          const targetH = Math.floor(rect.height * dpr);
+          if (c.width !== targetW || c.height !== targetH) {
+            c.width = targetW;
+            c.height = targetH;
+          }
+
+          const pCtx = c.getContext('2d');
+          pCtx.save();
+          pCtx.scale(dpr, dpr);
+
+          // Deep ocean mini backdrop
+          const grad = pCtx.createLinearGradient(0, 0, 0, rect.height);
+          grad.addColorStop(0, '#09233e');
+          grad.addColorStop(1, '#030b18');
+          pCtx.fillStyle = grad;
+          pCtx.fillRect(0, 0, rect.width, rect.height);
+
+          // Tiny rising bubble
+          const by = rect.height - ((time * 24) % rect.height);
+          pCtx.strokeStyle = 'rgba(186, 230, 253, 0.35)';
+          pCtx.lineWidth = 1;
+          pCtx.beginPath();
+          pCtx.arc(rect.width * 0.25 + Math.sin(time * 3) * 4, by, 2.2, 0, Math.PI * 2);
+          pCtx.stroke();
+
+          const pType = c.dataset.previewType;
+          const pId = c.dataset.previewId;
+
+          pCtx.translate(rect.width * 0.5, rect.height * 0.52);
+          if (pType === 'diver') {
+            renderDiverSprite(pCtx, pId, time, { scale: 0.88 });
+          } else if (pType === 'shark') {
+            renderSharkSprite(pCtx, pId, time, 0.62, {
+              isArmored: pId === 'hammerhead',
+              frenzyActive: pId === 'great_white' && Math.sin(time * 2) > 0.65
+            });
+          }
+
+          pCtx.restore();
+        });
+      }
+
+      // =========================================================================
+      // 5. RESPONSIVE CANVAS & AMBIENT OCEAN INITIALIZATION
+      // =========================================================================
+      function resizeCanvas() {
+        state.width = window.innerWidth;
+        state.height = window.innerHeight;
+        state.dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+        canvas.width = Math.floor(state.width * state.dpr);
+        canvas.height = Math.floor(state.height * state.dpr);
+        ctx.setTransform(state.dpr, 0, 0, state.dpr, 0, 0);
+
+        initAmbientOcean();
+      }
+
+      function initAmbientOcean() {
+        state.bubbles = [];
+        const bubbleCount = Math.max(24, Math.floor(state.width / 38));
+        for (let i = 0; i < bubbleCount; i++) {
+          state.bubbles.push({
+            x: Math.random() * state.width,
+            y: Math.random() * state.height,
+            r: 1.5 + Math.random() * 4.5,
+            speed: 18 + Math.random() * 42,
+            wobble: Math.random() * Math.PI * 2,
+            alpha: 0.12 + Math.random() * 0.32
+          });
+        }
+
+        state.kelp = [];
+        const kelpCount = Math.max(10, Math.floor(state.width / 95));
+        for (let i = 0; i < kelpCount; i++) {
+          state.kelp.push({
+            x: (i + 0.5) * (state.width / kelpCount) + (Math.random() - 0.5) * 35,
+            height: 75 + Math.random() * 110,
+            segments: 7,
+            phase: Math.random() * Math.PI * 2,
+            hue: 155 + Math.random() * 25
+          });
+        }
+
+        state.lightRays = [];
+        for (let i = 0; i < 6; i++) {
+          state.lightRays.push({
+            x: state.width * (0.12 + i * 0.16),
+            topWidth: 35 + Math.random() * 45,
+            bottomWidth: 140 + Math.random() * 110,
+            phase: Math.random() * Math.PI * 2,
+            speed: 0.35 + Math.random() * 0.35
+          });
+        }
+      }
+
+      window.addEventListener('resize', resizeCanvas);
+      resizeCanvas();
+
+      // =========================================================================
+      // 6. WORD SELECTION & APEX SHARK SPAWNING SYSTEM
+      // =========================================================================
+      function pickUniqueWord(diffId) {
+        const pool = WORD_BANK[diffId] || WORD_BANK.easy;
+        const activeFirstChars = new Set(
+          state.sharks.map(s => {
+            const rem = s.words[s.wordIndex].slice(s.typedIndex);
+            return rem ? rem[0] : '';
+          })
+        );
+
+        let candidates = pool.filter(w => !state.usedWords.has(w));
+        if (candidates.length < 8) {
+          state.usedWords.clear();
+          candidates = [...pool];
+        }
+
+        const nonColliding = candidates.filter(w => !activeFirstChars.has(w[0]));
+        const finalPool = nonColliding.length > 0 ? nonColliding : candidates;
+
+        const chosen = finalPool[Math.floor(Math.random() * finalPool.length)];
+        state.usedWords.add(chosen);
+        return chosen;
+      }
+
+      function spawnShark(forceBoss = false) {
+        const cfg = DIFFICULTY_CONFIG[state.difficulty];
+        const species = SHARK_SPECIES[state.selectedShark];
+        if (!forceBoss && state.sharks.length >= cfg.maxSharks) return;
+
+        // Determine if this shark is a Boss, Armored 2-word variant, or Standard predator
+        const armorRoll = Math.random();
+        const combinedArmorChance = Math.max(cfg.armoredChance, species.armorChance);
+        const isBoss = forceBoss;
+        const isArmored = !isBoss && cfg.id !== 'easy' && armorRoll < combinedArmorChance;
+
+        let words = [];
+        let speedMult = 1.0;
+        let scale = 1.0;
+
+        if (isBoss) {
+          words = [
+            pickUniqueWord(state.difficulty),
+            pickUniqueWord(state.difficulty),
+            pickUniqueWord(state.difficulty)
+          ];
+          speedMult = 0.56;
+          scale = 1.65;
+        } else if (isArmored) {
+          words = [
+            pickUniqueWord(state.difficulty),
+            pickUniqueWord(state.difficulty)
+          ];
+          speedMult = 0.78;
+          scale = 1.22;
+        } else {
+          words = [pickUniqueWord(state.difficulty)];
+          speedMult = species.id === 'goblin' ? 1.08 : 1.0;
+          scale = 1.0;
+        }
+
+        const topMargin = 115;
+        const bottomMargin = 135;
+        const laneHeight = Math.max(140, state.height - topMargin - bottomMargin);
+
+        let bestY = topMargin + Math.random() * laneHeight;
+        let bestMinDist = -1;
+        for (let attempt = 0; attempt < 8; attempt++) {
+          const candidateY = topMargin + Math.random() * laneHeight;
+          let minDist = Infinity;
+          for (const s of state.sharks) {
+            minDist = Math.min(minDist, Math.abs(s.y - candidateY));
+          }
+          if (minDist > bestMinDist) {
+            bestMinDist = minDist;
+            bestY = candidateY;
+          }
+        }
+
+        const baseSpeed = cfg.baseSpeed + (state.wave - 1) * cfg.speedPerWave;
+
+        state.sharks.push({
+          id: state.nextSharkId++,
+          speciesId: species.id,
+          isBoss,
+          isArmored,
+          x: state.width + 110 * scale,
+          y: bestY,
+          baseY: bestY,
+          speed: baseSpeed * speedMult,
+          scale,
+          words,
+          wordIndex: 0,
+          typedIndex: 0,
+          swimPhase: Math.random() * Math.PI * 2,
+          hitFlash: 0,
+          errorShake: 0,
+          stunTimer: 0,
+          knockbackVx: 0,
+          // Species-specific behavior timers
+          specialTimer: 1.5 + Math.random() * 2.0,
+          frenzyActive: false,
+          inkCloaked: species.inkAmbush && Math.random() < 0.55
+        });
+      }
+
+      // =========================================================================
+      // 7. MECHANICAL KEYCAP STREAM, ACTIVE WORD HUD & METRICS UPDATES
+      // =========================================================================
+      function pushKeycapVisual(label, status = 'normal', isWide = false) {
+        if (ui.keycapStream.firstElementChild && !ui.keycapStream.firstElementChild.classList.contains('mech-keycap')) {
+          ui.keycapStream.innerHTML = '';
+        }
+
+        const cap = document.createElement('div');
+        cap.className = 'mech-keycap pressed';
+        if (isWide) cap.classList.add('wide-key');
+        if (status === 'error') cap.classList.add('error');
+        if (status === 'emp') cap.classList.add('emp');
+        cap.textContent = label;
+
+        ui.keycapStream.appendChild(cap);
+
+        setTimeout(() => {
+          cap.classList.remove('pressed');
+        }, 80);
+
+        const maxCaps = state.width < 640 ? 5 : 9;
+        while (ui.keycapStream.children.length > maxCaps) {
+          ui.keycapStream.removeChild(ui.keycapStream.firstElementChild);
+        }
+      }
+
+      function updateActiveWordHud(triggerErrorShake = false) {
+        if (triggerErrorShake) {
+          ui.activeWordBox.classList.remove('word-shake');
+          void ui.activeWordBox.offsetWidth; // force reflow
+          ui.activeWordBox.classList.add('word-shake');
+        }
+
+        const locked = state.sharks.find(s => s.id === state.lockedSharkId);
+        if (!locked) {
+          ui.activeWordDisplay.innerHTML = `<span class="text-slate-400 text-xs sm:text-sm">TYPE FIRST LETTER TO LOCK TARGET</span>`;
+          return;
+        }
+
+        const word = locked.words[locked.wordIndex];
+        const typed = escapeHtml(word.slice(0, locked.typedIndex));
+        const activeChar = escapeHtml(word[locked.typedIndex] || '');
+        const remaining = escapeHtml(word.slice(locked.typedIndex + 1));
+
+        const multiBadge = locked.words.length > 1
+          ? `<span class="mr-2 px-1.5 py-0.5 rounded bg-slate-800 text-[10px] text-amber-300 border border-amber-500/40">ARMOR ${locked.wordIndex + 1}/${locked.words.length}</span>`
+          : '';
+
+        ui.activeWordDisplay.innerHTML = `
+          ${multiBadge}<span class="accent-text">${typed}</span><span class="px-1 mx-0.5 rounded bg-white/20 text-white underline decoration-2">${activeChar}</span><span class="text-slate-300">${remaining}</span>
+        `;
+      }
+
+      function escapeHtml(str) {
+        return str
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;');
+      }
+
+      function updateHud() {
+        ui.hudWave.textContent = state.wave;
+        ui.hudScore.textContent = Math.floor(state.score).toLocaleString();
+        ui.hudCombo.textContent = `${state.combo.toFixed(1)}x`;
+
+        // Hull Hearts (3 normally, 4 for MECH-SUIT MK.IV)
+        let livesHtml = '';
+        for (let i = 0; i < state.maxLives; i++) {
+          const active = i < state.lives;
+          livesHtml += `
+            <span class="inline-flex items-center justify-center w-6 h-6 rounded-lg border text-xs transition-all ${
+              active
+                ? 'bg-rose-500/20 border-rose-400 text-rose-300 shadow-[0_0_10px_rgba(244,63,94,0.4)]'
+                : 'bg-slate-900/70 border-slate-800 text-slate-600 opacity-40'
+            }">
+              ❤️
+            </span>
+          `;
+        }
+        ui.hudLives.innerHTML = livesHtml;
+
+        // Live WPM & Accuracy
+        const wpm = computeCurrentWpm();
+        if (wpm > state.peakWpm && state.correctKeystrokes >= 10) {
+          state.peakWpm = wpm;
+        }
+        ui.hudWpm.textContent = wpm;
+
+        const acc = state.totalKeystrokes === 0
+          ? 100
+          : Math.round((state.correctKeystrokes / state.totalKeystrokes) * 100);
+        ui.hudAccuracy.textContent = `${acc}%`;
+
+        // Sonar EMP Charge Bar
+        const empPct = Math.min(100, Math.round((state.empCharge / state.empMax) * 100));
+        ui.empBarFill.style.width = `${empPct}%`;
+        ui.empStatusText.textContent = `${empPct}%`;
+
+        if (state.empCharge >= state.empMax) {
+          ui.empBarContainer.classList.add('emp-ready-pulse', 'accent-border');
+          ui.empHintText.textContent = '100% READY! Press [SPACE] or [ENTER]!';
+          ui.empHintText.classList.add('accent-text', 'font-bold');
+        } else {
+          ui.empBarContainer.classList.remove('emp-ready-pulse', 'accent-border');
+          ui.empHintText.textContent = 'Build streak to charge Sonar EMP';
+          ui.empHintText.classList.remove('accent-text', 'font-bold');
+        }
+
+        updateActiveWordHud(false);
+      }
+
+      function computeCurrentWpm() {
+        if (state.activeTimeSeconds < 1.5) return 0;
+        const minutes = state.activeTimeSeconds / 60;
+        return Math.round((state.correctKeystrokes / 5) / minutes);
+      }
+
+      // =========================================================================
+      // 8. COMBAT ACTIONS: HARPOON BOLTS, SONAR EMP & SPECIES MECHANICS
+      // =========================================================================
+      function getDiverPosition() {
+        return {
+          x: Math.min(125, state.width * 0.13),
+          y: state.height * 0.52
+        };
+      }
+
+      function spawnPlasmaBolt(targetShark) {
+        const diver = getDiverPosition();
+        const angle = Math.atan2(targetShark.y - diver.y, targetShark.x - diver.x);
+        state.subAimAngle = angle;
+        state.subRecoil = 8;
+
+        state.bolts.push({
+          x: diver.x + Math.cos(angle) * 40,
+          y: diver.y + Math.sin(angle) * 10,
+          targetId: targetShark.id,
+          targetX: targetShark.x,
+          targetY: targetShark.y,
+          speed: 1600,
+          trail: []
+        });
+      }
+
+      function spawnParticles(x, y, color, count = 12, speedScale = 1) {
+        for (let i = 0; i < count; i++) {
+          const angle = Math.random() * Math.PI * 2;
+          const speed = (45 + Math.random() * 190) * speedScale;
+          state.particles.push({
+            x,
+            y,
+            vx: Math.cos(angle) * speed,
+            vy: Math.sin(angle) * speed,
+            r: 1.8 + Math.random() * 3.4,
+            color,
+            alpha: 1,
+            decay: 1.4 + Math.random() * 1.4
+          });
+        }
+      }
+
+      function spawnInkCloud(x, y) {
+        for (let i = 0; i < 6; i++) {
+          state.inkClouds.push({
+            x: x + (Math.random() - 0.5) * 35,
+            y: y + (Math.random() - 0.5) * 28,
+            r: 22 + Math.random() * 24,
+            alpha: 0.72,
+            decay: 0.42
+          });
+        }
+      }
+
+      function spawnFloatingText(x, y, text, color = '#ffffff', size = 16) {
+        state.floatingTexts.push({
+          x,
+          y,
+          vy: -48,
+          text,
+          color,
+          size,
+          alpha: 1
+        });
+      }
+
+      function triggerEmpShockwave() {
+        if (state.empCharge < state.empMax) return false;
+
+        state.empCharge = 0;
+        state.screenShake = 15;
+        sound.playEmpBlast();
+        pushKeycapVisual('SONAR EMP 📡', 'emp', true);
+
+        const diver = getDiverPosition();
+        const diverObj = DIVERS[state.selectedDiver];
+
+        state.shockwaves.push({
+          x: diver.x,
+          y: diver.y,
+          radius: 20,
+          maxRadius: Math.max(state.width, state.height) * 1.15,
+          alpha: 0.95,
+          color: diverObj.bright
+        });
+
+        spawnFloatingText(diver.x + 55, diver.y - 55, 'SONAR EMP BLAST!', diverObj.bright, 20);
+
+        const defeatedIds = [];
+        for (const shark of state.sharks) {
+          shark.knockbackVx = 350;
+          shark.stunTimer = 1.65;
+          shark.hitFlash = 1.0;
+          shark.inkCloaked = false;
+          spawnParticles(shark.x, shark.y, diverObj.bright, 14, 1.1);
+
+          // Advance up to 2 characters on current word
+          const currentWord = shark.words[shark.wordIndex];
+          shark.typedIndex = Math.min(currentWord.length, shark.typedIndex + 2);
+          if (shark.typedIndex >= currentWord.length) {
+            if (shark.wordIndex < shark.words.length - 1) {
+              shark.wordIndex++;
+              shark.typedIndex = 0;
+            } else {
+              defeatedIds.push(shark.id);
+            }
+          }
+        }
+
+        for (const id of defeatedIds) {
+          const idx = state.sharks.findIndex(s => s.id === id);
+          if (idx !== -1) {
+            defeatShark(state.sharks[idx], idx);
+          }
+        }
+
+        updateHud();
+        return true;
+      }
+
+      function defeatShark(shark, index) {
+        const diverObj = DIVERS[state.selectedDiver];
+        const speciesObj = SHARK_SPECIES[state.selectedShark];
+
+        sound.playSharkDefeat(shark.isBoss);
+        state.screenShake = shark.isBoss ? 16 : 6.5;
+
+        const basePoints = shark.isBoss ? 500 : shark.isArmored ? 200 : 120;
+        const pointsEarned = Math.round(basePoints * state.combo * speciesObj.scoreMult);
+        state.score += pointsEarned;
+        state.sharksDefeated++;
+        state.waveKills++;
+
+        spawnParticles(shark.x, shark.y, diverObj.bright, shark.isBoss ? 36 : 18, shark.isBoss ? 1.5 : 1.0);
+        spawnParticles(shark.x, shark.y, '#38bdf8', 12, 0.9);
+        spawnFloatingText(
+          shark.x,
+          shark.y - 24,
+          `+${pointsEarned}`,
+          diverObj.bright,
+          shark.isBoss ? 24 : 17
+        );
+
+        if (state.lockedSharkId === shark.id) {
+          state.lockedSharkId = null;
+        }
+
+        state.sharks.splice(index, 1);
+
+        if (state.waveKills >= state.killsPerWave) {
+          state.wave++;
+          state.waveKills = 0;
+          state.killsPerWave = Math.min(18, 8 + state.wave * 2);
+          const diver = getDiverPosition();
+          spawnFloatingText(diver.x + 80, diver.y - 80, `WAVE ${state.wave}!`, '#34d399', 22);
+
+          if (DIFFICULTY_CONFIG[state.difficulty].allowBoss && state.wave % 2 === 0) {
+            spawnShark(true);
+          }
+        }
+      }
+
+      // =========================================================================
+      // 9. KEYBOARD INPUT HANDLER
+      // =========================================================================
+      function formatKeyLabel(key) {
+        if (key === ' ') return 'SPACE';
+        if (key === 'Escape') return 'ESC';
+        if (key === 'Tab') return 'TAB';
+        if (key === 'Enter') return 'ENTER';
+        return key;
+      }
+
+      function handleKeyDown(e) {
+        if (state.status === 'playing' || state.status === 'paused') {
+          if ([' ', 'Tab', 'Backspace', 'Enter', '/', "'"].includes(e.key)) {
+            e.preventDefault();
+          }
+        }
+
+        // Allow Enter on Start Screen to immediately launch dive
+        if (state.status === 'menu' && e.key === 'Enter') {
+          startGame();
+          return;
+        }
+
+        // Toggle Pause with 'P' when not actively locked onto a word needing 'p'/'P'
+        if ((e.key === 'p' || e.key === 'P') && (state.status === 'paused' || (state.status === 'playing' && state.lockedSharkId === null && !e.ctrlKey && !e.metaKey))) {
+          const anyStartsWithP = state.sharks.some(s => {
+            const rem = s.words[s.wordIndex].slice(s.typedIndex);
+            return rem && rem[0].toLowerCase() === 'p';
+          });
+          if (state.status === 'paused' || !anyStartsWithP) {
+            togglePause();
+            return;
+          }
+        }
+
+        if (state.status !== 'playing') return;
+        if (e.ctrlKey || e.metaKey || e.altKey) return;
+
+        // Drop target lock with Escape or Tab
+        if (e.key === 'Escape' || e.key === 'Tab') {
+          if (state.lockedSharkId !== null) {
+            state.lockedSharkId = null;
+            sound.playUnlock();
+            pushKeycapVisual(formatKeyLabel(e.key), 'normal', true);
+            updateActiveWordHud(false);
+          }
+          return;
+        }
+
+        // Trigger Sonar EMP Shockwave with Enter or Space (when at 100%)
+        if (e.key === 'Enter') {
+          if (state.empCharge >= state.empMax) {
+            triggerEmpShockwave();
+          } else {
+            sound.playKeystroke(state.combo, true);
+            pushKeycapVisual('ENTER', 'normal', true);
+          }
+          return;
+        }
+
+        if (e.key === ' ') {
+          const locked = state.sharks.find(s => s.id === state.lockedSharkId);
+          const expectsSpace = locked && locked.words[locked.wordIndex][locked.typedIndex] === ' ';
+          if (!expectsSpace) {
+            if (state.empCharge >= state.empMax) {
+              triggerEmpShockwave();
+            } else {
+              sound.playKeystroke(state.combo, true);
+              pushKeycapVisual('SPACE', 'normal', true);
+            }
+            return;
+          }
+        }
+
+        if (e.key.length !== 1) return;
+
+        const cfg = DIFFICULTY_CONFIG[state.difficulty];
+        const diverObj = DIVERS[state.selectedDiver];
+        const typedChar = cfg.caseSensitive ? e.key : e.key.toLowerCase();
+        state.totalKeystrokes++;
+
+        let targetShark = state.sharks.find(s => s.id === state.lockedSharkId) || null;
+
+        // Auto-lock onto the nearest shark matching the first typed letter
+        if (!targetShark) {
+          let closest = null;
+          let minX = Infinity;
+
+          for (const shark of state.sharks) {
+            const currentWord = shark.words[shark.wordIndex];
+            const expectedChar = cfg.caseSensitive
+              ? currentWord[shark.typedIndex]
+              : currentWord[shark.typedIndex].toLowerCase();
+
+            if (expectedChar === typedChar && shark.x < minX) {
+              minX = shark.x;
+              closest = shark;
+            }
+          }
+
+          if (closest) {
+            targetShark = closest;
+            state.lockedSharkId = closest.id;
+            closest.inkCloaked = false;
+          }
+        }
+
+        if (targetShark) {
+          const currentWord = targetShark.words[targetShark.wordIndex];
+          const expectedChar = cfg.caseSensitive
+            ? currentWord[targetShark.typedIndex]
+            : currentWord[targetShark.typedIndex].toLowerCase();
+
+          if (typedChar === expectedChar) {
+            // HIT!
+            state.correctKeystrokes++;
+            state.streak++;
+            state.longestStreak = Math.max(state.longestStreak, state.streak);
+
+            // Apply Diver combo perk (CYBER-NINJA SUB gets +20% combo multiplier)
+            const rawCombo = 1.0 + Math.floor(state.streak / 5) * 0.2;
+            state.combo = Math.min(5.0, +(rawCombo * diverObj.comboBonusMult).toFixed(2));
+
+            // Apply Diver Sonar EMP charge perk (SCUBA ACE gets +15% charge speed)
+            if (state.empCharge < state.empMax) {
+              state.empCharge = Math.min(state.empMax, +(state.empCharge + diverObj.empChargeMult).toFixed(2));
+            }
+
+            targetShark.typedIndex++;
+            targetShark.hitFlash = 0.75;
+            targetShark.x += 9;
+
+            sound.playKeystroke(state.combo, e.key === ' ');
+            pushKeycapVisual(formatKeyLabel(e.key), 'normal', e.key === ' ');
+            spawnPlasmaBolt(targetShark);
+
+            // Check if current word is completed
+            if (targetShark.typedIndex >= currentWord.length) {
+              if (targetShark.wordIndex < targetShark.words.length - 1) {
+                // Armored or Boss shark advances to next word!
+                targetShark.wordIndex++;
+                targetShark.typedIndex = 0;
+                targetShark.knockbackVx = 135;
+                sound.playSharkDefeat(false);
+                spawnParticles(targetShark.x, targetShark.y, diverObj.bright, 16);
+                spawnFloatingText(targetShark.x, targetShark.y - 30, 'ARMOR BREACHED!', '#fbbf24', 15);
+              } else {
+                const idx = state.sharks.findIndex(s => s.id === targetShark.id);
+                if (idx !== -1) {
+                  defeatShark(targetShark, idx);
+                }
+              }
+            }
+
+            updateHud();
+            return;
+          }
+        }
+
+        // MISS / TYPO!
+        state.streak = 0;
+        state.combo = +(1.0 * diverObj.comboBonusMult).toFixed(2);
+        if (targetShark) {
+          targetShark.errorShake = 0.35;
+        }
+        sound.playError();
+        pushKeycapVisual(formatKeyLabel(e.key), 'error', e.key === ' ');
+        updateHud();
+        updateActiveWordHud(true);
+      }
+
+      window.addEventListener('keydown', handleKeyDown);
+
+      ui.mobileInput.addEventListener('input', (e) => {
+        const val = e.target.value;
+        if (val && val.length > 0) {
+          const lastChar = val[val.length - 1];
+          handleKeyDown({
+            key: lastChar,
+            ctrlKey: false,
+            metaKey: false,
+            altKey: false,
+            preventDefault: () => {}
+          });
+        }
+        e.target.value = '';
+      });
+
+      document.getElementById('btnTouchType').addEventListener('click', () => {
+        ui.mobileInput.focus();
+      });
+
+      // =========================================================================
+      // 10. SIMULATION UPDATE LOOP
+      // =========================================================================
+      function update(dt) {
+        state.globalTime += dt;
+
+        // Rising ambient bubbles
+        for (const b of state.bubbles) {
+          b.y -= b.speed * dt;
+          b.x += Math.sin(state.globalTime * 2 + b.wobble) * 12 * dt;
+          if (b.y < -12) {
+            b.y = state.height + 12;
+            b.x = Math.random() * state.width;
+          }
+        }
+
+        if (state.status === 'menu') {
+          renderStartScreenPreviews(state.globalTime);
+          return;
+        }
+
+        if (state.status !== 'playing') return;
+
+        // Active typing clock for WPM
+        state.activeTimeSeconds += dt;
+        state.wpmSampleTimer += dt;
+        if (state.wpmSampleTimer >= 0.45) {
+          state.wpmSampleTimer = 0;
+          updateHud();
+        }
+
+        if (state.screenShake > 0) state.screenShake = Math.max(0, state.screenShake - dt * 36);
+        if (state.damageFlash > 0) state.damageFlash = Math.max(0, state.damageFlash - dt * 2.2);
+        if (state.shieldBubbleAlpha > 0) state.shieldBubbleAlpha = Math.max(0, state.shieldBubbleAlpha - dt * 1.4);
+        if (state.subRecoil > 0) state.subRecoil = Math.max(0, state.subRecoil - dt * 42);
+
+        // Diver breathing bubbles trail
+        const diver = getDiverPosition();
+        if (Math.random() < dt * 4.5) {
+          state.bubbles.push({
+            x: diver.x + 14,
+            y: diver.y - 8,
+            r: 2 + Math.random() * 2.5,
+            speed: 38 + Math.random() * 25,
+            wobble: Math.random() * Math.PI * 2,
+            alpha: 0.45
+          });
+        }
+
+        // Shark spawning
+        const cfg = DIFFICULTY_CONFIG[state.difficulty];
+        state.spawnTimer -= dt;
+        if (state.spawnTimer <= 0 && state.sharks.length < cfg.maxSharks) {
+          spawnShark(false);
+          const dynamicInterval = Math.max(
+            cfg.minSpawnInterval,
+            cfg.spawnInterval - (state.wave - 1) * 0.11
+          );
+          state.spawnTimer = dynamicInterval;
+        }
+
+        const biteThresholdX = diver.x + 54;
+
+        for (let i = state.sharks.length - 1; i >= 0; i--) {
+          const s = state.sharks[i];
+          s.swimPhase += dt * 7.2;
+
+          if (s.hitFlash > 0) s.hitFlash = Math.max(0, s.hitFlash - dt * 4.5);
+          if (s.errorShake > 0) s.errorShake = Math.max(0, s.errorShake - dt * 2.5);
+
+          // Species-specific movement traits
+          s.specialTimer -= dt;
+          if (s.speciesId === 'great_white' && s.specialTimer <= 0) {
+            s.frenzyActive = !s.frenzyActive;
+            s.specialTimer = s.frenzyActive ? 1.15 : 2.8 + Math.random() * 1.5;
+          } else if (s.speciesId === 'goblin' && s.specialTimer <= 0) {
+            if (s.inkCloaked) {
+              // Ambush lunge out of an ink cloud!
+              s.inkCloaked = false;
+              s.frenzyActive = true;
+              spawnInkCloud(s.x, s.y);
+              s.specialTimer = 1.1;
+            } else {
+              s.frenzyActive = false;
+              s.specialTimer = 3.2 + Math.random() * 1.5;
+            }
+          }
+
+          if (s.knockbackVx > 0) {
+            s.x += s.knockbackVx * dt;
+            s.knockbackVx = Math.max(0, s.knockbackVx - dt * 780);
+          }
+
+          if (s.stunTimer > 0) {
+            s.stunTimer = Math.max(0, s.stunTimer - dt);
+          } else {
+            const currentSpeed = s.frenzyActive ? s.speed * 1.55 : s.speed;
+            s.x -= currentSpeed * dt;
+          }
+
+          s.y = s.baseY + Math.sin(s.swimPhase * 0.45) * 11;
+
+          // Check if shark reached the Diver
+          if (s.x - 42 * s.scale <= biteThresholdX) {
+            state.lives--;
+            state.streak = 0;
+            state.combo = +(1.0 * DIVERS[state.selectedDiver].comboBonusMult).toFixed(2);
+            state.screenShake = 18;
+            state.damageFlash = 0.85;
+            state.shieldBubbleAlpha = 0.95;
+            sound.playDamage();
+
+            spawnParticles(diver.x + 35, s.y, '#ef4444', 24, 1.2);
+            spawnFloatingText(diver.x + 45, diver.y - 35, 'HULL HIT! -1 ❤️', '#f87171', 18);
+
+            if (state.lockedSharkId === s.id) {
+              state.lockedSharkId = null;
+            }
+            state.sharks.splice(i, 1);
+            updateHud();
+
+            if (state.lives <= 0) {
+              triggerGameOver();
+              return;
+            }
+          }
+        }
+
+        // Update plasma harpoon bolts
+        for (let i = state.bolts.length - 1; i >= 0; i--) {
+          const b = state.bolts[i];
+          const target = state.sharks.find(s => s.id === b.targetId);
+          if (target) {
+            b.targetX = target.x;
+            b.targetY = target.y;
+          }
+
+          const dx = b.targetX - b.x;
+          const dy = b.targetY - b.y;
+          const dist = Math.hypot(dx, dy);
+          const step = b.speed * dt;
+
+          b.trail.push({ x: b.x, y: b.y });
+          if (b.trail.length > 5) b.trail.shift();
+
+          if (dist <= step || dist < 16) {
+            const isHammerhead = target && target.speciesId === 'hammerhead';
+            sound.playSharkHit(isHammerhead);
+            spawnParticles(
+              b.targetX,
+              b.targetY,
+              isHammerhead ? '#fbbf24' : DIVERS[state.selectedDiver].bright,
+              isHammerhead ? 11 : 7,
+              isHammerhead ? 1.1 : 0.75
+            );
+            state.bolts.splice(i, 1);
+          } else {
+            b.x += (dx / dist) * step;
+            b.y += (dy / dist) * step;
+          }
+        }
+
+        // Update particles
+        for (let i = state.particles.length - 1; i >= 0; i--) {
+          const p = state.particles[i];
+          p.x += p.vx * dt;
+          p.y += p.vy * dt;
+          p.vx *= 0.94;
+          p.vy *= 0.94;
+          p.alpha -= p.decay * dt;
+          if (p.alpha <= 0) {
+            state.particles.splice(i, 1);
+          }
+        }
+
+        // Update Goblin ink clouds
+        for (let i = state.inkClouds.length - 1; i >= 0; i--) {
+          const ic = state.inkClouds[i];
+          ic.r += 16 * dt;
+          ic.alpha -= ic.decay * dt;
+          if (ic.alpha <= 0) {
+            state.inkClouds.splice(i, 1);
+          }
+        }
+
+        // Update Sonar EMP shockwaves
+        for (let i = state.shockwaves.length - 1; i >= 0; i--) {
+          const sw = state.shockwaves[i];
+          sw.radius += 980 * dt;
+          sw.alpha = Math.max(0, 1 - sw.radius / sw.maxRadius);
+          if (sw.radius >= sw.maxRadius) {
+            state.shockwaves.splice(i, 1);
+          }
+        }
+
+        // Update floating score popups
+        for (let i = state.floatingTexts.length - 1; i >= 0; i--) {
+          const ft = state.floatingTexts[i];
+          ft.y += ft.vy * dt;
+          ft.alpha -= 0.95 * dt;
+          if (ft.alpha <= 0) {
+            state.floatingTexts.splice(i, 1);
+          }
+        }
+      }
+
+      // =========================================================================
+      // 11. MAIN HTML5 CANVAS RENDERING ENGINE
+      // =========================================================================
+      function render() {
+        const w = state.width;
+        const h = state.height;
+        const diverObj = DIVERS[state.selectedDiver];
+
+        ctx.save();
+
+        if (state.screenShake > 0.1) {
+          const sx = (Math.random() - 0.5) * state.screenShake;
+          const sy = (Math.random() - 0.5) * state.screenShake;
+          ctx.translate(sx, sy);
+        }
+
+        // 1. Deep Ocean Gradient
+        const bgGrad = ctx.createLinearGradient(0, 0, 0, h);
+        if (state.difficulty === 'hard') {
+          bgGrad.addColorStop(0, '#07152b');
+          bgGrad.addColorStop(0.55, '#030b1a');
+          bgGrad.addColorStop(1, '#01040b');
+        } else if (state.difficulty === 'medium') {
+          bgGrad.addColorStop(0, '#08233e');
+          bgGrad.addColorStop(0.55, '#041226');
+          bgGrad.addColorStop(1, '#020712');
+        } else {
+          bgGrad.addColorStop(0, '#0a3354');
+          bgGrad.addColorStop(0.55, '#051930');
+          bgGrad.addColorStop(1, '#020917');
+        }
+        ctx.fillStyle = bgGrad;
+        ctx.fillRect(0, 0, w, h);
+
+        // 2. Volumetric Surface Light Rays
+        for (const ray of state.lightRays) {
+          const pulse = 0.035 + Math.sin(state.globalTime * ray.speed + ray.phase) * 0.018;
+          const rayGrad = ctx.createLinearGradient(ray.x, 0, ray.x + 120, h * 0.85);
+          rayGrad.addColorStop(0, `rgba(125, 211, 252, ${pulse})`);
+          rayGrad.addColorStop(1, 'rgba(125, 211, 252, 0)');
+
+          ctx.fillStyle = rayGrad;
+          ctx.beginPath();
+          ctx.moveTo(ray.x - ray.topWidth * 0.5, 0);
+          ctx.lineTo(ray.x + ray.topWidth * 0.5, 0);
+          ctx.lineTo(ray.x + ray.bottomWidth + 130, h * 0.85);
+          ctx.lineTo(ray.x - ray.bottomWidth + 130, h * 0.85);
+          ctx.closePath();
+          ctx.fill();
+        }
+
+        // 3. Parallax Ocean Floor & Kelp
+        drawOceanFloor(w, h);
+        drawKelp(h);
+
+        // 4. Rising Bubbles
+        for (const b of state.bubbles) {
+          ctx.beginPath();
+          ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
+          ctx.strokeStyle = `rgba(186, 230, 253, ${b.alpha})`;
+          ctx.lineWidth = 1.1;
+          ctx.stroke();
+        }
+
+        // 5. Chosen Diver Character on the Left
+        const diver = getDiverPosition();
+        ctx.save();
+        ctx.translate(diver.x, diver.y);
+        renderDiverSprite(ctx, state.selectedDiver, state.globalTime, {
+          recoil: state.subRecoil,
+          aimAngle: state.subAimAngle,
+          shieldAlpha: state.shieldBubbleAlpha,
+          scale: 1.12
+        });
+        ctx.restore();
+
+        // 6. Targeting Laser Tether (if locked)
+        const lockedShark = state.sharks.find(s => s.id === state.lockedSharkId);
+        if (lockedShark) {
+          ctx.save();
+          ctx.strokeStyle = diverObj.accent;
+          ctx.lineWidth = 1.6;
+          ctx.setLineDash([7, 7]);
+          ctx.lineDashOffset = -state.globalTime * 65;
+          ctx.globalAlpha = 0.55;
+          ctx.beginPath();
+          ctx.moveTo(diver.x + 38, diver.y + 8);
+          ctx.lineTo(lockedShark.x, lockedShark.y);
+          ctx.stroke();
+          ctx.restore();
+        }
+
+        // 7. Chosen Apex Sharks
+        for (const shark of state.sharks) {
+          const isLocked = shark.id === state.lockedSharkId;
+          const shakeX = shark.errorShake > 0 ? Math.sin(shark.errorShake * 55) * 6 : 0;
+          const distToDiver = Math.max(0, shark.x - diver.x);
+          const jawSnapBoost = distToDiver < 230 ? (1 - distToDiver / 230) * 0.35 : 0;
+
+          ctx.save();
+          ctx.translate(shark.x + shakeX, shark.y);
+
+          if (shark.inkCloaked && !isLocked) {
+            ctx.globalAlpha = 0.36;
+          }
+
+          // Targeting Reticle around locked shark
+          if (isLocked) {
+            ctx.save();
+            ctx.rotate(state.globalTime * 1.6);
+            ctx.strokeStyle = diverObj.bright;
+            ctx.shadowColor = diverObj.accent;
+            ctx.shadowBlur = 14;
+            ctx.lineWidth = 2.2;
+            const r = 56 * shark.scale;
+            for (let q = 0; q < 4; q++) {
+              ctx.rotate(Math.PI / 2);
+              ctx.beginPath();
+              ctx.arc(0, 0, r, -0.32, 0.32);
+              ctx.stroke();
+            }
+            ctx.restore();
+          }
+
+          renderSharkSprite(ctx, shark.speciesId, shark.swimPhase / 7.2, shark.scale, {
+            hitFlash: shark.hitFlash,
+            isArmored: shark.isArmored,
+            isBoss: shark.isBoss,
+            isStunned: shark.stunTimer > 0,
+            frenzyActive: shark.frenzyActive,
+            jawSnapBoost
+          });
+
+          ctx.restore();
+        }
+
+        // 8. Abyssal Goblin Ink Clouds
+        for (const ic of state.inkClouds) {
+          ctx.save();
+          ctx.globalAlpha = Math.max(0, ic.alpha);
+          const inkGrad = ctx.createRadialGradient(ic.x, ic.y, 4, ic.x, ic.y, ic.r);
+          inkGrad.addColorStop(0, 'rgba(30, 10, 48, 0.9)');
+          inkGrad.addColorStop(1, 'rgba(30, 10, 48, 0)');
+          ctx.fillStyle = inkGrad;
+          ctx.beginPath();
+          ctx.arc(ic.x, ic.y, ic.r, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        }
+
+        // 9. Harpoon Plasma Bolts
+        for (const b of state.bolts) {
+          ctx.save();
+          ctx.strokeStyle = diverObj.bright;
+          ctx.shadowColor = diverObj.accent;
+          ctx.shadowBlur = 12;
+          ctx.lineWidth = 4;
+          ctx.lineCap = 'round';
+          ctx.beginPath();
+          if (b.trail.length > 0) {
+            ctx.moveTo(b.trail[0].x, b.trail[0].y);
+            for (const pt of b.trail) ctx.lineTo(pt.x, pt.y);
+          }
+          ctx.lineTo(b.x, b.y);
+          ctx.stroke();
+
+          ctx.fillStyle = '#ffffff';
+          ctx.beginPath();
+          ctx.arc(b.x, b.y, 3.5, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        }
+
+        // 10. Particles & Sonar EMP Shockwave Rings
+        for (const p of state.particles) {
+          ctx.save();
+          ctx.globalAlpha = Math.max(0, p.alpha);
+          ctx.fillStyle = p.color;
+          ctx.shadowColor = p.color;
+          ctx.shadowBlur = 8;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        }
+
+        for (const sw of state.shockwaves) {
+          ctx.save();
+          ctx.globalAlpha = sw.alpha;
+          ctx.strokeStyle = sw.color;
+          ctx.lineWidth = 6;
+          ctx.shadowColor = sw.color;
+          ctx.shadowBlur = 20;
+          ctx.beginPath();
+          ctx.arc(sw.x, sw.y, sw.radius, 0, Math.PI * 2);
+          ctx.stroke();
+          ctx.restore();
+        }
+
+        // 11. Non-Overlapping Floating Word Banners
+        drawWordPills(diverObj);
+
+        // 12. Floating Score Popups
+        for (const ft of state.floatingTexts) {
+          ctx.save();
+          ctx.globalAlpha = Math.max(0, ft.alpha);
+          ctx.font = `800 ${ft.size}px "Orbitron", sans-serif`;
+          ctx.textAlign = 'center';
+          ctx.fillStyle = ft.color;
+          ctx.shadowColor = 'rgba(0,0,0,0.85)';
+          ctx.shadowBlur = 6;
+          ctx.fillText(ft.text, ft.x, ft.y);
+          ctx.restore();
+        }
+
+        // 13. Red Hull Damage Vignette
+        if (state.damageFlash > 0) {
+          const rad = ctx.createRadialGradient(w * 0.5, h * 0.5, h * 0.25, w * 0.5, h * 0.5, w * 0.7);
+          rad.addColorStop(0, 'rgba(239, 68, 68, 0)');
+          rad.addColorStop(1, `rgba(239, 68, 68, ${state.damageFlash * 0.45})`);
+          ctx.fillStyle = rad;
+          ctx.fillRect(0, 0, w, h);
+        }
+
+        ctx.restore();
+      }
+
+      function drawOceanFloor(w, h) {
+        ctx.fillStyle = '#030b18';
+        ctx.beginPath();
+        ctx.moveTo(0, h);
+        const scroll1 = (state.globalTime * 14) % 240;
+        for (let x = -240; x <= w + 240; x += 120) {
+          const peak = Math.sin((x + scroll1) * 0.012) * 34 + Math.cos((x + scroll1) * 0.028) * 18;
+          ctx.lineTo(x - scroll1, h - 85 - peak);
+        }
+        ctx.lineTo(w, h);
+        ctx.closePath();
+        ctx.fill();
+
+        ctx.fillStyle = '#020710';
+        ctx.beginPath();
+        ctx.moveTo(0, h);
+        const scroll2 = (state.globalTime * 28) % 240;
+        for (let x = -240; x <= w + 240; x += 90) {
+          const peak = Math.cos((x + scroll2) * 0.018) * 24 + Math.sin((x + scroll2) * 0.04) * 12;
+          ctx.lineTo(x - scroll2, h - 42 - peak);
+        }
+        ctx.lineTo(w, h);
+        ctx.closePath();
+        ctx.fill();
+      }
+
+      function drawKelp(h) {
+        for (const k of state.kelp) {
+          ctx.save();
+          ctx.strokeStyle = `hsla(${k.hue}, 55%, 24%, 0.55)`;
+          ctx.lineWidth = 5;
+          ctx.lineCap = 'round';
+          ctx.beginPath();
+          let px = k.x;
+          let py = h - 18;
+          ctx.moveTo(px, py);
+
+          const segH = k.height / k.segments;
+          for (let s = 1; s <= k.segments; s++) {
+            const sway = Math.sin(state.globalTime * 1.8 + k.phase + s * 0.55) * (s * 3.2);
+            px = k.x + sway;
+            py = h - 18 - s * segH;
+            ctx.lineTo(px, py);
+          }
+          ctx.stroke();
+          ctx.restore();
+        }
+      }
+
+      function drawWordPills(diverObj) {
+        ctx.save();
+        ctx.font = '800 17px "JetBrains Mono", monospace';
+        ctx.textBaseline = 'middle';
+
+        const pills = state.sharks.map(shark => {
+          const word = shark.words[shark.wordIndex];
+          const textW = ctx.measureText(word).width;
+          const padX = 14;
+          const boxW = Math.max(58, textW + padX * 2);
+          const boxH = 34;
+          const isLocked = shark.id === state.lockedSharkId;
+
+          return {
+            shark,
+            word,
+            textW,
+            boxW,
+            boxH,
+            isLocked,
+            x: Math.max(16, Math.min(state.width - boxW - 16, shark.x - boxW * 0.5)),
+            y: shark.y - 46 * shark.scale - boxH * 0.5
+          };
+        });
+
+        // Prevent vertical banner overlaps
+        pills.sort((a, b) => a.y - b.y);
+        for (let i = 1; i < pills.length; i++) {
+          const prev = pills[i - 1];
+          const curr = pills[i];
+          const horizOverlap = Math.abs((prev.x + prev.boxW * 0.5) - (curr.x + curr.boxW * 0.5)) < (prev.boxW + curr.boxW) * 0.54;
+          if (horizOverlap && curr.y < prev.y + prev.boxH + 10) {
+            curr.y = prev.y + prev.boxH + 10;
+          }
+        }
+
+        // Draw locked pill last so it sits on top
+        pills.sort((a, b) => (a.isLocked === b.isLocked ? 0 : a.isLocked ? 1 : -1));
+
+        for (const p of pills) {
+          const { shark, word, textW, boxW, boxH, isLocked, x, y } = p;
+
+          // Multi-word Armor / Boss progress pips
+          if (shark.words.length > 1) {
+            const pipY = y - 10;
+            const totalPipW = shark.words.length * 16;
+            const startPipX = x + boxW * 0.5 - totalPipW * 0.5;
+            for (let wIdx = 0; wIdx < shark.words.length; wIdx++) {
+              ctx.fillStyle = wIdx < shark.wordIndex
+                ? '#10b981'
+                : wIdx === shark.wordIndex
+                  ? diverObj.bright
+                  : 'rgba(148, 163, 184, 0.35)';
+              ctx.beginPath();
+              ctx.roundRect(startPipX + wIdx * 16, pipY, 12, 4, 2);
+              ctx.fill();
+            }
+          }
+
+          ctx.save();
+          ctx.fillStyle = isLocked ? 'rgba(9, 20, 40, 0.96)' : 'rgba(5, 13, 28, 0.88)';
+          ctx.strokeStyle = isLocked ? diverObj.bright : 'rgba(148, 163, 184, 0.35)';
+          ctx.lineWidth = isLocked ? 2.4 : 1.3;
+          if (isLocked) {
+            ctx.shadowColor = diverObj.accent;
+            ctx.shadowBlur = 16;
+          }
+          ctx.beginPath();
+          ctx.roundRect(x, y, boxW, boxH, 10);
+          ctx.fill();
+          ctx.stroke();
+          ctx.restore();
+
+          const typedPart = word.slice(0, shark.typedIndex);
+          const nextChar = word[shark.typedIndex] || '';
+          const remPart = word.slice(shark.typedIndex + 1);
+
+          let drawX = x + (boxW - textW) * 0.5;
+          const drawY = y + boxH * 0.5 + 1;
+
+          if (typedPart.length > 0) {
+            ctx.fillStyle = diverObj.bright;
+            ctx.fillText(typedPart, drawX, drawY);
+            drawX += ctx.measureText(typedPart).width;
+          }
+
+          if (nextChar) {
+            const nextW = ctx.measureText(nextChar).width;
+            if (isLocked) {
+              ctx.fillStyle = 'rgba(255, 255, 255, 0.16)';
+              ctx.beginPath();
+              ctx.roundRect(drawX - 1.5, y + 5, nextW + 3, boxH - 10, 4);
+              ctx.fill();
+            }
+            ctx.fillStyle = isLocked ? '#ffffff' : '#f8fafc';
+            ctx.fillText(nextChar, drawX, drawY);
+
+            ctx.fillStyle = isLocked ? diverObj.bright : 'rgba(148, 163, 184, 0.5)';
+            ctx.fillRect(drawX, y + boxH - 6, nextW, 2.5);
+            drawX += nextW;
+          }
+
+          if (remPart.length > 0) {
+            ctx.fillStyle = isLocked ? '#e2e8f0' : '#cbd5e1';
+            ctx.fillText(remPart, drawX, drawY);
+          }
+        }
+
+        ctx.restore();
+      }
+
+      // =========================================================================
+      // 12. LOADOUT SELECTION, GAME LIFECYCLE & UI WIRING
+      // =========================================================================
+      function selectDiver(diverKey) {
+        if (!DIVERS[diverKey]) return;
+        state.selectedDiver = diverKey;
+        document.body.setAttribute('data-theme', diverKey);
+        ui.selectedDiverPerkHint.textContent = DIVERS[diverKey].perkText;
+
+        document.querySelectorAll('.diver-card').forEach(card => {
+          card.classList.toggle('selected', card.dataset.diver === diverKey);
+        });
+      }
+
+      function selectShark(sharkKey) {
+        if (!SHARK_SPECIES[sharkKey]) return;
+        state.selectedShark = sharkKey;
+        ui.selectedSharkTraitHint.textContent = SHARK_SPECIES[sharkKey].traitText;
+
+        document.querySelectorAll('.shark-card').forEach(card => {
+          card.classList.toggle('selected', card.dataset.shark === sharkKey);
+        });
+      }
+
+      function selectDifficulty(diffKey) {
+        if (!DIFFICULTY_CONFIG[diffKey]) return;
+        state.difficulty = diffKey;
+
+        document.querySelectorAll('.difficulty-card').forEach(card => {
+          card.classList.toggle('selected', card.dataset.difficulty === diffKey);
+        });
+      }
+
+      function startGame() {
+        const cfg = DIFFICULTY_CONFIG[state.difficulty];
+        const diverObj = DIVERS[state.selectedDiver];
+        const speciesObj = SHARK_SPECIES[state.selectedShark];
+
+        state.status = 'playing';
+        state.score = 0;
+        state.wave = 1;
+        state.maxLives = diverObj.maxHearts;
+        state.lives = diverObj.maxHearts;
+        state.combo = +(1.0 * diverObj.comboBonusMult).toFixed(2);
+        state.streak = 0;
+        state.longestStreak = 0;
+        state.empCharge = 0;
+        state.sharksDefeated = 0;
+        state.waveKills = 0;
+        state.killsPerWave = 8;
+
+        state.correctKeystrokes = 0;
+        state.totalKeystrokes = 0;
+        state.activeTimeSeconds = 0;
+        state.peakWpm = 0;
+        state.wpmSampleTimer = 0;
+
+        state.sharks = [];
+        state.lockedSharkId = null;
+        state.bolts = [];
+        state.particles = [];
+        state.inkClouds = [];
+        state.floatingTexts = [];
+        state.shockwaves = [];
+        state.usedWords.clear();
+        state.spawnTimer = 0.8;
+        state.screenShake = 0;
+        state.damageFlash = 0;
+        state.shieldBubbleAlpha = 0;
+
+        ui.hudDifficultyBadge.textContent = cfg.shortLabel;
+        ui.hudLoadoutBadge.textContent = `${diverObj.name} vs ${speciesObj.name}`;
+        ui.keycapStream.innerHTML = `<div class="text-[11px] font-mono-code text-slate-500 tracking-wide">[ MECHANICAL SWITCH TELEMETRY READY ]</div>`;
+
+        ui.startScreen.classList.add('hidden');
+        ui.pauseScreen.classList.add('hidden');
+        ui.gameOverScreen.classList.add('hidden');
+        ui.topHud.classList.remove('hidden');
+        ui.bottomHud.classList.remove('hidden');
+
+        sound.ensureContext();
+        updateHud();
+
+        spawnShark(false);
+        setTimeout(() => {
+          if (state.status === 'playing') spawnShark(false);
+        }, 700);
+      }
+
+      function togglePause() {
+        if (state.status === 'playing') {
+          state.status = 'paused';
+          ui.pauseScreen.classList.remove('hidden');
+        } else if (state.status === 'paused') {
+          state.status = 'playing';
+          ui.pauseScreen.classList.add('hidden');
+        }
+      }
+
+      function returnToMenu() {
+        state.status = 'menu';
+        state.sharks = [];
+        state.lockedSharkId = null;
+        ui.topHud.classList.add('hidden');
+        ui.bottomHud.classList.add('hidden');
+        ui.pauseScreen.classList.add('hidden');
+        ui.gameOverScreen.classList.add('hidden');
+        ui.startScreen.classList.remove('hidden');
+      }
+
+      function triggerGameOver() {
+        state.status = 'gameover';
+        ui.topHud.classList.add('hidden');
+        ui.bottomHud.classList.add('hidden');
+        ui.pauseScreen.classList.add('hidden');
+
+        const cfg = DIFFICULTY_CONFIG[state.difficulty];
+        const diverObj = DIVERS[state.selectedDiver];
+        const speciesObj = SHARK_SPECIES[state.selectedShark];
+        const avgWpm = computeCurrentWpm();
+        const peakWpm = Math.max(avgWpm, state.peakWpm);
+        const acc = state.totalKeystrokes === 0
+          ? 100
+          : Math.round((state.correctKeystrokes / state.totalKeystrokes) * 100);
+
+        ui.summaryDifficultyBadge.textContent = cfg.label;
+        ui.summaryDiverBadge.textContent = `🤿 ${diverObj.name}`;
+        ui.summarySharkBadge.textContent = `🦈 ${speciesObj.name}`;
+        ui.finalScore.textContent = Math.floor(state.score).toLocaleString();
+        ui.finalAvgWpm.textContent = `${avgWpm} WPM`;
+        ui.finalPeakWpm.textContent = `${peakWpm} WPM`;
+        ui.finalAccuracy.textContent = `${acc}%`;
+        ui.finalSharks.textContent = state.sharksDefeated;
+        ui.finalStreak.textContent = `${state.longestStreak} keys`;
+        ui.finalWave.textContent = state.wave;
+
+        ui.gameOverScreen.classList.remove('hidden');
+      }
+
+      // Wire Start Screen Selection Cards with tactile keystroke audio feedback
+      document.querySelectorAll('.diver-card').forEach(card => {
+        card.addEventListener('click', () => {
+          selectDiver(card.dataset.diver);
+          sound.ensureContext();
+          sound.playKeystroke(1, false);
+        });
+      });
+
+      document.querySelectorAll('.shark-card').forEach(card => {
+        card.addEventListener('click', () => {
+          selectShark(card.dataset.shark);
+          sound.ensureContext();
+          sound.playKeystroke(1, false);
+        });
+      });
+
+      document.querySelectorAll('.difficulty-card').forEach(card => {
+        card.addEventListener('click', () => {
+          selectDifficulty(card.dataset.difficulty);
+          sound.ensureContext();
+          sound.playKeystroke(1, false);
+        });
+        card.addEventListener('dblclick', () => {
+          selectDifficulty(card.dataset.difficulty);
+          startGame();
+        });
+      });
+
+      document.getElementById('btnLaunchDive').addEventListener('click', startGame);
+
+      // Mute / Unmute Toggle Buttons
+      function handleSoundToggle() {
+        const isOn = sound.toggle();
+        ui.soundStartIcon.textContent = isOn ? '🔊' : '🔇';
+        ui.soundStartLabel.textContent = isOn ? 'Audio: ON' : 'Audio: OFF';
+        ui.btnSoundHud.innerHTML = isOn ? '<span>🔊</span>' : '<span>🔇</span>';
+      }
+
+      document.getElementById('btnSoundStart').addEventListener('click', handleSoundToggle);
+      ui.btnSoundHud.addEventListener('click', handleSoundToggle);
+
+      // Pause, Resume, Play Again & Change Diver / Shark Buttons
+      document.getElementById('btnPause').addEventListener('click', togglePause);
+      document.getElementById('btnResume').addEventListener('click', togglePause);
+      document.getElementById('btnRestartFromPause').addEventListener('click', startGame);
+      document.getElementById('btnMenuFromPause').addEventListener('click', returnToMenu);
+      document.getElementById('btnReplay').addEventListener('click', startGame);
+      document.getElementById('btnChangeDifficulty').addEventListener('click', returnToMenu);
+
+      // =========================================================================
+      // 13. MAIN REQUESTANIMATIONFRAME LOOP
+      // =========================================================================
+      let lastFrameTime = performance.now();
+
+      function gameLoop(now) {
+        const dt = Math.min(0.05, (now - lastFrameTime) / 1000);
+        lastFrameTime = now;
+
+        update(dt);
+        render();
+
+        requestAnimationFrame(gameLoop);
+      }
+
+      window.addEventListener('load', () => {
+        selectDiver('scuba');
+        selectShark('great_white');
+        selectDifficulty('easy');
+        requestAnimationFrame(gameLoop);
+      });
+    })();
+  </script>
+</body>
+</html>
