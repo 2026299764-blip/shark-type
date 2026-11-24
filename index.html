@@ -181,76 +181,92 @@
   />
 
   <!-- Top Telemetry Scoreboard HUD (Visible During Gameplay) -->
-  <header id="topHud" class="hidden fixed top-0 left-0 right-0 z-20 px-3 sm:px-6 pt-3 pb-2 pointer-events-none">
-    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2 ocean-panel rounded-2xl px-3.5 sm:px-5 py-2.5 pointer-events-auto">
-      <!-- Left: Difficulty, Loadout & Wave Progress -->
-      <div class="flex items-center gap-2 sm:gap-3">
-        <span id="hudDifficultyBadge" class="px-2.5 py-1 rounded-lg text-[11px] font-display font-extrabold tracking-wider uppercase bg-cyan-500/20 border border-cyan-400/40 text-cyan-300">
-          EASY
-        </span>
-        <span id="hudLoadoutBadge" class="hidden xl:inline-block px-2.5 py-1 rounded-lg text-[11px] font-mono-code font-bold bg-slate-900/90 border border-slate-700 text-slate-300">
-          SCUBA ACE vs GREAT WHITE
-        </span>
-        <div class="flex flex-col ml-1">
-          <div class="flex items-center gap-1.5 text-xs sm:text-sm font-display font-bold text-slate-300">
-            <span>WAVE <span id="hudWave" class="text-white text-base">1</span></span>
-            <span id="hudWaveProgressText" class="text-[10px] font-mono-code text-slate-400">(0/8)</span>
-          </div>
-          <div class="w-20 sm:w-24 h-1.5 bg-slate-900 rounded-full overflow-hidden border border-slate-700/80 mt-0.5">
-            <div id="hudWaveBarFill" class="h-full accent-bg transition-all duration-200" style="width: 0%;"></div>
-          </div>
-        </div>
+  <header id="topHud" class="hidden fixed top-0 left-0 right-0 z-20 px-3 sm:px-6 pt-2.5 pb-2 pointer-events-none">
+    <div class="max-w-7xl mx-auto flex flex-col gap-1.5">
+      <!-- Top Control Strip Above Scoreboard -->
+      <div class="flex items-center justify-end pointer-events-auto">
+        <button
+          id="hudMenuBtn"
+          type="button"
+          class="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl ocean-panel hover:border-cyan-400/70 text-[11px] font-display font-bold tracking-wider uppercase text-slate-200 hover:text-cyan-300 transition-colors cursor-pointer"
+          title="Return to Main Menu"
+        >
+          <svg class="w-3.5 h-3.5 text-cyan-300" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+          <span>MENU</span>
+        </button>
       </div>
 
-      <!-- Center: Score, Combo & Live WPM -->
-      <div class="flex items-center gap-4 sm:gap-7">
-        <div class="text-center">
-          <div class="text-[10px] font-bold tracking-widest text-slate-400 uppercase">SCORE</div>
-          <div id="hudScore" class="font-display font-black text-base sm:text-xl text-white">0</div>
-        </div>
-        <div class="text-center">
-          <div class="text-[10px] font-bold tracking-widest text-slate-400 uppercase">COMBO</div>
-          <div id="hudCombo" class="font-display font-black text-base sm:text-xl accent-text">1.0x</div>
-        </div>
-        <div class="text-center hidden sm:block">
-          <div class="text-[10px] font-bold tracking-widest text-slate-400 uppercase">SPEED</div>
-          <div class="font-mono-code font-extrabold text-sm sm:text-lg text-emerald-400"><span id="hudWpm">0</span> <span class="text-xs text-slate-400">WPM</span></div>
-        </div>
-      </div>
-
-      <!-- Right: Hull Hearts, EMP Meter & Sound Toggle -->
-      <div class="flex items-center gap-2.5 sm:gap-3.5">
-        <!-- Diver Hull Hearts -->
-        <div id="hudLives" class="flex items-center gap-1" title="Diver Hull Integrity"></div>
-
-        <!-- Sonar EMP Charge Bar -->
-        <button
-          id="empTriggerBtn"
-          type="button"
-          class="flex items-center gap-2 px-2.5 py-1.5 rounded-xl bg-slate-900/90 border border-slate-700 text-xs font-mono-code font-bold transition-all"
-          title="Press ENTER or SPACE when at 100% to unleash Sonar EMP Shockwave"
-        >
-          <span class="text-cyan-300">EMP</span>
-          <div class="w-12 sm:w-16 h-2 bg-slate-800 rounded-full overflow-hidden">
-            <div id="hudEmpBar" class="h-full bg-gradient-to-r from-cyan-400 to-emerald-400 transition-all duration-150" style="width: 0%;"></div>
+      <!-- Main Telemetry Scoreboard -->
+      <div class="w-full flex flex-wrap items-center justify-between gap-2 ocean-panel rounded-2xl px-3.5 sm:px-5 py-2.5 pointer-events-auto">
+        <!-- Left: Difficulty, Loadout & Wave Progress -->
+        <div class="flex items-center gap-3 sm:gap-4">
+          <div class="flex flex-col">
+            <div class="flex items-center gap-1.5">
+              <span id="hudDifficultyBadge" class="px-2 py-0.5 rounded-md bg-cyan-500/20 border border-cyan-400/40 font-display font-extrabold text-[10px] tracking-wider text-cyan-300 uppercase">EASY</span>
+              <span id="hudLoadoutBadge" class="hidden md:inline-block text-[11px] font-mono-code font-bold text-slate-300 truncate max-w-[210px]">SCUBA ACE vs GREAT WHITE</span>
+            </div>
+            <div class="flex items-center gap-2 mt-1">
+              <span class="text-[10px] font-display font-bold tracking-widest text-slate-400 uppercase">WAVE <span id="hudWave" class="text-white font-black">1</span></span>
+              <span id="hudWaveProgressText" class="text-[10px] font-mono-code text-cyan-300">(0/8)</span>
+              <div class="w-16 sm:w-24 h-1.5 bg-slate-800 rounded-full overflow-hidden">
+                <div id="hudWaveBarFill" class="h-full accent-bg transition-all duration-200" style="width: 0%;"></div>
+              </div>
+            </div>
           </div>
-          <span id="hudEmpText" class="text-[10px] text-slate-300">0%</span>
-        </button>
+        </div>
 
-        <!-- Sound Toggle Button -->
-        <button
-          id="muteBtn"
-          type="button"
-          class="p-2 rounded-xl bg-slate-900/90 border border-slate-700 hover:border-cyan-400/60 text-slate-200 transition-colors"
-          title="Toggle Mechanical Switch & Ocean Audio"
-        >
-          <svg id="iconSoundOn" class="w-4 h-4 text-cyan-300" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M11 5L6 9H2v6h4l5 4V5zM15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14" />
-          </svg>
-          <svg id="iconSoundOff" class="w-4 h-4 text-rose-400 hidden" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M11 5L6 9H2v6h4l5 4V5zM23 9l-6 6M17 9l6 6" />
-          </svg>
-        </button>
+        <!-- Center: Score, Combo & Live WPM -->
+        <div class="flex items-center gap-4 sm:gap-7">
+          <div class="text-center">
+            <div class="text-[9px] sm:text-[10px] font-display font-bold tracking-widest text-slate-400 uppercase">SCORE</div>
+            <div id="hudScore" class="font-display font-black text-base sm:text-xl text-white leading-tight">0</div>
+          </div>
+          <div class="text-center">
+            <div class="text-[9px] sm:text-[10px] font-display font-bold tracking-widest text-slate-400 uppercase">COMBO</div>
+            <div id="hudCombo" class="font-display font-black text-base sm:text-xl accent-text leading-tight">1.0x</div>
+          </div>
+          <div class="text-center">
+            <div class="text-[9px] sm:text-[10px] font-display font-bold tracking-widest text-slate-400 uppercase">SPEED</div>
+            <div class="font-mono-code font-extrabold text-sm sm:text-lg text-emerald-400 leading-tight"><span id="hudWpm">0</span> <span class="text-[10px] text-slate-400">WPM</span></div>
+          </div>
+        </div>
+
+        <!-- Right: Hull Hearts, EMP & Mute -->
+        <div class="flex items-center gap-2.5 sm:gap-3.5">
+          <!-- Diver Hull Hearts -->
+          <div id="hudLives" class="flex items-center gap-1" title="Diver Hull Integrity"></div>
+
+          <!-- Sonar EMP Charge Bar -->
+          <button
+            id="empTriggerBtn"
+            type="button"
+            class="flex items-center gap-2 px-2.5 py-1.5 rounded-xl bg-slate-900/90 border border-slate-700 text-xs font-mono-code font-bold transition-all"
+            title="Press ENTER or SPACE when at 100% to unleash Sonar EMP Shockwave"
+          >
+            <span class="text-cyan-300">EMP</span>
+            <div class="w-12 sm:w-16 h-2 bg-slate-800 rounded-full overflow-hidden">
+              <div id="hudEmpBar" class="h-full bg-gradient-to-r from-cyan-400 to-emerald-400 transition-all duration-150" style="width: 0%;"></div>
+            </div>
+            <span id="hudEmpText" class="text-[10px] text-slate-300">0%</span>
+          </button>
+
+          <!-- Sound Toggle Button -->
+          <button
+            id="muteBtn"
+            type="button"
+            class="p-2 rounded-xl bg-slate-900/90 border border-slate-700 hover:border-cyan-400/60 text-slate-200 transition-colors cursor-pointer"
+            title="Toggle Mechanical Switch & Ocean Audio"
+          >
+            <svg id="iconSoundOn" class="w-4 h-4 text-cyan-300" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M11 5L6 9H2v6h4l5 4V5zM15.54 8.46a5 5 0 010 7.07M19.07 4.93a10 10 0 010 14.14" />
+            </svg>
+            <svg id="iconSoundOff" class="w-4 h-4 text-rose-400 hidden" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M11 5L6 9H2v6h4l5 4V5zM23 9l-6 6M17 9l6 6" />
+            </svg>
+          </button>
+        </div>
       </div>
     </div>
   </header>
@@ -323,7 +339,7 @@
               <div class="font-display font-extrabold text-sm text-white truncate">SCUBA ACE</div>
               <div class="text-[11px] text-slate-300 leading-snug mt-0.5">Twin O₂ tanks &amp; high-velocity plasma harpoon.</div>
               <div class="inline-block mt-1.5 px-2 py-0.5 rounded bg-cyan-500/20 border border-cyan-400/40 text-[10px] font-mono-code font-bold text-cyan-300">
-                +15% SONAR EMP CHARGE
+                +15% EMP • PLASMA LASER
               </div>
             </div>
           </div>
@@ -335,7 +351,7 @@
               <div class="font-display font-extrabold text-sm text-white truncate">MECH-SUIT MK.IV</div>
               <div class="text-[11px] text-slate-300 leading-snug mt-0.5">Reinforced deep-trench exosuit with heavy rail-harpoon.</div>
               <div class="inline-block mt-1.5 px-2 py-0.5 rounded bg-amber-500/20 border border-amber-400/40 text-[10px] font-mono-code font-bold text-amber-300">
-                +1 EXTRA HULL HEART (4 HP)
+                +1 HEART • RAIL CANNON
               </div>
             </div>
           </div>
@@ -347,7 +363,7 @@
               <div class="font-display font-extrabold text-sm text-white truncate">CYBER-NINJA SUB</div>
               <div class="text-[11px] text-slate-300 leading-snug mt-0.5">Stealth hydro-thrusters &amp; emerald laser-katana bolts.</div>
               <div class="inline-block mt-1.5 px-2 py-0.5 rounded bg-emerald-500/20 border border-emerald-400/40 text-[10px] font-mono-code font-bold text-emerald-300">
-                +20% COMBO SCORE BONUS
+                +20% SCORE • PHOTON BLADE
               </div>
             </div>
           </div>
@@ -509,6 +525,36 @@
           class="w-full sm:w-auto px-6 py-3.5 rounded-2xl bg-slate-800/90 hover:bg-slate-700 border border-slate-600 font-display font-bold text-sm text-slate-200 uppercase transition-colors cursor-pointer"
         >
           CHANGE LOADOUT
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- MENU CONFIRMATION MODAL (PAUSE / RETURN HOME PROMPT) -->
+  <section id="menuConfirmModal" class="hidden fixed inset-0 z-40 flex items-center justify-center p-4 bg-slate-950/75 backdrop-blur-md">
+    <div class="ocean-panel rounded-3xl w-full max-w-md p-6 sm:p-7 text-center border border-cyan-400/35">
+      <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-cyan-500/15 border border-cyan-400/35 text-cyan-300 text-[11px] font-display font-bold tracking-widest uppercase mb-2">
+        <span>⏸ DIVE PAUSED</span>
+      </div>
+      <h2 class="font-display font-black text-2xl sm:text-3xl text-white">RETURN TO HOME?</h2>
+      <p class="text-xs sm:text-sm text-slate-300 mt-2 leading-relaxed">
+        Do you want to return to the Home Screen or continue your current dive?
+      </p>
+
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-3 mt-6">
+        <button
+          id="continueGameBtn"
+          type="button"
+          class="mech-cta-btn w-full sm:w-auto px-6 py-3 rounded-2xl font-display font-black text-xs sm:text-sm tracking-wider text-slate-950 uppercase cursor-pointer"
+        >
+          CONTINUE GAME ▶
+        </button>
+        <button
+          id="confirmHomeBtn"
+          type="button"
+          class="w-full sm:w-auto px-6 py-3 rounded-2xl bg-slate-800/90 hover:bg-rose-950/80 border border-slate-600 hover:border-rose-400/60 font-display font-bold text-xs sm:text-sm text-slate-200 hover:text-rose-200 uppercase transition-colors cursor-pointer"
+        >
+          HOME SCREEN
         </button>
       </div>
     </div>
@@ -871,122 +917,205 @@
           osc.start(now);
           osc.stop(now + 0.38);
         }
+
+        // Synthesizes a distinct laser signature tailored to each Diver's weapon
+        playLaser(diverId, isKillShot = false) {
+          if (this.muted) return;
+          this.ensureContext();
+          if (!this.ctx) return;
+
+          const now = this.ctx.currentTime;
+          const jitter = 0.96 + Math.random() * 0.08;
+
+          if (diverId === 'mech') {
+            // MECH-SUIT MK.IV: Heavy electromagnetic rail-cannon thump + coil snap
+            const subOsc = this.ctx.createOscillator();
+            const subGain = this.ctx.createGain();
+            subOsc.type = 'triangle';
+            subOsc.frequency.setValueAtTime((isKillShot ? 260 : 210) * jitter, now);
+            subOsc.frequency.exponentialRampToValueAtTime(42, now + 0.13);
+
+            subGain.gain.setValueAtTime(0.22, now);
+            subGain.gain.exponentialRampToValueAtTime(0.001, now + 0.14);
+
+            subOsc.connect(subGain);
+            subGain.connect(this.ctx.destination);
+            subOsc.start(now);
+            subOsc.stop(now + 0.15);
+
+            const coilOsc = this.ctx.createOscillator();
+            const coilGain = this.ctx.createGain();
+            coilOsc.type = 'square';
+            coilOsc.frequency.setValueAtTime(620 * jitter, now);
+            coilOsc.frequency.exponentialRampToValueAtTime(135, now + 0.095);
+
+            coilGain.gain.setValueAtTime(0.085, now);
+            coilGain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+
+            coilOsc.connect(coilGain);
+            coilGain.connect(this.ctx.destination);
+            coilOsc.start(now);
+            coilOsc.stop(now + 0.11);
+          } else if (diverId === 'ninja') {
+            // CYBER-NINJA SUB: Razor-sharp high-frequency photon katana slice
+            const bladeOsc = this.ctx.createOscillator();
+            const bladeGain = this.ctx.createGain();
+            bladeOsc.type = 'sine';
+            bladeOsc.frequency.setValueAtTime((isKillShot ? 2650 : 2250) * jitter, now);
+            bladeOsc.frequency.exponentialRampToValueAtTime(640, now + 0.075);
+
+            bladeGain.gain.setValueAtTime(0.14, now);
+            bladeGain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+
+            bladeOsc.connect(bladeGain);
+            bladeGain.connect(this.ctx.destination);
+            bladeOsc.start(now);
+            bladeOsc.stop(now + 0.085);
+
+            const shimmerOsc = this.ctx.createOscillator();
+            const shimmerGain = this.ctx.createGain();
+            shimmerOsc.type = 'triangle';
+            shimmerOsc.frequency.setValueAtTime(3400 * jitter, now);
+            shimmerOsc.frequency.exponentialRampToValueAtTime(1150, now + 0.055);
+
+            shimmerGain.gain.setValueAtTime(0.075, now);
+            shimmerGain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
+
+            shimmerOsc.connect(shimmerGain);
+            shimmerGain.connect(this.ctx.destination);
+            shimmerOsc.start(now);
+            shimmerOsc.stop(now + 0.065);
+          } else {
+            // SCUBA ACE: Classic energetic underwater plasma-harpoon pew
+            const plasmaOsc = this.ctx.createOscillator();
+            const filter = this.ctx.createBiquadFilter();
+            const plasmaGain = this.ctx.createGain();
+
+            plasmaOsc.type = 'sawtooth';
+            plasmaOsc.frequency.setValueAtTime((isKillShot ? 1460 : 1220) * jitter, now);
+            plasmaOsc.frequency.exponentialRampToValueAtTime(240, now + 0.095);
+
+            filter.type = 'lowpass';
+            filter.frequency.setValueAtTime(2800, now);
+            filter.frequency.exponentialRampToValueAtTime(480, now + 0.095);
+
+            plasmaGain.gain.setValueAtTime(0.14, now);
+            plasmaGain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
+
+            plasmaOsc.connect(filter);
+            filter.connect(plasmaGain);
+            plasmaGain.connect(this.ctx.destination);
+            plasmaOsc.start(now);
+            plasmaOsc.stop(now + 0.105);
+          }
+        }
       }
 
+      // =========================================================================
+      // 3. DOM TELEMETRY REFERENCES & AUDIO ENGINE INSTANCE
+      // =========================================================================
       const sound = new SoundEngine();
-
-      // =========================================================================
-      // 3. DOM REFERENCES & GAME STATE
-      // =========================================================================
       const canvas = document.getElementById('gameCanvas');
       const ctx = canvas.getContext('2d');
 
       const ui = {
         topHud: document.getElementById('topHud'),
+        hudMenuBtn: document.getElementById('hudMenuBtn'),
         bottomHud: document.getElementById('bottomHud'),
-        startScreen: document.getElementById('startScreen'),
-        gameOverScreen: document.getElementById('gameOverScreen'),
-        mobileInput: document.getElementById('mobileTypingInput'),
-        mobileKeyboardBtn: document.getElementById('mobileKeyboardBtn'),
-
         hudDifficultyBadge: document.getElementById('hudDifficultyBadge'),
         hudLoadoutBadge: document.getElementById('hudLoadoutBadge'),
         hudWave: document.getElementById('hudWave'),
         hudWaveProgressText: document.getElementById('hudWaveProgressText'),
         hudWaveBarFill: document.getElementById('hudWaveBarFill'),
-        hudLives: document.getElementById('hudLives'),
         hudScore: document.getElementById('hudScore'),
         hudCombo: document.getElementById('hudCombo'),
         hudWpm: document.getElementById('hudWpm'),
+        hudLives: document.getElementById('hudLives'),
+        empTriggerBtn: document.getElementById('empTriggerBtn'),
         hudEmpBar: document.getElementById('hudEmpBar'),
         hudEmpText: document.getElementById('hudEmpText'),
-        empTriggerBtn: document.getElementById('empTriggerBtn'),
-
         muteBtn: document.getElementById('muteBtn'),
         iconSoundOn: document.getElementById('iconSoundOn'),
         iconSoundOff: document.getElementById('iconSoundOff'),
-
         targetWordBar: document.getElementById('targetWordBar'),
         targetWordDisplay: document.getElementById('targetWordDisplay'),
         keycapStream: document.getElementById('keycapStream'),
-
+        mobileInput: document.getElementById('mobileTypingInput'),
+        mobileKeyboardBtn: document.getElementById('mobileKeyboardBtn'),
+        startScreen: document.getElementById('startScreen'),
         startGameBtn: document.getElementById('startGameBtn'),
-        playAgainBtn: document.getElementById('playAgainBtn'),
-        changeLoadoutBtn: document.getElementById('changeLoadoutBtn'),
-
+        gameOverScreen: document.getElementById('gameOverScreen'),
         reportLoadoutSummary: document.getElementById('reportLoadoutSummary'),
         statFinalScore: document.getElementById('statFinalScore'),
         statWave: document.getElementById('statWave'),
         statSharks: document.getElementById('statSharks'),
         statWpm: document.getElementById('statWpm'),
         statAccuracy: document.getElementById('statAccuracy'),
-        statMaxCombo: document.getElementById('statMaxCombo')
+        statMaxCombo: document.getElementById('statMaxCombo'),
+        playAgainBtn: document.getElementById('playAgainBtn'),
+        changeLoadoutBtn: document.getElementById('changeLoadoutBtn'),
+        menuConfirmModal: document.getElementById('menuConfirmModal'),
+        continueGameBtn: document.getElementById('continueGameBtn'),
+        confirmHomeBtn: document.getElementById('confirmHomeBtn')
       };
 
+      // =========================================================================
+      // 4. CORE SIMULATION STATE & RESPONSIVE PLAYFIELD SAFE-ZONE HELPERS
+      // =========================================================================
       const state = {
-        phase: 'MENU', // 'MENU' | 'PLAYING' | 'GAMEOVER'
-        width: window.innerWidth,
-        height: window.innerHeight,
-        dpr: Math.min(window.devicePixelRatio || 1, 2),
-
+        phase: 'MENU',
         selectedDiver: 'ace',
         selectedShark: 'greatwhite',
         difficulty: 'easy',
-
+        width: window.innerWidth,
+        height: window.innerHeight,
+        dpr: 1,
+        animTime: 0,
         wave: 1,
         waveKills: 0,
         killsPerWave: 8,
         score: 0,
         combo: 1.0,
         maxCombo: 1.0,
-        lives: 3,
         maxLives: 3,
+        lives: 3,
         empCharge: 0,
-
         sharksDefeated: 0,
         correctKeystrokes: 0,
         totalKeystrokes: 0,
         startTimeMs: 0,
-
+        pausedAtMs: 0,
         sharks: [],
         nextSharkId: 1,
         lockedSharkId: null,
         usedWords: new Set(),
-        spawnTimer: 0.8,
-
+        spawnTimer: 0,
         bolts: [],
         particles: [],
         inkClouds: [],
         floatingTexts: [],
         shockwaves: [],
+        waveBanner: null,
         ambientBubbles: [],
         causticRays: [],
-
         screenShake: 0,
         damageFlash: 0,
         shieldBubbleAlpha: 0,
-        diverRecoil: 0,
-        waveBanner: null,
-        animTime: 0
+        diverRecoil: 0
       };
 
-      // =========================================================================
-      // 4. RESPONSIVE CANVAS & SAFE-ZONE PLAYFIELD BOUNDS
-      // =========================================================================
       function resizeCanvas() {
         state.width = window.innerWidth;
         state.height = window.innerHeight;
         state.dpr = Math.min(window.devicePixelRatio || 1, 2);
-
         canvas.width = Math.floor(state.width * state.dpr);
         canvas.height = Math.floor(state.height * state.dpr);
         ctx.setTransform(state.dpr, 0, 0, state.dpr, 0, 0);
       }
 
-      // Dynamically measures top scoreboard & bottom keycap HUD so sharks and word pills never hide behind UI
       function getSafePlayfieldBounds() {
-        let topHudBottom = 76;
-        let bottomHudTop = state.height - 96;
+        let topHudBottom = 84;
+        let bottomHudTop = state.height - 108;
 
         if (ui.topHud && !ui.topHud.classList.contains('hidden')) {
           const rect = ui.topHud.getBoundingClientRect();
@@ -1001,15 +1130,9 @@
           }
         }
 
-        const safeTopY = Math.min(state.height * 0.42, topHudBottom + 68);
+        const safeTopY = Math.min(state.height * 0.42, topHudBottom + 66);
         const safeBottomY = Math.max(safeTopY + 70, bottomHudTop - 44);
-
-        return {
-          topHudBottom,
-          bottomHudTop,
-          safeTopY,
-          safeBottomY
-        };
+        return { topHudBottom, bottomHudTop, safeTopY, safeBottomY };
       }
 
       function initAmbientOcean() {
@@ -1018,19 +1141,18 @@
           state.ambientBubbles.push({
             x: Math.random() * state.width,
             y: Math.random() * state.height,
-            r: 1.5 + Math.random() * 4.5,
-            speed: 14 + Math.random() * 28,
+            r: 1.5 + Math.random() * 4.2,
+            speed: 18 + Math.random() * 34,
             wobble: Math.random() * Math.PI * 2,
-            alpha: 0.12 + Math.random() * 0.28
+            alpha: 0.14 + Math.random() * 0.25
           });
         }
 
         state.causticRays = [];
         for (let i = 0; i < 7; i++) {
           state.causticRays.push({
-            x: (state.width / 6) * i + Math.random() * 80,
-            width: 55 + Math.random() * 95,
-            speed: 8 + Math.random() * 10,
+            x: (state.width / 6) * i - 40,
+            width: 55 + Math.random() * 80,
             phase: Math.random() * Math.PI * 2
           });
         }
@@ -1054,6 +1176,7 @@
             card.classList.add('selected');
             state.selectedDiver = card.dataset.diver;
             applyDiverTheme(state.selectedDiver);
+            sound.playLaser(state.selectedDiver, false);
           });
         });
 
@@ -1266,69 +1389,38 @@
       }
 
       function updateHud() {
-        ui.hudWave.textContent = state.wave;
+        if (ui.hudWave) ui.hudWave.textContent = state.wave;
         if (ui.hudWaveProgressText && ui.hudWaveBarFill) {
           ui.hudWaveProgressText.textContent = `(${state.waveKills}/${state.killsPerWave})`;
           const wavePct = Math.min(100, Math.round((state.waveKills / Math.max(1, state.killsPerWave)) * 100));
           ui.hudWaveBarFill.style.width = `${wavePct}%`;
         }
-        ui.hudScore.textContent = Math.floor(state.score).toLocaleString();
-        ui.hudCombo.textContent = `${state.combo.toFixed(1)}x`;
-        ui.hudWpm.textContent = calculateNetWpm();
+        if (ui.hudScore) ui.hudScore.textContent = Math.floor(state.score).toLocaleString();
+        if (ui.hudCombo) ui.hudCombo.textContent = `${state.combo.toFixed(1)}x`;
+        if (ui.hudWpm) ui.hudWpm.textContent = calculateNetWpm();
 
-        // Render Hearts
-        let heartsHtml = '';
-        for (let i = 0; i < state.maxLives; i++) {
-          const active = i < state.lives;
-          heartsHtml += `<span class="text-base sm:text-lg ${active ? 'text-rose-500 drop-shadow' : 'text-slate-700'}">♥</span>`;
+        // Update Diver Hull Hearts
+        if (ui.hudLives) {
+          let heartsHtml = '';
+          for (let i = 0; i < state.maxLives; i++) {
+            const active = i < state.lives;
+            heartsHtml += `<span class="text-sm sm:text-base transition-transform ${active ? 'text-rose-500 scale-100 drop-shadow' : 'text-slate-700 scale-90'}">♥</span>`;
+          }
+          ui.hudLives.innerHTML = heartsHtml;
         }
-        ui.hudLives.innerHTML = heartsHtml;
 
-        // Render EMP Charge
+        // Update Sonar EMP Charge Bar
         const empPct = Math.min(100, Math.floor(state.empCharge));
-        ui.hudEmpBar.style.width = `${empPct}%`;
-        ui.hudEmpText.textContent = `${empPct}%`;
-        if (empPct >= 100) {
-          ui.empTriggerBtn.classList.add('border-cyan-400', 'shadow-lg', 'shadow-cyan-500/30');
-          ui.hudEmpText.classList.add('text-emerald-300');
-        } else {
-          ui.empTriggerBtn.classList.remove('border-cyan-400', 'shadow-lg', 'shadow-cyan-500/30');
-          ui.hudEmpText.classList.remove('text-emerald-300');
-        }
-
-        // Update Active Locked Target Word Bar
-        const lockedShark = state.sharks.find((s) => s.id === state.lockedSharkId);
-        if (lockedShark) {
-          const word = lockedShark.words[lockedShark.wordIndex];
-          const typedPart = escapeHtml(word.slice(0, lockedShark.typedIndex));
-          const remPart = escapeHtml(word.slice(lockedShark.typedIndex));
-          const armorTag = lockedShark.words.length > 1
-            ? `<span class="ml-2 text-[10px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-400/40">WORD ${lockedShark.wordIndex + 1}/${lockedShark.words.length}</span>`
-            : '';
-          ui.targetWordDisplay.innerHTML = `<span class="text-emerald-400 underline decoration-2 underline-offset-4">${typedPart}</span><span class="text-white">${remPart}</span>${armorTag}`;
-        } else {
-          ui.targetWordDisplay.innerHTML = `<span class="text-slate-400 text-xs sm:text-sm font-normal">TYPE ANY SHARK WORD TO ENGAGE</span>`;
-        }
-      }
-
-      function pushKeycapVisual(charLabel, isError = false) {
-        if (ui.keycapStream.querySelector('span.italic')) {
-          ui.keycapStream.innerHTML = '';
-        }
-
-        const cap = document.createElement('span');
-        cap.className = `keycap-3d ${isError ? 'keycap-error' : ''}`;
-        cap.textContent = charLabel === ' ' ? 'SPACE' : charLabel;
-        ui.keycapStream.appendChild(cap);
-
-        while (ui.keycapStream.children.length > 12) {
-          ui.keycapStream.removeChild(ui.keycapStream.firstChild);
-        }
-
-        if (isError) {
-          ui.targetWordBar.classList.remove('keycap-error');
-          void ui.targetWordBar.offsetWidth;
-          ui.targetWordBar.classList.add('keycap-error');
+        if (ui.hudEmpBar) ui.hudEmpBar.style.width = `${empPct}%`;
+        if (ui.hudEmpText) ui.hudEmpText.textContent = `${empPct}%`;
+        if (ui.empTriggerBtn) {
+          if (empPct >= 100) {
+            ui.empTriggerBtn.classList.add('border-emerald-400', 'shadow-lg', 'shadow-emerald-500/30', 'animate-pulse', 'cursor-pointer');
+            ui.empTriggerBtn.classList.remove('border-slate-700');
+          } else {
+            ui.empTriggerBtn.classList.remove('border-emerald-400', 'shadow-lg', 'shadow-emerald-500/30', 'animate-pulse', 'cursor-pointer');
+            ui.empTriggerBtn.classList.add('border-slate-700');
+          }
         }
       }
 
@@ -1339,65 +1431,90 @@
           .replace(/>/g, '&gt;');
       }
 
-      // =========================================================================
-      // 8. COMBAT, HARPOON BOLTS, PARTICLES & WAVE PROGRESSION
-      // =========================================================================
-      function getDiverAnchor() {
-        const { safeTopY, safeBottomY } = getSafePlayfieldBounds();
-        const centerY = (safeTopY + safeBottomY) * 0.5;
-        return {
-          x: Math.max(78, Math.min(130, state.width * 0.11)),
-          y: centerY + Math.sin(state.animTime * 2.4) * 10
-        };
+      function updateTargetWordHud(isError = false) {
+        if (!ui.targetWordDisplay) return;
+        const target = state.sharks.find((s) => s.id === state.lockedSharkId);
+
+        if (!target) {
+          ui.targetWordDisplay.innerHTML = '<span class="text-slate-400 text-xs sm:text-sm font-normal">TYPE ANY SHARK WORD TO ENGAGE</span>';
+          return;
+        }
+
+        const currentWord = target.words[target.wordIndex] || '';
+        const typedPart = escapeHtml(currentWord.slice(0, target.typedIndex));
+        const nextChar = escapeHtml(currentWord.slice(target.typedIndex, target.typedIndex + 1));
+        const restPart = escapeHtml(currentWord.slice(target.typedIndex + 1));
+        const remainingWordsCount = target.words.length - target.wordIndex - 1;
+        const armorBadge = remainingWordsCount > 0
+          ? `<span class="ml-2 px-1.5 py-0.5 rounded bg-amber-500/20 border border-amber-400/40 text-[10px] text-amber-300">+${remainingWordsCount} ARMOR</span>`
+          : '';
+
+        ui.targetWordDisplay.innerHTML = `
+          <span class="text-emerald-400">${typedPart}</span><span class="${isError ? 'text-rose-400 underline' : 'text-cyan-300 underline'}">${nextChar}</span><span class="text-white">${restPart}</span>${armorBadge}
+        `;
       }
 
-      function spawnPlasmaBolt(targetShark, isKillShot = false) {
-        const diver = getDiverAnchor();
-        const diverObj = DIVERS[state.selectedDiver];
+      function pushKeycapToStream(keyLabel, isError = false) {
+        if (!ui.keycapStream) return;
 
-        state.diverRecoil = 1.0;
-        state.bolts.push({
-          x: diver.x + 34,
-          y: diver.y - 4,
-          targetX: targetShark.x - 20 * targetShark.scale,
-          targetY: targetShark.y,
-          color: diverObj.boltColor,
-          life: 0.14,
-          maxLife: 0.14,
-          isKillShot
-        });
+        // Remove placeholder message on first keystroke
+        if (ui.keycapStream.querySelector('span.italic')) {
+          ui.keycapStream.innerHTML = '';
+        }
 
-        // Impact sparks on shark snout
-        const sparkCount = isKillShot ? 22 : 7;
-        for (let i = 0; i < sparkCount; i++) {
-          const angle = Math.random() * Math.PI * 2;
-          const spd = (isKillShot ? 90 : 45) + Math.random() * 140;
-          state.particles.push({
-            x: targetShark.x - 18 * targetShark.scale,
-            y: targetShark.y,
-            vx: Math.cos(angle) * spd,
-            vy: Math.sin(angle) * spd,
-            r: (isKillShot ? 2.5 : 1.8) + Math.random() * 2.5,
-            color: i % 2 === 0 ? diverObj.bright : '#ffffff',
-            life: 0.25 + Math.random() * 0.25,
-            maxLife: 0.5
-          });
+        const cap = document.createElement('div');
+        cap.className = `keycap-3d ${isError ? 'keycap-error' : ''}`;
+        cap.textContent = keyLabel === ' ' ? 'SPACE' : keyLabel;
+        ui.keycapStream.appendChild(cap);
+
+        // Keep the latest 10 mechanical keycaps visible
+        while (ui.keycapStream.children.length > 10) {
+          ui.keycapStream.removeChild(ui.keycapStream.firstChild);
         }
       }
 
-      function spawnExplosion(x, y, color, count = 28) {
+      // =========================================================================
+      // 8. COMBAT EFFECTS, PROJECTILES & WAVE PROGRESSION
+      // =========================================================================
+      function getDiverPosition() {
+        const { safeTopY, safeBottomY } = getSafePlayfieldBounds();
+        const centerY = (safeTopY + safeBottomY) * 0.5;
+        const baseX = Math.max(76, Math.min(130, state.width * 0.1));
+        return {
+          x: baseX - state.diverRecoil,
+          y: centerY + Math.sin(state.animTime * 2.4) * 8
+        };
+      }
+
+      function spawnPlasmaBolt(startX, startY, targetShark, isKillShot) {
+        const diver = DIVERS[state.selectedDiver] || DIVERS.ace;
+        state.bolts.push({
+          x: startX + 26,
+          y: startY,
+          targetId: targetShark.id,
+          targetX: targetShark.x,
+          targetY: targetShark.y,
+          speed: 1450,
+          color: diver.boltColor,
+          diverId: diver.id,
+          isKillShot,
+          life: 1.0
+        });
+      }
+
+      function spawnExplosion(x, y, primaryColor, secondaryColor, count = 22) {
         for (let i = 0; i < count; i++) {
           const angle = Math.random() * Math.PI * 2;
-          const speed = 50 + Math.random() * 220;
+          const speed = 60 + Math.random() * 240;
           state.particles.push({
             x,
             y,
             vx: Math.cos(angle) * speed,
             vy: Math.sin(angle) * speed,
             r: 2 + Math.random() * 4.5,
-            color: i % 3 === 0 ? '#ffffff' : i % 2 === 0 ? color : '#38bdf8',
-            life: 0.35 + Math.random() * 0.4,
-            maxLife: 0.75
+            color: i % 2 === 0 ? primaryColor : secondaryColor,
+            alpha: 1,
+            decay: 1.4 + Math.random() * 1.1
           });
         }
       }
@@ -1406,126 +1523,84 @@
         state.inkClouds.push({
           x,
           y,
-          r: 24,
-          maxR: 78,
-          life: 1.4,
-          maxLife: 1.4
+          r: 26,
+          maxR: 92,
+          alpha: 0.72
         });
       }
 
-      function spawnFloatingText(x, y, text, color = '#67e8f9', size = 15) {
+      function spawnFloatingText(x, y, text, color = '#ffffff', scale = 1) {
         state.floatingTexts.push({
           x,
           y,
+          vy: -44,
           text,
           color,
-          size,
-          life: 0.95,
-          maxLife: 0.95
+          scale,
+          alpha: 1.0
         });
-      }
-
-      function checkWaveProgression() {
-        if (state.waveKills >= state.killsPerWave) {
-          state.wave++;
-          state.waveKills = 0;
-          state.killsPerWave = Math.min(24, 8 + (state.wave - 1) * 3);
-
-          // Wave Clear Reward & Sonar Boost
-          const waveBonus = 250 * (state.wave - 1);
-          const diverObj = DIVERS[state.selectedDiver];
-          state.score += waveBonus;
-          state.empCharge = Math.min(100, state.empCharge + 15 * diverObj.empChargeMult);
-
-          sound.playWaveUp();
-          const meta = getWaveMetadata(state.wave);
-          const isMilestoneBossWave = state.wave % 3 === 0;
-
-          state.waveBanner = {
-            title: `WAVE ${state.wave}: ${meta.title}`,
-            subtitle: isMilestoneBossWave
-              ? `⚠️ LEVIATHAN BOSS DETECTED • +${waveBonus} WAVE BONUS`
-              : `${meta.badge} • +${waveBonus} WAVE BONUS`,
-            timer: 3.1,
-            maxTimer: 3.1
-          };
-
-          // Immediately deploy an incoming wave vanguard pack so each wave surge is felt right away
-          const vanguardCount = Math.min(4, 2 + Math.floor(state.wave / 3));
-          spawnSharkPack(vanguardCount, isMilestoneBossWave);
-          state.spawnTimer = 1.4;
-        }
-      }
-
-      function defeatShark(shark) {
-        const diverObj = DIVERS[state.selectedDiver];
-        const speciesObj = SHARK_SPECIES[shark.speciesId];
-
-        const wordLengthBonus = shark.words.reduce((acc, w) => acc + w.length, 0) * 18;
-        const tierMult = shark.isBoss ? 3.0 : shark.isArmored ? 1.65 : 1.0;
-        const points = Math.round(wordLengthBonus * tierMult * speciesObj.scoreMult * diverObj.scoreMult * state.combo);
-
-        state.score += points;
-        state.sharksDefeated++;
-        state.waveKills++;
-
-        sound.playExplosion(shark.isBoss || shark.isArmored);
-        spawnExplosion(shark.x, shark.y, diverObj.bright, shark.isBoss ? 48 : 26);
-        spawnFloatingText(shark.x, shark.y - 24, `+${points}`, diverObj.bright, shark.isBoss ? 20 : 15);
-
-        state.screenShake = Math.max(state.screenShake, shark.isBoss ? 14 : 6);
-        if (state.lockedSharkId === shark.id) {
-          state.lockedSharkId = null;
-        }
-
-        state.sharks = state.sharks.filter((s) => s.id !== shark.id);
-        checkWaveProgression();
       }
 
       function triggerSonarEmp() {
-        if (state.phase !== 'PLAYING' || state.empCharge < 100) return;
+        if (state.empCharge < 100 || state.phase !== 'PLAYING') return;
 
         state.empCharge = 0;
         sound.playEmp();
-        state.screenShake = 18;
+        state.screenShake = 14;
+        const diverPos = getDiverPosition();
 
-        const diver = getDiverAnchor();
-        const diverObj = DIVERS[state.selectedDiver];
         state.shockwaves.push({
-          x: diver.x,
-          y: diver.y,
+          x: diverPos.x,
+          y: diverPos.y,
           r: 20,
           maxR: Math.max(state.width, state.height) * 1.15,
-          color: diverObj.bright,
-          life: 0.65,
-          maxLife: 0.65
+          alpha: 0.95
         });
 
-        spawnFloatingText(diver.x + 90, diver.y - 45, 'SONAR EMP SHOCKWAVE!', '#67e8f9', 18);
+        pushKeycapToStream('EMP!', false);
 
-        // Destroy standard/armored sharks and strip 1 word from Bosses
-        const survivors = [];
-        for (const s of state.sharks) {
-          if (s.isBoss && s.wordIndex < s.words.length - 1) {
-            s.wordIndex++;
-            s.typedIndex = 0;
-            s.knockbackVx = 190;
-            s.stunTimer = 1.4;
-            spawnExplosion(s.x, s.y, '#38bdf8', 20);
-            survivors.push(s);
+        const diver = DIVERS[state.selectedDiver];
+        const species = SHARK_SPECIES[state.selectedShark];
+        let empKills = 0;
+
+        for (let i = state.sharks.length - 1; i >= 0; i--) {
+          const s = state.sharks[i];
+          if (s.isBoss) {
+            // EMP strips one armor word and stuns bosses
+            if (s.wordIndex < s.words.length - 1) {
+              s.wordIndex += 1;
+              s.typedIndex = 0;
+              s.knockbackVx = 190;
+              s.stunTimer = 1.6;
+              spawnExplosion(s.x, s.y, '#22d3ee', '#fcd34d', 18);
+              spawnFloatingText(s.x, s.y - 30, 'ARMOR SHATTERED!', '#fcd34d', 1.05);
+            } else {
+              s.knockbackVx = 240;
+              s.stunTimer = 2.0;
+            }
           } else {
-            const bonus = 120 * s.words.length;
-            state.score += bonus;
-            state.sharksDefeated++;
-            state.waveKills++;
-            spawnExplosion(s.x, s.y, diverObj.bright, 24);
-            spawnFloatingText(s.x, s.y - 16, `+${bonus}`, '#34d399', 14);
+            empKills += 1;
+            state.sharksDefeated += 1;
+            state.waveKills += 1;
+            const pts = Math.round(120 * diver.scoreMult * species.scoreMult);
+            state.score += pts;
+            spawnExplosion(s.x, s.y, '#22d3ee', '#34d399', 26);
+            spawnFloatingText(s.x, s.y - 18, `+${pts}`, '#67e8f9', 1.0);
+            if (state.lockedSharkId === s.id) {
+              state.lockedSharkId = null;
+            }
+            state.sharks.splice(i, 1);
           }
         }
 
-        state.sharks = survivors;
-        state.lockedSharkId = null;
-        checkWaveProgression();
+        if (empKills > 0) {
+          spawnFloatingText(diverPos.x + 80, diverPos.y - 50, `SONAR EMP OBLITERATED ${empKills} SHARKS!`, '#34d399', 1.15);
+        } else {
+          spawnFloatingText(diverPos.x + 80, diverPos.y - 50, 'SONAR EMP SHOCKWAVE!', '#22d3ee', 1.15);
+        }
+
+        updateTargetWordHud();
+        advanceWaveIfNeeded();
         updateHud();
       }
 
@@ -1533,18 +1608,19 @@
         sound.playDamage();
         state.lives = Math.max(0, state.lives - 1);
         state.combo = 1.0;
-        state.damageFlash = 1.0;
-        state.shieldBubbleAlpha = 0.9;
-        state.screenShake = 16;
+        state.screenShake = 18;
+        state.damageFlash = 0.65;
+        state.shieldBubbleAlpha = 0.85;
 
-        const diver = getDiverAnchor();
-        spawnExplosion(diver.x + 25, diver.y, '#f43f5e', 30);
-        spawnFloatingText(diver.x + 40, diver.y - 38, 'HULL IMPACT! -1 ♥', '#fb7185', 16);
+        const diverPos = getDiverPosition();
+        spawnExplosion(diverPos.x + 20, diverPos.y, '#f43f5e', '#fb923c', 28);
+        spawnFloatingText(diverPos.x + 30, diverPos.y - 38, 'HULL IMPACT! -1 ♥', '#fb7185', 1.15);
 
         if (state.lockedSharkId === shark.id) {
           state.lockedSharkId = null;
         }
         state.sharks = state.sharks.filter((s) => s.id !== shark.id);
+        updateTargetWordHud();
         updateHud();
 
         if (state.lives <= 0) {
@@ -1552,113 +1628,170 @@
         }
       }
 
-      // =========================================================================
-      // 9. KEYBOARD INPUT HANDLING
-      // =========================================================================
-      function charsMatch(typedChar, targetChar, caseSensitive) {
-        if (caseSensitive) return typedChar === targetChar;
-        return typedChar.toLowerCase() === targetChar.toLowerCase();
+      function advanceWaveIfNeeded() {
+        if (state.waveKills < state.killsPerWave) return;
+
+        state.wave += 1;
+        state.waveKills = 0;
+        state.killsPerWave = Math.min(24, 8 + (state.wave - 1) * 2);
+
+        const waveBonus = state.wave * 150;
+        state.score += waveBonus;
+        state.empCharge = Math.min(100, state.empCharge + 20);
+        sound.playWaveUp();
+
+        const meta = getWaveMetadata(state.wave);
+        state.waveBanner = {
+          title: `WAVE ${state.wave}: ${meta.title}`,
+          subtitle: `${meta.badge} • +${waveBonus} PTS & +20% EMP`,
+          timer: 3.1
+        };
+
+        // Deploy immediate escalating vanguard wave (with a Leviathan Boss every 3rd wave)
+        const isMilestoneBossWave = state.wave % 3 === 0;
+        const vanguardCount = Math.min(3, 1 + Math.floor(state.wave / 2));
+        spawnSharkPack(vanguardCount, isMilestoneBossWave);
       }
 
-      function handleTypingCharacter(char) {
+      // =========================================================================
+      // 9. KEYBOARD & TYPING COMBAT HANDLERS
+      // =========================================================================
+      function handleCharacterInput(rawChar) {
         if (state.phase !== 'PLAYING') return;
 
+        state.totalKeystrokes += 1;
         const cfg = DIFFICULTY_CONFIG[state.difficulty];
-        const diverObj = DIVERS[state.selectedDiver];
-        state.totalKeystrokes++;
+        const diver = DIVERS[state.selectedDiver];
+        const species = SHARK_SPECIES[state.selectedShark];
 
-        let targetShark = state.sharks.find((s) => s.id === state.lockedSharkId);
+        const normalize = (ch) => (cfg.caseSensitive ? ch : ch.toLowerCase());
+        const inputNorm = normalize(rawChar);
 
-        // If no shark is locked yet, lock onto the closest shark whose current word starts with `char`
-        if (!targetShark) {
-          let closestDist = Infinity;
+        let target = state.sharks.find((s) => s.id === state.lockedSharkId);
+
+        // If no shark is currently locked, auto-lock the closest shark matching the first letter
+        if (!target) {
+          let bestShark = null;
+          let smallestX = Infinity;
+
           for (const s of state.sharks) {
-            const activeWord = s.words[s.wordIndex];
-            if (activeWord && charsMatch(char, activeWord[0], cfg.caseSensitive)) {
-              if (s.x < closestDist) {
-                closestDist = s.x;
-                targetShark = s;
-              }
+            const currentWord = s.words[s.wordIndex];
+            if (!currentWord) continue;
+            if (normalize(currentWord[0]) === inputNorm && s.x < smallestX) {
+              smallestX = s.x;
+              bestShark = s;
             }
           }
-          if (targetShark) {
-            state.lockedSharkId = targetShark.id;
+
+          if (bestShark) {
+            target = bestShark;
+            state.lockedSharkId = target.id;
           }
         }
 
-        if (!targetShark) {
-          // Missed keystroke (no matching word)
-          sound.playError();
-          state.combo = 1.0;
-          pushKeycapVisual(char, true);
-          updateHud();
-          return;
-        }
+        // Check if character matches the locked target's next expected letter
+        if (target) {
+          const currentWord = target.words[target.wordIndex];
+          const expectedChar = currentWord[target.typedIndex];
 
-        const currentWord = targetShark.words[targetShark.wordIndex];
-        const expectedChar = currentWord[targetShark.typedIndex];
+          if (expectedChar && normalize(expectedChar) === inputNorm) {
+            // Valid keystroke hit!
+            state.correctKeystrokes += 1;
+            target.typedIndex += 1;
+            target.hitFlash = 0.16;
+            target.knockbackVx = Math.max(target.knockbackVx, target.isBoss ? 24 : 52);
+            target.inkCloaked = false;
 
-        if (charsMatch(char, expectedChar, cfg.caseSensitive)) {
-          // Valid hit!
-          sound.playKeystroke();
-          state.correctKeystrokes++;
-          targetShark.typedIndex++;
-          targetShark.hitFlash = 1.0;
-          targetShark.knockbackVx = Math.max(targetShark.knockbackVx, 52);
+            state.combo = Math.min(8.0, Number((state.combo + 0.1).toFixed(1)));
+            state.maxCombo = Math.max(state.maxCombo, state.combo);
+            state.empCharge = Math.min(100, state.empCharge + 4 * diver.empChargeMult);
+            state.diverRecoil = 7;
 
-          // Combo & EMP Charge
-          state.combo = Math.min(8.0, +(state.combo + 0.1).toFixed(1));
-          state.maxCombo = Math.max(state.maxCombo, state.combo);
-          state.empCharge = Math.min(100, state.empCharge + 4.0 * diverObj.empChargeMult);
+            sound.playKeystroke();
+            pushKeycapToStream(rawChar, false);
 
-          pushKeycapVisual(char, false);
+            const diverPos = getDiverPosition();
+            const wordCompleted = target.typedIndex >= currentWord.length;
+            const sharkDefeated = wordCompleted && target.wordIndex >= target.words.length - 1;
 
-          // Check if current word is completed
-          if (targetShark.typedIndex >= currentWord.length) {
-            if (targetShark.wordIndex < targetShark.words.length - 1) {
-              // Armor plate cracked! Advance to next word on this shark
-              targetShark.wordIndex++;
-              targetShark.typedIndex = 0;
-              targetShark.knockbackVx = 125;
-              targetShark.stunTimer = 0.55;
+            sound.playLaser(diver.id, sharkDefeated);
+            spawnPlasmaBolt(diverPos.x, diverPos.y, target, sharkDefeated);
+
+            if (sharkDefeated) {
+              // Full shark elimination
+              state.sharksDefeated += 1;
+              state.waveKills += 1;
+              const basePts = target.isBoss ? 450 : target.isArmored ? 220 : 100;
+              const earnedPts = Math.round(basePts * state.combo * diver.scoreMult * species.scoreMult);
+              state.score += earnedPts;
+
+              sound.playExplosion(target.isBoss);
+              spawnExplosion(
+                target.x,
+                target.y,
+                target.isBoss ? '#f59e0b' : diver.accent,
+                species.finAccent,
+                target.isBoss ? 42 : 24
+              );
+              spawnFloatingText(
+                target.x,
+                target.y - 22,
+                target.isBoss ? `LEVIATHAN SLAIN! +${earnedPts}` : `+${earnedPts}`,
+                target.isBoss ? '#fcd34d' : '#6ee7b7',
+                target.isBoss ? 1.25 : 1.0
+              );
+
+              state.lockedSharkId = null;
+              state.sharks = state.sharks.filter((s) => s.id !== target.id);
+              advanceWaveIfNeeded();
+            } else if (wordCompleted) {
+              // Armor layer cracked on multi-word shark
+              target.wordIndex += 1;
+              target.typedIndex = 0;
+              target.knockbackVx = 120;
               sound.playExplosion(false);
-              spawnPlasmaBolt(targetShark, true);
-              spawnFloatingText(targetShark.x, targetShark.y - 22, 'ARMOR CRACKED!', '#fbbf24', 14);
-            } else {
-              // Shark defeated!
-              spawnPlasmaBolt(targetShark, true);
-              defeatShark(targetShark);
+              spawnExplosion(target.x, target.y, '#fbbf24', '#38bdf8', 16);
+              spawnFloatingText(target.x, target.y - 24, 'ARMOR CRACKED!', '#fcd34d', 0.95);
             }
-          } else {
-            spawnPlasmaBolt(targetShark, false);
-          }
 
-          updateHud();
-        } else {
-          // Typo on locked target
-          sound.playError();
-          state.combo = 1.0;
-          targetShark.errorShake = 1.0;
-          pushKeycapVisual(char, true);
-          updateHud();
+            updateTargetWordHud(false);
+            updateHud();
+            return;
+          }
         }
+
+        // Typo / Miss
+        sound.playError();
+        state.combo = 1.0;
+        if (target) {
+          target.errorShake = 0.25;
+        }
+        pushKeycapToStream(rawChar, true);
+        updateTargetWordHud(true);
+        updateHud();
       }
 
       window.addEventListener('keydown', (e) => {
+        if (state.phase === 'PAUSED') {
+          if (e.key === 'Escape') {
+            e.preventDefault();
+            resumeGame();
+          }
+          return;
+        }
+
         if (state.phase !== 'PLAYING') return;
 
-        // Release target lock with Escape or Tab
         if (e.key === 'Escape' || e.key === 'Tab') {
           e.preventDefault();
           if (state.lockedSharkId !== null) {
             state.lockedSharkId = null;
             sound.playKeystroke();
-            updateHud();
+            updateTargetWordHud(false);
           }
           return;
         }
 
-        // Trigger Sonar EMP with Enter or Space (when not typing a word containing space)
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
           if (state.empCharge >= 100) {
@@ -1667,344 +1800,350 @@
           return;
         }
 
-        // Ignore modifier combos (Ctrl/Cmd/Alt) and non-printable keys
-        if (e.ctrlKey || e.metaKey || e.altKey) return;
-        if (e.key.length === 1) {
+        // Note: Letter 'P' acts purely as a typing character (never opens menu)
+        if (e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
           e.preventDefault();
-          handleTypingCharacter(e.key);
+          handleCharacterInput(e.key);
         }
       });
 
-      // Mobile / virtual keyboard fallback
-      ui.mobileInput.addEventListener('input', (e) => {
-        const val = e.target.value;
-        if (val && val.length > 0) {
-          const lastChar = val[val.length - 1];
-          handleTypingCharacter(lastChar);
-        }
-        e.target.value = '';
-      });
-
-      ui.mobileKeyboardBtn.addEventListener('click', () => {
-        ui.mobileInput.focus();
-      });
-
-      canvas.addEventListener('click', () => {
-        if (state.phase === 'PLAYING' && window.innerWidth < 768) {
+      // Touch-device virtual keyboard bridge
+      if (ui.mobileKeyboardBtn && ui.mobileInput) {
+        ui.mobileKeyboardBtn.addEventListener('click', () => {
           ui.mobileInput.focus();
-        }
-      });
-
-      // =========================================================================
-      // 10. SIMULATION STEP (UPDATE)
-      // =========================================================================
-      function updateSimulation(dt) {
-        state.animTime += dt;
-
-        // Ambient bubbles & caustic light rays always animate
-        for (const b of state.ambientBubbles) {
-          b.y -= b.speed * dt;
-          b.wobble += dt * 2.2;
-          b.x += Math.sin(b.wobble) * 12 * dt;
-          if (b.y < -15) {
-            b.y = state.height + 15;
-            b.x = Math.random() * state.width;
+        });
+        ui.mobileInput.addEventListener('input', (e) => {
+          const val = e.target.value;
+          if (val && val.length > 0) {
+            const lastChar = val[val.length - 1];
+            handleCharacterInput(lastChar);
           }
-        }
-
-        for (const r of state.causticRays) {
-          r.phase += dt * 0.65;
-        }
-
-        if (state.phase !== 'PLAYING') return;
-
-        // Decay visual camera/FX timers
-        if (state.screenShake > 0) state.screenShake = Math.max(0, state.screenShake - dt * 42);
-        if (state.damageFlash > 0) state.damageFlash = Math.max(0, state.damageFlash - dt * 2.2);
-        if (state.shieldBubbleAlpha > 0) state.shieldBubbleAlpha = Math.max(0, state.shieldBubbleAlpha - dt * 1.4);
-        if (state.diverRecoil > 0) state.diverRecoil = Math.max(0, state.diverRecoil - dt * 6.5);
-        if (state.waveBanner) {
-          state.waveBanner.timer -= dt;
-          if (state.waveBanner.timer <= 0) {
-            state.waveBanner = null;
-          }
-        }
-
-        // Spawn sharks up to dynamic wave cap (supports multi-shark packs on higher waves)
-        const cfg = DIFFICULTY_CONFIG[state.difficulty];
-        const effectiveMaxSharks = getEffectiveMaxSharks();
-        state.spawnTimer -= dt;
-        if (state.spawnTimer <= 0 && state.sharks.length < effectiveMaxSharks) {
-          spawnSharkPack();
-          const dynamicInterval = Math.max(
-            cfg.minSpawnInterval,
-            cfg.spawnInterval - (state.wave - 1) * 0.18
-          );
-          state.spawnTimer = dynamicInterval;
-        }
-
-        const diver = getDiverAnchor();
-        const { safeTopY, safeBottomY } = getSafePlayfieldBounds();
-
-        // Update Sharks
-        for (let i = state.sharks.length - 1; i >= 0; i--) {
-          const s = state.sharks[i];
-          s.swimPhase += dt * (s.frenzyActive ? 9.5 : 5.2);
-          if (s.hitFlash > 0) s.hitFlash = Math.max(0, s.hitFlash - dt * 5.0);
-          if (s.errorShake > 0) s.errorShake = Math.max(0, s.errorShake - dt * 5.5);
-
-          // Species-specific tactical AI
-          s.specialTimer -= dt;
-          if (s.speciesId === 'greatwhite' && s.specialTimer <= 0) {
-            s.frenzyActive = !s.frenzyActive;
-            s.specialTimer = s.frenzyActive ? 1.15 : 2.6 + Math.random() * 1.5;
-          } else if (s.speciesId === 'goblin' && s.specialTimer <= 0) {
-            if (s.inkCloaked) {
-              s.inkCloaked = false;
-              s.knockbackVx = -95; // Sudden ambush lunge forward
-              spawnInkCloud(s.x, s.y);
-            }
-            s.specialTimer = 4.5;
-          }
-
-          if (s.stunTimer > 0) {
-            s.stunTimer -= dt;
-          } else {
-            const speedMultiplier = s.frenzyActive ? 1.48 : 1.0;
-            s.x -= s.speed * speedMultiplier * dt;
-          }
-
-          if (Math.abs(s.knockbackVx) > 0.5) {
-            s.x += s.knockbackVx * dt;
-            s.knockbackVx *= Math.pow(0.04, dt);
-          } else {
-            s.knockbackVx = 0;
-          }
-
-          // Vertical wave bobbing strictly clamped inside safe playfield
-          const rawY = s.baseY + Math.sin(s.swimPhase * 0.45) * 14;
-          s.y = Math.max(safeTopY, Math.min(safeBottomY, rawY));
-
-          // Check collision with Diver
-          const hitThresholdX = diver.x + 42 + 28 * s.scale;
-          if (s.x <= hitThresholdX) {
-            damageDiver(s);
-          }
-        }
-
-        // Update Plasma Harpoon Bolts
-        for (let i = state.bolts.length - 1; i >= 0; i--) {
-          state.bolts[i].life -= dt;
-          if (state.bolts[i].life <= 0) {
-            state.bolts.splice(i, 1);
-          }
-        }
-
-        // Update Particles
-        for (let i = state.particles.length - 1; i >= 0; i--) {
-          const p = state.particles[i];
-          p.x += p.vx * dt;
-          p.y += p.vy * dt;
-          p.vx *= 0.94;
-          p.vy *= 0.94;
-          p.life -= dt;
-          if (p.life <= 0) {
-            state.particles.splice(i, 1);
-          }
-        }
-
-        // Update Ink Clouds
-        for (let i = state.inkClouds.length - 1; i >= 0; i--) {
-          const ic = state.inkClouds[i];
-          ic.r += (ic.maxR - ic.r) * dt * 3.0;
-          ic.life -= dt;
-          if (ic.life <= 0) {
-            state.inkClouds.splice(i, 1);
-          }
-        }
-
-        // Update Shockwaves
-        for (let i = state.shockwaves.length - 1; i >= 0; i--) {
-          const sw = state.shockwaves[i];
-          sw.r += (sw.maxR - sw.r) * dt * 4.5;
-          sw.life -= dt;
-          if (sw.life <= 0) {
-            state.shockwaves.splice(i, 1);
-          }
-        }
-
-        // Update Floating Texts
-        for (let i = state.floatingTexts.length - 1; i >= 0; i--) {
-          const ft = state.floatingTexts[i];
-          ft.y -= 34 * dt;
-          ft.life -= dt;
-          if (ft.life <= 0) {
-            state.floatingTexts.splice(i, 1);
-          }
-        }
-
-        // Keep live WPM ticking smoothly
-        updateHud();
+          e.target.value = '';
+        });
       }
 
       // =========================================================================
-      // 11. CUSTOM VECTOR CANVAS RENDERERS (DIVERS, SHARKS, ENVIRONMENT & WORD HUD)
+      // 10. GAME LIFECYCLE CONTROLS (START, RETURN TO MENU, GAME OVER)
       // =========================================================================
-      function drawDiverCharacter(targetCtx, diverId, x, y, scale = 1, recoil = 0, animTime = 0) {
-        const diverObj = DIVERS[diverId] || DIVERS.ace;
+      function startGame() {
+        sound.ensureContext();
+        sound.playKeystroke();
+
+        const diver = DIVERS[state.selectedDiver] || DIVERS.ace;
+        const species = SHARK_SPECIES[state.selectedShark] || SHARK_SPECIES.greatwhite;
+        const cfg = DIFFICULTY_CONFIG[state.difficulty] || DIFFICULTY_CONFIG.easy;
+
+        applyDiverTheme(diver.id);
+
+        state.phase = 'PLAYING';
+        state.wave = 1;
+        state.waveKills = 0;
+        state.killsPerWave = 8;
+        state.score = 0;
+        state.combo = 1.0;
+        state.maxCombo = 1.0;
+        state.maxLives = diver.maxLives;
+        state.lives = diver.maxLives;
+        state.empCharge = 0;
+        state.sharksDefeated = 0;
+        state.correctKeystrokes = 0;
+        state.totalKeystrokes = 0;
+        state.startTimeMs = performance.now();
+        state.pausedAtMs = 0;
+
+        state.sharks = [];
+        state.lockedSharkId = null;
+        state.usedWords.clear();
+        state.spawnTimer = 1.1;
+        state.bolts = [];
+        state.particles = [];
+        state.inkClouds = [];
+        state.floatingTexts = [];
+        state.shockwaves = [];
+        state.screenShake = 0;
+        state.damageFlash = 0;
+        state.shieldBubbleAlpha = 0;
+
+        if (ui.hudDifficultyBadge) ui.hudDifficultyBadge.textContent = cfg.shortLabel;
+        if (ui.hudLoadoutBadge) ui.hudLoadoutBadge.textContent = `${diver.name} vs ${species.name}`;
+        if (ui.keycapStream) {
+          ui.keycapStream.innerHTML = '<span class="text-xs font-mono-code text-slate-500 italic">Awaiting keystrokes...</span>';
+        }
+
+        ui.startScreen.classList.add('hidden');
+        ui.gameOverScreen.classList.add('hidden');
+        ui.menuConfirmModal.classList.add('hidden');
+        ui.topHud.classList.remove('hidden');
+        ui.bottomHud.classList.remove('hidden');
+
+        const meta = getWaveMetadata(1);
+        state.waveBanner = {
+          title: `WAVE 1: ${meta.title}`,
+          subtitle: meta.badge,
+          timer: 2.6
+        };
+
+        spawnSharkPack(2, false);
+        updateTargetWordHud(false);
+        updateHud();
+      }
+
+      function openMenuConfirm() {
+        if (state.phase !== 'PLAYING') return;
+        sound.playKeystroke();
+        state.phase = 'PAUSED';
+        state.pausedAtMs = performance.now();
+        ui.menuConfirmModal.classList.remove('hidden');
+      }
+
+      function resumeGame() {
+        if (state.phase !== 'PAUSED') return;
+        sound.playKeystroke();
+        if (state.pausedAtMs > 0) {
+          state.startTimeMs += performance.now() - state.pausedAtMs;
+          state.pausedAtMs = 0;
+        }
+        ui.menuConfirmModal.classList.add('hidden');
+        state.phase = 'PLAYING';
+      }
+
+      function returnToMenu() {
+        sound.playKeystroke();
+        state.phase = 'MENU';
+        state.pausedAtMs = 0;
+        state.sharks = [];
+        state.bolts = [];
+        state.lockedSharkId = null;
+
+        ui.menuConfirmModal.classList.add('hidden');
+        ui.topHud.classList.add('hidden');
+        ui.bottomHud.classList.add('hidden');
+        ui.gameOverScreen.classList.add('hidden');
+        ui.startScreen.classList.remove('hidden');
+      }
+
+      function endGame() {
+        state.phase = 'GAMEOVER';
+        ui.topHud.classList.add('hidden');
+        ui.bottomHud.classList.add('hidden');
+
+        const diver = DIVERS[state.selectedDiver];
+        const species = SHARK_SPECIES[state.selectedShark];
+        const cfg = DIFFICULTY_CONFIG[state.difficulty];
+
+        const accuracy = state.totalKeystrokes > 0
+          ? Math.round((state.correctKeystrokes / state.totalKeystrokes) * 100)
+          : 100;
+
+        if (ui.reportLoadoutSummary) {
+          ui.reportLoadoutSummary.textContent = `${diver.name} vs ${species.name} • ${cfg.shortLabel}`;
+        }
+        if (ui.statFinalScore) ui.statFinalScore.textContent = Math.floor(state.score).toLocaleString();
+        if (ui.statWave) ui.statWave.textContent = state.wave;
+        if (ui.statSharks) ui.statSharks.textContent = state.sharksDefeated;
+        if (ui.statWpm) ui.statWpm.textContent = calculateNetWpm();
+        if (ui.statAccuracy) ui.statAccuracy.textContent = `${accuracy}%`;
+        if (ui.statMaxCombo) ui.statMaxCombo.textContent = `${state.maxCombo.toFixed(1)}x`;
+
+        ui.gameOverScreen.classList.remove('hidden');
+      }
+
+      // Wire UI Buttons
+      ui.startGameBtn.addEventListener('click', startGame);
+      ui.playAgainBtn.addEventListener('click', startGame);
+      ui.changeLoadoutBtn.addEventListener('click', returnToMenu);
+      ui.hudMenuBtn.addEventListener('click', openMenuConfirm);
+      ui.continueGameBtn.addEventListener('click', resumeGame);
+      ui.confirmHomeBtn.addEventListener('click', returnToMenu);
+      ui.empTriggerBtn.addEventListener('click', triggerSonarEmp);
+
+      ui.muteBtn.addEventListener('click', () => {
+        const isMuted = sound.toggleMute();
+        ui.iconSoundOn.classList.toggle('hidden', isMuted);
+        ui.iconSoundOff.classList.toggle('hidden', !isMuted);
+      });
+
+      // =========================================================================
+      // 11. CANVAS VECTOR ARTWORK (OCEAN, DIVERS, SHARKS & SAFE-ZONE WORD LABELS)
+      // =========================================================================
+      function drawOceanBackground(dt) {
+        const w = state.width;
+        const h = state.height;
+
+        // Deep pelagic gradient
+        const bgGrad = ctx.createLinearGradient(0, 0, 0, h);
+        bgGrad.addColorStop(0, '#041c38');
+        bgGrad.addColorStop(0.45, '#031226');
+        bgGrad.addColorStop(1, '#010712');
+        ctx.fillStyle = bgGrad;
+        ctx.fillRect(0, 0, w, h);
+
+        // Animated surface caustic light shafts
+        ctx.save();
+        for (const ray of state.causticRays) {
+          ray.phase += dt * 0.65;
+          const sway = Math.sin(ray.phase) * 35;
+          const rayGrad = ctx.createLinearGradient(ray.x + sway, 0, ray.x + sway + 90, h * 0.78);
+          rayGrad.addColorStop(0, 'rgba(56, 189, 248, 0.085)');
+          rayGrad.addColorStop(1, 'rgba(56, 189, 248, 0)');
+          ctx.fillStyle = rayGrad;
+          ctx.beginPath();
+          ctx.moveTo(ray.x + sway, 0);
+          ctx.lineTo(ray.x + ray.width + sway, 0);
+          ctx.lineTo(ray.x + ray.width + 150 + sway, h * 0.8);
+          ctx.lineTo(ray.x + 60 + sway, h * 0.8);
+          ctx.closePath();
+          ctx.fill();
+        }
+        ctx.restore();
+
+        // Ambient rising bubbles
+        ctx.save();
+        for (const b of state.ambientBubbles) {
+          b.y -= b.speed * dt;
+          b.wobble += dt * 2.2;
+          if (b.y < -12) {
+            b.y = h + 12;
+            b.x = Math.random() * w;
+          }
+          const bx = b.x + Math.sin(b.wobble) * 6;
+          ctx.strokeStyle = `rgba(186, 230, 253, ${b.alpha})`;
+          ctx.lineWidth = 1.2;
+          ctx.beginPath();
+          ctx.arc(bx, b.y, b.r, 0, Math.PI * 2);
+          ctx.stroke();
+        }
+        ctx.restore();
+      }
+
+      function drawDiverSprite(targetCtx, x, y, time, diverId, scale = 1.0) {
         targetCtx.save();
-        targetCtx.translate(x - recoil * 8, y);
+        targetCtx.translate(x, y);
         targetCtx.scale(scale, scale);
 
-        const kick = Math.sin(animTime * 8) * 6;
+        const finKick = Math.sin(time * 9) * 6;
 
         if (diverId === 'mech') {
-          // Heavy Orange-Gold Atmospheric Mech-Suit Mk.IV
-          // Hydraulic Thruster Legs
-          targetCtx.fillStyle = '#9a3412';
+          // MECH-SUIT MK.IV (Armored Amber Atmospheric Exosuit)
+          // Thruster glow
+          targetCtx.fillStyle = 'rgba(251, 191, 36, 0.45)';
           targetCtx.beginPath();
-          targetCtx.roundRect(-34, -8 + kick * 0.4, 22, 10, 4);
-          targetCtx.roundRect(-34, 4 - kick * 0.4, 22, 10, 4);
+          targetCtx.ellipse(-34, 4, 12 + Math.sin(time * 20) * 3, 6, 0, 0, Math.PI * 2);
           targetCtx.fill();
 
-          // Armored Exosuit Torso
-          const grad = targetCtx.createLinearGradient(-20, -22, 22, 22);
-          grad.addColorStop(0, '#fbbf24');
-          grad.addColorStop(1, '#b45309');
-          targetCtx.fillStyle = grad;
+          // Heavy Armored Torso
+          targetCtx.fillStyle = '#d97706';
           targetCtx.strokeStyle = '#fef3c7';
           targetCtx.lineWidth = 1.8;
           targetCtx.beginPath();
-          targetCtx.roundRect(-22, -20, 42, 38, 12);
+          targetCtx.roundRect(-24, -16, 44, 32, 10);
           targetCtx.fill();
           targetCtx.stroke();
 
-          // Dome Bathysphere Visor
-          targetCtx.fillStyle = '#0f172a';
-          targetCtx.beginPath();
-          targetCtx.arc(10, -4, 12, 0, Math.PI * 2);
-          targetCtx.fill();
+          // Dome Helmet Visor
           targetCtx.fillStyle = '#38bdf8';
           targetCtx.beginPath();
-          targetCtx.arc(12, -5, 8.5, -0.8, 1.4);
+          targetCtx.arc(14, -4, 11, -Math.PI * 0.5, Math.PI * 0.5);
           targetCtx.fill();
 
-          // Heavy Rail-Harpoon Cannon
+          // Rail-Cannon Arm
           targetCtx.fillStyle = '#334155';
-          targetCtx.fillRect(14, 6, 28, 8);
+          targetCtx.fillRect(6, 6, 32, 8);
           targetCtx.fillStyle = '#fbbf24';
-          targetCtx.fillRect(36, 4, 8, 12);
+          targetCtx.fillRect(14, 8, 22, 3);
         } else if (diverId === 'ninja') {
-          // Stealth Cyber-Ninja Freediver
-          // Twin Hydro-Fins
-          targetCtx.fillStyle = '#064e3b';
+          // CYBER-NINJA SUB (Stealth Obsidian & Emerald Hydro-Diver)
+          // Twin Neon Fins
+          targetCtx.fillStyle = '#059669';
           targetCtx.beginPath();
-          targetCtx.moveTo(-24, -4);
-          targetCtx.lineTo(-44, -14 + kick);
+          targetCtx.moveTo(-22, 0);
+          targetCtx.lineTo(-42, -11 + finKick);
+          targetCtx.lineTo(-36, 0);
+          targetCtx.lineTo(-42, 11 + finKick);
+          targetCtx.closePath();
+          targetCtx.fill();
+
+          // Sleek Stealth Body
+          targetCtx.fillStyle = '#0f172a';
+          targetCtx.strokeStyle = '#34d399';
+          targetCtx.lineWidth = 1.8;
+          targetCtx.beginPath();
+          targetCtx.ellipse(0, 0, 26, 11, 0, 0, Math.PI * 2);
+          targetCtx.fill();
+          targetCtx.stroke();
+
+          // Glowing Emerald Cyber Visor
+          targetCtx.fillStyle = '#10b981';
+          targetCtx.beginPath();
+          targetCtx.moveTo(10, -6);
+          targetCtx.lineTo(24, -2);
+          targetCtx.lineTo(12, 3);
+          targetCtx.closePath();
+          targetCtx.fill();
+
+          // Photon Blade Emitter
+          targetCtx.strokeStyle = '#6ee7b7';
+          targetCtx.lineWidth = 3;
+          targetCtx.beginPath();
+          targetCtx.moveTo(14, 7);
+          targetCtx.lineTo(38, 7);
+          targetCtx.stroke();
+        } else {
+          // SCUBA ACE (Classic Cyan/Yellow Deep-Sea Diver)
+          // Flippers
+          targetCtx.fillStyle = '#0284c7';
+          targetCtx.beginPath();
+          targetCtx.moveTo(-24, -2);
+          targetCtx.lineTo(-42, -10 + finKick);
           targetCtx.lineTo(-38, -2);
           targetCtx.closePath();
           targetCtx.fill();
 
           targetCtx.beginPath();
-          targetCtx.moveTo(-24, 6);
-          targetCtx.lineTo(-44, 16 - kick);
+          targetCtx.moveTo(-24, 4);
+          targetCtx.lineTo(-42, 12 - finKick);
           targetCtx.lineTo(-38, 4);
           targetCtx.closePath();
           targetCtx.fill();
 
-          // Sleek Stealth Suit
-          targetCtx.fillStyle = '#0f172a';
-          targetCtx.strokeStyle = '#10b981';
-          targetCtx.lineWidth = 2;
-          targetCtx.beginPath();
-          targetCtx.ellipse(0, 0, 26, 12, 0, 0, Math.PI * 2);
-          targetCtx.fill();
-          targetCtx.stroke();
-
-          // Glowing Emerald Cyber-Visor
-          targetCtx.fillStyle = '#34d399';
-          targetCtx.shadowColor = '#10b981';
-          targetCtx.shadowBlur = 10;
-          targetCtx.beginPath();
-          targetCtx.roundRect(10, -7, 13, 6, 3);
-          targetCtx.fill();
-          targetCtx.shadowBlur = 0;
-
-          // Katana-Harpoon Emitter
-          targetCtx.strokeStyle = '#6ee7b7';
-          targetCtx.lineWidth = 3;
-          targetCtx.beginPath();
-          targetCtx.moveTo(16, 5);
-          targetCtx.lineTo(42, 5);
-          targetCtx.stroke();
-        } else {
-          // Scuba Ace (Default Cyan & Yellow Diver)
-          // Swim Fins
+          // Twin Oxygen Tanks
           targetCtx.fillStyle = '#facc15';
           targetCtx.beginPath();
-          targetCtx.moveTo(-22, -4);
-          targetCtx.lineTo(-42, -13 + kick);
-          targetCtx.lineTo(-36, -1);
-          targetCtx.closePath();
-          targetCtx.fill();
-
-          targetCtx.beginPath();
-          targetCtx.moveTo(-22, 5);
-          targetCtx.lineTo(-42, 14 - kick);
-          targetCtx.lineTo(-36, 2);
-          targetCtx.closePath();
-          targetCtx.fill();
-
-          // Twin Yellow O2 Tanks
-          targetCtx.fillStyle = '#eab308';
-          targetCtx.beginPath();
-          targetCtx.roundRect(-18, -17, 26, 8, 4);
+          targetCtx.roundRect(-18, -14, 24, 8, 4);
           targetCtx.fill();
 
           // Wetsuit Torso
-          targetCtx.fillStyle = '#0284c7';
-          targetCtx.strokeStyle = '#67e8f9';
-          targetCtx.lineWidth = 1.6;
+          targetCtx.fillStyle = '#0f172a';
+          targetCtx.strokeStyle = '#22d3ee';
+          targetCtx.lineWidth = 1.8;
           targetCtx.beginPath();
-          targetCtx.ellipse(0, 1, 24, 11, 0, 0, Math.PI * 2);
+          targetCtx.ellipse(0, 2, 24, 10, 0, 0, Math.PI * 2);
           targetCtx.fill();
           targetCtx.stroke();
 
-          // Diver Helmet & Cyan Visor
-          targetCtx.fillStyle = '#0f172a';
+          // Diver Mask
+          targetCtx.fillStyle = '#67e8f9';
           targetCtx.beginPath();
-          targetCtx.arc(16, -2, 10, 0, Math.PI * 2);
+          targetCtx.arc(18, -1, 7, 0, Math.PI * 2);
           targetCtx.fill();
 
-          targetCtx.fillStyle = '#22d3ee';
-          targetCtx.beginPath();
-          targetCtx.ellipse(19, -2, 6, 5, 0, 0, Math.PI * 2);
-          targetCtx.fill();
-
-          // Plasma Harpoon Rifle
-          targetCtx.fillStyle = '#cbd5e1';
-          targetCtx.fillRect(14, 5, 26, 4.5);
-          targetCtx.fillStyle = diverObj.bright;
-          targetCtx.beginPath();
-          targetCtx.moveTo(40, 3);
-          targetCtx.lineTo(48, 7.2);
-          targetCtx.lineTo(40, 11.5);
-          targetCtx.closePath();
-          targetCtx.fill();
+          // Plasma Harpoon Launcher
+          targetCtx.fillStyle = '#38bdf8';
+          targetCtx.fillRect(10, 6, 26, 5);
         }
 
         targetCtx.restore();
       }
 
-      function drawSharkCharacter(targetCtx, speciesId, x, y, scale = 1, swimPhase = 0, options = {}) {
+      function drawSharkSprite(targetCtx, x, y, time, speciesId, scale = 1.0, options = {}) {
         const sp = SHARK_SPECIES[speciesId] || SHARK_SPECIES.greatwhite;
         const {
+          isArmored = false,
+          isBoss = false,
           isLocked = false,
           hitFlash = 0,
           frenzyActive = false,
-          inkCloaked = false,
-          isArmored = false,
-          isBoss = false
+          inkCloaked = false
         } = options;
 
         targetCtx.save();
@@ -2015,610 +2154,526 @@
           targetCtx.globalAlpha = 0.42;
         }
 
-        const tailSwing = Math.sin(swimPhase) * 12;
-
-        // Target Lock Reticle Aura
+        // Target lock reticle ring behind locked shark
         if (isLocked) {
           targetCtx.save();
-          targetCtx.strokeStyle = '#34d399';
-          targetCtx.lineWidth = 2.2;
-          targetCtx.setLineDash([6, 4]);
+          targetCtx.rotate(time * 1.8);
+          targetCtx.strokeStyle = '#22d3ee';
+          targetCtx.lineWidth = 2;
+          targetCtx.setLineDash([8, 6]);
           targetCtx.beginPath();
-          targetCtx.ellipse(0, 0, 66, 32, 0, 0, Math.PI * 2);
+          targetCtx.arc(0, 0, 44, 0, Math.PI * 2);
           targetCtx.stroke();
           targetCtx.restore();
         }
 
-        // Tail Fin
+        // Frenzy aura glow
+        if (frenzyActive) {
+          targetCtx.shadowColor = '#f43f5e';
+          targetCtx.shadowBlur = 18;
+        }
+
+        const tailWag = Math.sin(time * (frenzyActive ? 16 : 9)) * 9;
+
+        // Caudal Tail Fin (facing left, so tail is on the right +X)
         targetCtx.fillStyle = hitFlash > 0 ? '#ffffff' : sp.bodySecondary;
         targetCtx.beginPath();
-        targetCtx.moveTo(42, 0);
-        targetCtx.lineTo(74, -22 + tailSwing);
-        targetCtx.lineTo(62, 0);
-        targetCtx.lineTo(72, 20 + tailSwing);
+        targetCtx.moveTo(34, 0);
+        targetCtx.lineTo(56, -18 + tailWag);
+        targetCtx.lineTo(48, 0);
+        targetCtx.lineTo(56, 16 + tailWag);
         targetCtx.closePath();
         targetCtx.fill();
 
         // Dorsal Fin
-        targetCtx.fillStyle = hitFlash > 0 ? '#ffffff' : sp.bodySecondary;
+        targetCtx.fillStyle = hitFlash > 0 ? '#ffffff' : sp.finAccent;
         targetCtx.beginPath();
-        targetCtx.moveTo(-6, -15);
-        targetCtx.lineTo(14, -36);
-        targetCtx.lineTo(22, -13);
+        targetCtx.moveTo(-4, -14);
+        targetCtx.lineTo(10, -34);
+        targetCtx.lineTo(18, -13);
         targetCtx.closePath();
         targetCtx.fill();
 
-        // Main Torpedo Body
-        const bodyGrad = targetCtx.createLinearGradient(0, -22, 0, 22);
-        bodyGrad.addColorStop(0, hitFlash > 0 ? '#ffffff' : sp.bodyPrimary);
-        bodyGrad.addColorStop(0.62, hitFlash > 0 ? '#e2e8f0' : sp.bodySecondary);
-        bodyGrad.addColorStop(0.64, sp.belly);
-        bodyGrad.addColorStop(1, sp.belly);
-
-        targetCtx.fillStyle = bodyGrad;
+        // Main Fusiform Shark Body (Snout pointing Left -X)
+        targetCtx.fillStyle = hitFlash > 0 ? '#ffffff' : sp.bodyPrimary;
         targetCtx.beginPath();
         if (speciesId === 'goblin') {
-          // Elongated Goblin Shark Blade Snout
-          targetCtx.moveTo(-68, -3);
-          targetCtx.lineTo(-36, -13);
-          targetCtx.quadraticCurveTo(10, -24, 48, 0);
-          targetCtx.quadraticCurveTo(10, 21, -34, 12);
-          targetCtx.lineTo(-46, 4);
+          // Elongated Goblin Shark Snout
+          targetCtx.moveTo(-58, -3);
+          targetCtx.quadraticCurveTo(-24, -19, 38, -5);
+          targetCtx.lineTo(38, 6);
+          targetCtx.quadraticCurveTo(-18, 20, -44, 6);
+          targetCtx.lineTo(-34, 1);
           targetCtx.closePath();
         } else {
-          targetCtx.moveTo(-54, 0);
-          targetCtx.quadraticCurveTo(-18, -24, 48, 0);
-          targetCtx.quadraticCurveTo(-18, 22, -54, 0);
+          targetCtx.moveTo(-46, 0);
+          targetCtx.quadraticCurveTo(-16, -22, 38, -5);
+          targetCtx.lineTo(38, 6);
+          targetCtx.quadraticCurveTo(-14, 21, -46, 0);
         }
         targetCtx.fill();
 
-        // Cyber Hammerhead Cephalofoil T-Head
+        // Underbelly
+        targetCtx.fillStyle = hitFlash > 0 ? '#f8fafc' : sp.belly;
+        targetCtx.beginPath();
+        targetCtx.moveTo(-40, 2);
+        targetCtx.quadraticCurveTo(-12, 18, 32, 5);
+        targetCtx.quadraticCurveTo(-10, 9, -40, 2);
+        targetCtx.fill();
+
+        // Hammerhead Cephalofoil T-bar
         if (speciesId === 'hammerhead') {
           targetCtx.fillStyle = hitFlash > 0 ? '#ffffff' : sp.finAccent;
           targetCtx.beginPath();
-          targetCtx.roundRect(-56, -18, 16, 36, 5);
+          targetCtx.roundRect(-48, -16, 12, 32, 4);
           targetCtx.fill();
         }
 
-        // Armored Plating / Boss Crown
+        // Cybernetic / Armored Plating for Multi-Word Sharks
         if (isArmored || isBoss) {
-          targetCtx.strokeStyle = isBoss ? '#f43f5e' : '#fbbf24';
-          targetCtx.lineWidth = isBoss ? 3 : 2;
+          targetCtx.fillStyle = isBoss ? 'rgba(245, 158, 11, 0.85)' : 'rgba(148, 163, 184, 0.78)';
+          targetCtx.strokeStyle = isBoss ? '#fef08a' : '#e2e8f0';
+          targetCtx.lineWidth = 1.5;
           targetCtx.beginPath();
-          targetCtx.moveTo(-26, -14);
-          targetCtx.lineTo(18, -14);
-          targetCtx.lineTo(28, 0);
-          targetCtx.stroke();
-        }
-
-        // Pectoral Fin
-        targetCtx.fillStyle = sp.bodySecondary;
-        targetCtx.beginPath();
-        targetCtx.moveTo(-10, 8);
-        targetCtx.lineTo(8, 26);
-        targetCtx.lineTo(16, 9);
-        targetCtx.closePath();
-        targetCtx.fill();
-
-        // Gill Slits
-        targetCtx.strokeStyle = 'rgba(15, 23, 42, 0.55)';
-        targetCtx.lineWidth = 1.8;
-        for (let g = 0; g < 3; g++) {
-          targetCtx.beginPath();
-          targetCtx.moveTo(-16 + g * 5, -5);
-          targetCtx.lineTo(-15 + g * 5, 6);
+          targetCtx.roundRect(-16, -13, 34, 16, 5);
+          targetCtx.fill();
           targetCtx.stroke();
         }
 
         // Glowing Predator Eye
-        targetCtx.fillStyle = frenzyActive ? '#ef4444' : sp.eyeColor;
+        targetCtx.fillStyle = sp.eyeColor;
         targetCtx.beginPath();
-        targetCtx.arc(-34, -5, 3.3, 0, Math.PI * 2);
+        targetCtx.arc(speciesId === 'hammerhead' ? -42 : -28, -4, 3.2, 0, Math.PI * 2);
         targetCtx.fill();
 
-        // Razor Teeth Jaw
-        targetCtx.fillStyle = '#ffffff';
+        // Pectoral Fin
+        targetCtx.fillStyle = sp.bodySecondary;
         targetCtx.beginPath();
-        targetCtx.moveTo(-42, 6);
-        targetCtx.lineTo(-38, 11);
-        targetCtx.lineTo(-34, 6);
-        targetCtx.lineTo(-30, 11);
-        targetCtx.lineTo(-26, 6);
+        targetCtx.moveTo(-8, 8);
+        targetCtx.lineTo(6, 24);
+        targetCtx.lineTo(14, 8);
         targetCtx.closePath();
         targetCtx.fill();
 
         targetCtx.restore();
       }
 
-      // Render Live Animated Previews on the Start Screen Cards
-      function renderCardPreviews(t) {
-        const diverPreviews = [
-          { id: 'ace', el: document.getElementById('previewDiverAce') },
-          { id: 'mech', el: document.getElementById('previewDiverMech') },
-          { id: 'ninja', el: document.getElementById('previewDiverNinja') }
-        ];
+      function drawSharkWordLabels() {
+        const { topHudBottom, bottomHudTop } = getSafePlayfieldBounds();
+        const labelBoxes = [];
 
-        for (const dp of diverPreviews) {
-          if (!dp.el) continue;
-          const pCtx = dp.el.getContext('2d');
-          pCtx.clearRect(0, 0, dp.el.width, dp.el.height);
-          drawDiverCharacter(pCtx, dp.id, 42, 35 + Math.sin(t * 3) * 2.5, 0.85, 0, t);
-        }
-
-        const sharkPreviews = [
-          { id: 'greatwhite', el: document.getElementById('previewSharkWhite') },
-          { id: 'hammerhead', el: document.getElementById('previewSharkHammer') },
-          { id: 'goblin', el: document.getElementById('previewSharkGoblin') }
-        ];
-
-        for (const sp of sharkPreviews) {
-          if (!sp.el) continue;
-          const sCtx = sp.el.getContext('2d');
-          sCtx.clearRect(0, 0, sp.el.width, sp.el.height);
-          drawSharkCharacter(sCtx, sp.id, 44, 36, 0.62, t * 5, {
-            isArmored: sp.id === 'hammerhead'
-          });
-        }
-      }
-
-      // =========================================================================
-      // 12. MAIN OCEAN SCENE & SAFE-CLAMPED WORD PILL RENDERER
-      // =========================================================================
-      function renderScene() {
-        // 1) Deep Ocean Gradient Backdrop
-        const oceanGrad = ctx.createLinearGradient(0, 0, 0, state.height);
-        oceanGrad.addColorStop(0, '#062447');
-        oceanGrad.addColorStop(0.45, '#031329');
-        oceanGrad.addColorStop(1, '#010712');
-        ctx.fillStyle = oceanGrad;
-        ctx.fillRect(0, 0, state.width, state.height);
+        // Sort sharks left-to-right so closest threats claim clean label positions first
+        const sortedSharks = [...state.sharks].sort((a, b) => a.x - b.x);
 
         ctx.save();
-        if (state.screenShake > 0.2) {
-          const sx = (Math.random() - 0.5) * state.screenShake;
-          const sy = (Math.random() - 0.5) * state.screenShake;
-          ctx.translate(sx, sy);
-        }
+        ctx.font = '800 15px "JetBrains Mono", monospace';
+        ctx.textBaseline = 'middle';
 
-        // 2) Sunlit Surface Caustic Rays
-        for (const r of state.causticRays) {
-          const rayAlpha = 0.035 + Math.sin(r.phase) * 0.018;
-          const rayGrad = ctx.createLinearGradient(r.x, 0, r.x + 90, state.height * 0.78);
-          rayGrad.addColorStop(0, `rgba(103, 232, 249, ${Math.max(0, rayAlpha)})`);
-          rayGrad.addColorStop(1, 'rgba(103, 232, 249, 0)');
-          ctx.fillStyle = rayGrad;
+        for (const s of sortedSharks) {
+          const currentWord = s.words[s.wordIndex] || '';
+          const isLocked = s.id === state.lockedSharkId;
+          const remainingWords = s.words.length - s.wordIndex;
+
+          const textWidth = ctx.measureText(currentWord).width;
+          const padX = 14;
+          const pillW = Math.max(58, textWidth + padX * 2 + (isLocked ? 14 : 0));
+          const pillH = remainingWords > 1 ? 34 : 28;
+
+          let labelX = Math.max(pillW * 0.5 + 10, Math.min(state.width - pillW * 0.5 - 10, s.x));
+          let labelY = s.y - (38 * s.scale + 16);
+
+          // Clamp strictly below top scoreboard and above bottom HUD
+          const minAllowedY = topHudBottom + pillH * 0.5 + 14;
+          const maxAllowedY = bottomHudTop - pillH * 0.5 - 14;
+          labelY = Math.max(minAllowedY, Math.min(maxAllowedY, labelY));
+
+          // Resolve vertical overlap with already-placed labels
+          for (let attempt = 0; attempt < 6; attempt++) {
+            const overlap = labelBoxes.find(
+              (box) => Math.abs(box.x - labelX) < (box.w + pillW) * 0.52 && Math.abs(box.y - labelY) < pillH + 6
+            );
+            if (!overlap) break;
+            if (labelY + pillH + 8 <= maxAllowedY) {
+              labelY += pillH + 8;
+            } else if (labelY - pillH - 8 >= minAllowedY) {
+              labelY -= pillH + 8;
+            } else {
+              break;
+            }
+          }
+
+          labelBoxes.push({ x: labelX, y: labelY, w: pillW, h: pillH });
+
+          const shakeX = s.errorShake > 0 ? Math.sin(state.animTime * 65) * 5 : 0;
+          const boxLeft = labelX - pillW * 0.5 + shakeX;
+          const boxTop = labelY - pillH * 0.5;
+
+          // Pill Backdrop
+          ctx.fillStyle = isLocked ? 'rgba(6, 24, 44, 0.96)' : 'rgba(9, 17, 32, 0.90)';
+          ctx.strokeStyle = s.errorShake > 0
+            ? '#f43f5e'
+            : isLocked
+              ? '#22d3ee'
+              : s.isBoss
+                ? '#f59e0b'
+                : 'rgba(148, 163, 184, 0.55)';
+          ctx.lineWidth = isLocked ? 2.2 : 1.5;
+
           ctx.beginPath();
-          ctx.moveTo(r.x, 0);
-          ctx.lineTo(r.x + r.width, 0);
-          ctx.lineTo(r.x + r.width + 160, state.height * 0.85);
-          ctx.lineTo(r.x + 70, state.height * 0.85);
-          ctx.closePath();
+          ctx.roundRect(boxLeft, boxTop, pillW, pillH, 9);
           ctx.fill();
-        }
-
-        // 3) Ambient Rising Bubbles
-        for (const b of state.ambientBubbles) {
-          ctx.strokeStyle = `rgba(186, 230, 253, ${b.alpha})`;
-          ctx.lineWidth = 1.2;
-          ctx.beginPath();
-          ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
           ctx.stroke();
-        }
 
-        // 4) Seabed Silhouette Reef Ridge
-        ctx.fillStyle = '#020917';
-        ctx.beginPath();
-        ctx.moveTo(0, state.height);
-        for (let sx = 0; sx <= state.width + 80; sx += 80) {
-          const ridgeH = 26 + Math.sin(sx * 0.012 + 1.2) * 14 + Math.cos(sx * 0.028) * 8;
-          ctx.lineTo(sx, state.height - ridgeH);
-        }
-        ctx.lineTo(state.width, state.height);
-        ctx.closePath();
-        ctx.fill();
-
-        if (state.phase === 'PLAYING' || state.phase === 'GAMEOVER') {
-          const diver = getDiverAnchor();
-          const diverObj = DIVERS[state.selectedDiver];
-
-          // 5) Draw Player Diver
-          drawDiverCharacter(
-            ctx,
-            state.selectedDiver,
-            diver.x,
-            diver.y,
-            1.15,
-            state.diverRecoil,
-            state.animTime
-          );
-
-          // Protective Hull Shield Pulse on Hit
-          if (state.shieldBubbleAlpha > 0) {
-            ctx.save();
-            ctx.strokeStyle = `rgba(244, 63, 94, ${state.shieldBubbleAlpha})`;
-            ctx.fillStyle = `rgba(244, 63, 94, ${state.shieldBubbleAlpha * 0.18})`;
-            ctx.lineWidth = 2.5;
-            ctx.beginPath();
-            ctx.arc(diver.x + 4, diver.y, 56, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.stroke();
-            ctx.restore();
-          }
-
-          // 6) Draw Plasma Harpoon Bolts
-          for (const bolt of state.bolts) {
-            const alpha = Math.max(0, bolt.life / bolt.maxLife);
-            ctx.save();
-            ctx.globalAlpha = alpha;
-            ctx.strokeStyle = bolt.color;
-            ctx.lineWidth = bolt.isKillShot ? 5 : 3;
-            ctx.shadowColor = bolt.color;
-            ctx.shadowBlur = 14;
-            ctx.beginPath();
-            ctx.moveTo(bolt.x, bolt.y);
-            ctx.lineTo(bolt.targetX, bolt.targetY);
-            ctx.stroke();
-            ctx.restore();
-          }
-
-          // 7) Draw Sharks
-          for (const s of state.sharks) {
-            const isLocked = s.id === state.lockedSharkId;
-            const shakeOffsetX = s.errorShake > 0 ? Math.sin(s.errorShake * 35) * 6 : 0;
-            drawSharkCharacter(ctx, s.speciesId, s.x + shakeOffsetX, s.y, s.scale, s.swimPhase, {
-              isLocked,
-              hitFlash: s.hitFlash,
-              frenzyActive: s.frenzyActive,
-              inkCloaked: s.inkCloaked,
-              isArmored: s.isArmored,
-              isBoss: s.isBoss
-            });
-          }
-
-          // 8) Draw Ink Clouds
-          for (const ic of state.inkClouds) {
-            const alpha = Math.max(0, (ic.life / ic.maxLife) * 0.55);
-            const grad = ctx.createRadialGradient(ic.x, ic.y, 4, ic.x, ic.y, ic.r);
-            grad.addColorStop(0, `rgba(46, 16, 101, ${alpha})`);
-            grad.addColorStop(1, 'rgba(46, 16, 101, 0)');
-            ctx.fillStyle = grad;
-            ctx.beginPath();
-            ctx.arc(ic.x, ic.y, ic.r, 0, Math.PI * 2);
-            ctx.fill();
-          }
-
-          // 9) Draw Safe-Clamped High-Contrast Word Pills Above Every Shark
-          const { topHudBottom, bottomHudTop } = getSafePlayfieldBounds();
-          const pillLayouts = [];
-
-          ctx.font = '800 15px "JetBrains Mono", monospace';
-          for (const s of state.sharks) {
-            const currentWord = s.words[s.wordIndex];
-            const isLocked = s.id === state.lockedSharkId;
-            const hasArmorBadge = s.words.length > 1;
-            const pillH = hasArmorBadge ? 42 : 30;
-            const textW = ctx.measureText(currentWord).width;
-            const pillW = Math.max(76, textW + 34);
-
-            // Clamp vertically so pill NEVER overlaps top scoreboard or bottom HUD
-            const minPillTop = topHudBottom + 12;
-            const maxPillBottom = bottomHudTop - 12;
-            let pillTop = s.y - 34 * s.scale - pillH;
-            pillTop = Math.max(minPillTop, Math.min(maxPillBottom - pillH, pillTop));
-
-            let pillLeft = s.x - pillW * 0.5;
-            pillLeft = Math.max(12, Math.min(state.width - pillW - 12, pillLeft));
-
-            pillLayouts.push({
-              shark: s,
-              isLocked,
-              hasArmorBadge,
-              pillLeft,
-              pillTop,
-              pillW,
-              pillH
-            });
-          }
-
-          // Resolve vertical overlaps between nearby word pills within safe bounds
-          pillLayouts.sort((a, b) => a.pillTop - b.pillTop);
-          for (let i = 1; i < pillLayouts.length; i++) {
-            const prev = pillLayouts[i - 1];
-            const curr = pillLayouts[i];
-            const horizOverlap =
-              curr.pillLeft < prev.pillLeft + prev.pillW + 8 &&
-              curr.pillLeft + curr.pillW + 8 > prev.pillLeft;
-
-            if (horizOverlap && curr.pillTop < prev.pillTop + prev.pillH + 6) {
-              const maxAllowedTop = bottomHudTop - 12 - curr.pillH;
-              curr.pillTop = Math.min(maxAllowedTop, prev.pillTop + prev.pillH + 6);
+          // Armor / Boss Multi-Word Indicator Pips
+          if (remainingWords > 1) {
+            for (let p = 0; p < s.words.length; p++) {
+              const pipActive = p >= s.wordIndex;
+              ctx.fillStyle = pipActive ? (s.isBoss ? '#fbbf24' : '#38bdf8') : '#334155';
+              ctx.fillRect(boxLeft + 10 + p * 14, boxTop + 4, 10, 3);
             }
           }
 
-          // Render the Word Pills (locked target drawn last so it always sits on top)
-          pillLayouts.sort((a, b) => (a.isLocked === b.isLocked ? 0 : a.isLocked ? 1 : -1));
+          let cursorX = boxLeft + padX;
+          const textY = labelY + (remainingWords > 1 ? 3 : 0);
 
-          for (const item of pillLayouts) {
-            const { shark, isLocked, hasArmorBadge, pillLeft, pillTop, pillW, pillH } = item;
-            const word = shark.words[shark.wordIndex];
-            const typed = word.slice(0, shark.typedIndex);
-            const remaining = word.slice(shark.typedIndex);
-
-            ctx.save();
-            ctx.fillStyle = isLocked ? 'rgba(6, 24, 44, 0.96)' : 'rgba(5, 14, 30, 0.90)';
-            ctx.strokeStyle = isLocked
-              ? '#34d399'
-              : shark.isBoss
-                ? '#f43f5e'
-                : shark.isArmored
-                  ? '#fbbf24'
-                  : 'rgba(148, 163, 184, 0.55)';
-            ctx.lineWidth = isLocked ? 2.4 : 1.5;
-
-            if (isLocked) {
-              ctx.shadowColor = 'rgba(52, 211, 153, 0.45)';
-              ctx.shadowBlur = 12;
-            }
-
+          // Target Lock Beacon Dot
+          if (isLocked) {
+            ctx.fillStyle = '#22d3ee';
             ctx.beginPath();
-            ctx.roundRect(pillLeft, pillTop, pillW, pillH, 10);
+            ctx.arc(cursorX + 2, textY, 3.5, 0, Math.PI * 2);
             ctx.fill();
-            ctx.stroke();
-            ctx.shadowBlur = 0;
-
-            // Optional Multi-Word Armor / Boss Indicator Strip
-            let textBaselineY = pillTop + 20;
-            if (hasArmorBadge) {
-              ctx.font = '700 9px "Orbitron", sans-serif';
-              ctx.textAlign = 'center';
-              ctx.fillStyle = shark.isBoss ? '#fda4af' : '#fcd34d';
-              const label = shark.isBoss
-                ? `LEVIATHAN ${shark.wordIndex + 1}/${shark.words.length}`
-                : `ARMOR ${shark.wordIndex + 1}/${shark.words.length}`;
-              ctx.fillText(label, pillLeft + pillW * 0.5, pillTop + 12);
-              textBaselineY = pillTop + 31;
-            }
-
-            // Target Lock Indicator Dot
-            if (isLocked) {
-              ctx.fillStyle = '#34d399';
-              ctx.beginPath();
-              ctx.arc(pillLeft + 10, textBaselineY - 5, 3.2, 0, Math.PI * 2);
-              ctx.fill();
-            }
-
-            // Render Typed Prefix (Emerald) + Remaining Characters (Crisp White)
-            ctx.font = '800 15px "JetBrains Mono", monospace';
-            ctx.textAlign = 'left';
-            const fullW = ctx.measureText(word).width;
-            const startX = pillLeft + (pillW - fullW) * 0.5 + (isLocked ? 3 : 0);
-
-            if (typed.length > 0) {
-              ctx.fillStyle = '#34d399';
-              ctx.fillText(typed, startX, textBaselineY);
-            }
-            const typedW = ctx.measureText(typed).width;
-            ctx.fillStyle = '#ffffff';
-            ctx.fillText(remaining, startX + typedW, textBaselineY);
-            ctx.restore();
+            cursorX += 12;
           }
 
-          // 10) Particles
-          for (const p of state.particles) {
-            const alpha = Math.max(0, p.life / p.maxLife);
-            ctx.save();
-            ctx.globalAlpha = alpha;
-            ctx.fillStyle = p.color;
-            ctx.beginPath();
-            ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.restore();
+          // Typed Prefix (Emerald Green)
+          const typedStr = currentWord.slice(0, s.typedIndex);
+          const untypedStr = currentWord.slice(s.typedIndex);
+
+          if (typedStr.length > 0) {
+            ctx.fillStyle = '#34d399';
+            ctx.fillText(typedStr, cursorX, textY);
+            cursorX += ctx.measureText(typedStr).width;
           }
 
-          // 11) Sonar EMP Shockwaves
-          for (const sw of state.shockwaves) {
-            const alpha = Math.max(0, sw.life / sw.maxLife);
-            ctx.save();
-            ctx.globalAlpha = alpha;
-            ctx.strokeStyle = sw.color;
-            ctx.lineWidth = 6 * alpha;
-            ctx.beginPath();
-            ctx.arc(sw.x, sw.y, sw.r, 0, Math.PI * 2);
-            ctx.stroke();
-            ctx.restore();
-          }
-
-          // 12) Floating Score & Status Popups
-          for (const ft of state.floatingTexts) {
-            const alpha = Math.max(0, ft.life / ft.maxLife);
-            ctx.save();
-            ctx.globalAlpha = alpha;
-            ctx.font = `800 ${ft.size}px "Orbitron", sans-serif`;
-            ctx.textAlign = 'center';
-            ctx.fillStyle = ft.color;
-            ctx.shadowColor = 'rgba(0, 0, 0, 0.85)';
-            ctx.shadowBlur = 6;
-            ctx.fillText(ft.text, ft.x, ft.y);
-            ctx.restore();
-          }
-
-          // 13) Wave Transition Banner (Safe-positioned below top scoreboard)
-          if (state.waveBanner) {
-            const wb = state.waveBanner;
-            const progress = wb.timer / wb.maxTimer;
-            const alpha = progress > 0.85
-              ? (1 - progress) / 0.15
-              : progress < 0.2
-                ? progress / 0.2
-                : 1;
-            const bannerY = topHudBottom + 36;
-
-            ctx.save();
-            ctx.globalAlpha = Math.max(0, Math.min(1, alpha));
-            ctx.textAlign = 'center';
-
-            const pillW = Math.min(state.width - 32, 460);
-            const pillH = 54;
-            ctx.fillStyle = 'rgba(4, 14, 30, 0.88)';
-            ctx.strokeStyle = diverObj.bright;
-            ctx.lineWidth = 2;
-            ctx.shadowColor = diverObj.accent;
-            ctx.shadowBlur = 18;
-            ctx.beginPath();
-            ctx.roundRect(state.width * 0.5 - pillW * 0.5, bannerY - 22, pillW, pillH, 14);
-            ctx.fill();
-            ctx.stroke();
-
-            ctx.shadowBlur = 0;
-            ctx.font = '900 18px "Orbitron", sans-serif';
-            ctx.fillStyle = '#ffffff';
-            ctx.fillText(wb.title, state.width * 0.5, bannerY - 2);
-
-            ctx.font = '700 11px "JetBrains Mono", monospace';
-            ctx.fillStyle = diverObj.bright;
-            ctx.fillText(wb.subtitle, state.width * 0.5, bannerY + 18);
-            ctx.restore();
-          }
-        }
-
-        // Red Hull Breach Screen Flash
-        if (state.damageFlash > 0) {
-          ctx.fillStyle = `rgba(225, 29, 72, ${state.damageFlash * 0.28})`;
-          ctx.fillRect(0, 0, state.width, state.height);
+          // Remaining Letters (Crisp High-Contrast White)
+          ctx.fillStyle = '#f8fafc';
+          ctx.fillText(untypedStr, cursorX, textY);
         }
 
         ctx.restore();
       }
 
-      // =========================================================================
-      // 13. GAME LIFECYCLE (START, GAME OVER & MAIN LOOP)
-      // =========================================================================
-      function startGame() {
-        sound.ensureContext();
-        sound.playWaveUp();
+      function drawBoltsParticlesAndEffects(dt) {
+        // 1. Plasma Bolts / Rail Beams / Photon Blades
+        for (let i = state.bolts.length - 1; i >= 0; i--) {
+          const b = state.bolts[i];
+          const target = state.sharks.find((s) => s.id === b.targetId);
+          if (target) {
+            b.targetX = target.x;
+            b.targetY = target.y;
+          }
 
-        const diverObj = DIVERS[state.selectedDiver];
-        const speciesObj = SHARK_SPECIES[state.selectedShark];
-        const diffObj = DIFFICULTY_CONFIG[state.difficulty];
+          const dx = b.targetX - b.x;
+          const dy = b.targetY - b.y;
+          const dist = Math.hypot(dx, dy);
 
-        applyDiverTheme(state.selectedDiver);
+          if (dist < 28 || b.life <= 0) {
+            spawnExplosion(b.targetX, b.targetY, b.color, '#ffffff', 6);
+            state.bolts.splice(i, 1);
+            continue;
+          }
 
-        state.phase = 'PLAYING';
-        state.wave = 1;
-        state.waveKills = 0;
-        state.killsPerWave = 8;
-        state.score = 0;
-        state.combo = 1.0;
-        state.maxCombo = 1.0;
-        state.maxLives = diverObj.maxLives;
-        state.lives = diverObj.maxLives;
-        state.empCharge = 0;
+          const step = b.speed * dt;
+          b.x += (dx / dist) * step;
+          b.y += (dy / dist) * step;
+          b.life -= dt * 1.4;
 
-        state.sharksDefeated = 0;
-        state.correctKeystrokes = 0;
-        state.totalKeystrokes = 0;
-        state.startTimeMs = performance.now();
-
-        state.sharks = [];
-        state.lockedSharkId = null;
-        state.bolts = [];
-        state.particles = [];
-        state.inkClouds = [];
-        state.floatingTexts = [];
-        state.shockwaves = [];
-        state.waveBanner = null;
-        state.usedWords.clear();
-        state.spawnTimer = 0.9;
-
-        ui.hudDifficultyBadge.textContent = diffObj.shortLabel;
-        ui.hudLoadoutBadge.textContent = `${diverObj.name} vs ${speciesObj.name}`;
-        ui.keycapStream.innerHTML = `<span class="text-xs font-mono-code text-slate-500 italic">Awaiting keystrokes...</span>`;
-
-        ui.startScreen.classList.add('hidden');
-        ui.gameOverScreen.classList.add('hidden');
-        ui.topHud.classList.remove('hidden');
-        ui.bottomHud.classList.remove('hidden');
-
-        // Spawn initial vanguard sharks after HUD layout settles
-        requestAnimationFrame(() => {
-          spawnShark(false, 0, 0.32);
-          spawnShark(false, 120, 0.68);
-          updateHud();
-        });
-      }
-
-      function endGame() {
-        state.phase = 'GAMEOVER';
-        const diverObj = DIVERS[state.selectedDiver];
-        const speciesObj = SHARK_SPECIES[state.selectedShark];
-        const diffObj = DIFFICULTY_CONFIG[state.difficulty];
-
-        const accuracy = state.totalKeystrokes > 0
-          ? Math.round((state.correctKeystrokes / state.totalKeystrokes) * 100)
-          : 100;
-
-        ui.reportLoadoutSummary.textContent = `${diverObj.name} vs ${speciesObj.name} • ${diffObj.label}`;
-        ui.statFinalScore.textContent = Math.floor(state.score).toLocaleString();
-        ui.statWave.textContent = state.wave;
-        ui.statSharks.textContent = state.sharksDefeated;
-        ui.statWpm.textContent = calculateNetWpm();
-        ui.statAccuracy.textContent = `${accuracy}%`;
-        ui.statMaxCombo.textContent = `${state.maxCombo.toFixed(1)}x`;
-
-        ui.topHud.classList.add('hidden');
-        ui.bottomHud.classList.add('hidden');
-        ui.gameOverScreen.classList.remove('hidden');
-      }
-
-      // Wire UI Buttons
-      ui.startGameBtn.addEventListener('click', startGame);
-      ui.playAgainBtn.addEventListener('click', startGame);
-      ui.changeLoadoutBtn.addEventListener('click', () => {
-        sound.playKeystroke();
-        state.phase = 'MENU';
-        ui.gameOverScreen.classList.add('hidden');
-        ui.startScreen.classList.remove('hidden');
-      });
-
-      ui.empTriggerBtn.addEventListener('click', () => {
-        if (state.empCharge >= 100) {
-          triggerSonarEmp();
+          ctx.save();
+          ctx.strokeStyle = b.color;
+          ctx.shadowColor = b.color;
+          ctx.shadowBlur = 12;
+          ctx.lineWidth = b.diverId === 'mech' ? 5 : 3.5;
+          ctx.beginPath();
+          ctx.moveTo(b.x, b.y);
+          ctx.lineTo(b.x - (dx / dist) * 24, b.y - (dy / dist) * 24);
+          ctx.stroke();
+          ctx.restore();
         }
-      });
 
-      ui.muteBtn.addEventListener('click', () => {
-        const isMuted = sound.toggleMute();
-        ui.iconSoundOn.classList.toggle('hidden', isMuted);
-        ui.iconSoundOff.classList.toggle('hidden', !isMuted);
-      });
+        // 2. Ink Clouds
+        for (let i = state.inkClouds.length - 1; i >= 0; i--) {
+          const cloud = state.inkClouds[i];
+          cloud.r += (cloud.maxR - cloud.r) * dt * 2.2;
+          cloud.alpha -= dt * 0.28;
+          if (cloud.alpha <= 0) {
+            state.inkClouds.splice(i, 1);
+            continue;
+          }
+          ctx.save();
+          ctx.fillStyle = `rgba(30, 10, 45, ${cloud.alpha})`;
+          ctx.beginPath();
+          ctx.arc(cloud.x, cloud.y, cloud.r, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        }
 
-      // Main Animation Loop
-      let lastTimestamp = performance.now();
-      function gameLoop(now) {
-        const dt = Math.min(0.05, Math.max(0.001, (now - lastTimestamp) / 1000));
-        lastTimestamp = now;
+        // 3. Explosion Particles
+        for (let i = state.particles.length - 1; i >= 0; i--) {
+          const p = state.particles[i];
+          p.x += p.vx * dt;
+          p.y += p.vy * dt;
+          p.vx *= 0.95;
+          p.vy *= 0.95;
+          p.alpha -= p.decay * dt;
+          if (p.alpha <= 0) {
+            state.particles.splice(i, 1);
+            continue;
+          }
+          ctx.save();
+          ctx.globalAlpha = Math.max(0, p.alpha);
+          ctx.fillStyle = p.color;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.restore();
+        }
+
+        // 4. Sonar EMP Shockwaves
+        for (let i = state.shockwaves.length - 1; i >= 0; i--) {
+          const sw = state.shockwaves[i];
+          sw.r += 950 * dt;
+          sw.alpha -= dt * 1.15;
+          if (sw.alpha <= 0 || sw.r >= sw.maxR) {
+            state.shockwaves.splice(i, 1);
+            continue;
+          }
+          ctx.save();
+          ctx.strokeStyle = `rgba(34, 211, 238, ${sw.alpha})`;
+          ctx.lineWidth = 6;
+          ctx.beginPath();
+          ctx.arc(sw.x, sw.y, sw.r, 0, Math.PI * 2);
+          ctx.stroke();
+          ctx.restore();
+        }
+
+        // 5. Floating Combat Text
+        for (let i = state.floatingTexts.length - 1; i >= 0; i--) {
+          const ft = state.floatingTexts[i];
+          ft.y += ft.vy * dt;
+          ft.alpha -= dt * 0.95;
+          if (ft.alpha <= 0) {
+            state.floatingTexts.splice(i, 1);
+            continue;
+          }
+          ctx.save();
+          ctx.globalAlpha = Math.max(0, ft.alpha);
+          ctx.font = `900 ${Math.round(14 * ft.scale)}px "Orbitron", sans-serif`;
+          ctx.textAlign = 'center';
+          ctx.fillStyle = ft.color;
+          ctx.fillText(ft.text, ft.x, ft.y);
+          ctx.restore();
+        }
+
+        // 6. Wave Announcement Banner
+        if (state.waveBanner && state.waveBanner.timer > 0) {
+          state.waveBanner.timer -= dt;
+          const alpha = Math.min(1, state.waveBanner.timer * 1.5);
+          const { safeTopY, safeBottomY } = getSafePlayfieldBounds();
+          const bannerY = safeTopY + (safeBottomY - safeTopY) * 0.25;
+
+          ctx.save();
+          ctx.globalAlpha = alpha;
+          ctx.textAlign = 'center';
+          ctx.font = '900 24px "Orbitron", sans-serif';
+          ctx.fillStyle = '#22d3ee';
+          ctx.fillText(state.waveBanner.title, state.width * 0.5, bannerY);
+          ctx.font = '700 12px "JetBrains Mono", monospace';
+          ctx.fillStyle = '#cbd5e1';
+          ctx.fillText(state.waveBanner.subtitle, state.width * 0.5, bannerY + 22);
+          ctx.restore();
+        }
+
+        // 7. Damage Red Vignette
+        if (state.damageFlash > 0) {
+          state.damageFlash = Math.max(0, state.damageFlash - dt * 1.6);
+          ctx.save();
+          ctx.fillStyle = `rgba(225, 29, 72, ${state.damageFlash * 0.35})`;
+          ctx.fillRect(0, 0, state.width, state.height);
+          ctx.restore();
+        }
+      }
+
+      // Render animated mini previews on the Start Screen loadout cards
+      function renderLoadoutPreviews(time) {
+        const previewConfigs = [
+          { id: 'previewDiverAce', type: 'diver', key: 'ace' },
+          { id: 'previewDiverMech', type: 'diver', key: 'mech' },
+          { id: 'previewDiverNinja', type: 'diver', key: 'ninja' },
+          { id: 'previewSharkWhite', type: 'shark', key: 'greatwhite' },
+          { id: 'previewSharkHammer', type: 'shark', key: 'hammerhead' },
+          { id: 'previewSharkGoblin', type: 'shark', key: 'goblin' }
+        ];
+
+        for (const item of previewConfigs) {
+          const pCanvas = document.getElementById(item.id);
+          if (!pCanvas) continue;
+          const pCtx = pCanvas.getContext('2d');
+          pCtx.clearRect(0, 0, pCanvas.width, pCanvas.height);
+
+          const bobY = pCanvas.height * 0.5 + Math.sin(time * 3.2) * 2.5;
+          if (item.type === 'diver') {
+            drawDiverSprite(pCtx, pCanvas.width * 0.48, bobY, time, item.key, 0.85);
+          } else {
+            drawSharkSprite(pCtx, pCanvas.width * 0.52, bobY, time, item.key, 0.68, {
+              isArmored: item.key === 'hammerhead'
+            });
+          }
+        }
+      }
+
+      // =========================================================================
+      // 12. MAIN SIMULATION LOOP & INITIALIZATION
+      // =========================================================================
+      function updateSimulation(dt) {
+        if (state.phase === 'PAUSED') return;
+
+        state.animTime += dt;
+
+        if (state.screenShake > 0) {
+          state.screenShake = Math.max(0, state.screenShake - dt * 38);
+        }
+        if (state.diverRecoil > 0) {
+          state.diverRecoil = Math.max(0, state.diverRecoil - dt * 42);
+        }
+        if (state.shieldBubbleAlpha > 0) {
+          state.shieldBubbleAlpha = Math.max(0, state.shieldBubbleAlpha - dt * 1.2);
+        }
+
+        if (state.phase !== 'PLAYING') return;
+
+        // Escalating wave spawn timer
+        const cfg = DIFFICULTY_CONFIG[state.difficulty];
+        const currentSpawnInterval = Math.max(
+          cfg.minSpawnInterval,
+          cfg.spawnInterval - (state.wave - 1) * 0.12
+        );
+
+        state.spawnTimer -= dt;
+        if (state.spawnTimer <= 0 || state.sharks.length === 0) {
+          spawnSharkPack();
+          state.spawnTimer = currentSpawnInterval;
+        }
+
+        const { safeTopY, safeBottomY } = getSafePlayfieldBounds();
+        const diverPos = getDiverPosition();
+
+        for (let i = state.sharks.length - 1; i >= 0; i--) {
+          const s = state.sharks[i];
+          s.swimPhase += dt * 3.2;
+
+          if (s.hitFlash > 0) s.hitFlash = Math.max(0, s.hitFlash - dt);
+          if (s.errorShake > 0) s.errorShake = Math.max(0, s.errorShake - dt);
+
+          // Species-specific tactical AI behaviors
+          s.specialTimer -= dt;
+          if (s.specialTimer <= 0) {
+            if (s.speciesId === 'greatwhite') {
+              s.frenzyActive = !s.frenzyActive;
+              s.specialTimer = s.frenzyActive ? 1.35 : 2.6;
+            } else if (s.speciesId === 'goblin') {
+              s.knockbackVx = -145; // Sudden abyssal ambush lunge
+              spawnInkCloud(s.x, s.y);
+              s.specialTimer = 3.4;
+            } else {
+              s.specialTimer = 3.0;
+            }
+          }
+
+          if (s.stunTimer > 0) {
+            s.stunTimer -= dt;
+          } else {
+            const frenzyMult = s.frenzyActive ? 1.48 : 1.0;
+            s.x -= s.speed * frenzyMult * dt;
+          }
+
+          if (Math.abs(s.knockbackVx) > 0.5) {
+            s.x += s.knockbackVx * dt;
+            s.knockbackVx *= 0.88;
+          }
+
+          // Vertical bobbing clamped strictly inside safe playfield bounds
+          const rawY = s.baseY + Math.sin(s.swimPhase) * 14;
+          s.y = Math.max(safeTopY, Math.min(safeBottomY, rawY));
+
+          // Check collision with Diver
+          if (s.x - 36 * s.scale <= diverPos.x + 24) {
+            damageDiver(s);
+          }
+        }
+      }
+
+      let lastFrameTime = 0;
+      function gameLoop(timestamp) {
+        if (!lastFrameTime) lastFrameTime = timestamp;
+        const dt = Math.min(0.05, (timestamp - lastFrameTime) / 1000);
+        lastFrameTime = timestamp;
 
         updateSimulation(dt);
-        renderScene();
 
-        if (state.phase === 'MENU') {
-          renderCardPreviews(now / 1000);
+        ctx.save();
+        if (state.screenShake > 0) {
+          const sx = (Math.random() - 0.5) * state.screenShake;
+          const sy = (Math.random() - 0.5) * state.screenShake;
+          ctx.translate(sx, sy);
         }
 
+        drawOceanBackground(dt);
+
+        if (state.phase === 'PLAYING' || state.phase === 'PAUSED') {
+          const diverPos = getDiverPosition();
+          drawDiverSprite(ctx, diverPos.x, diverPos.y, state.animTime, state.selectedDiver, 1.05);
+
+          // Protective hull impact shield bubble
+          if (state.shieldBubbleAlpha > 0) {
+            ctx.save();
+            ctx.strokeStyle = `rgba(56, 189, 248, ${state.shieldBubbleAlpha})`;
+            ctx.fillStyle = `rgba(56, 189, 248, ${state.shieldBubbleAlpha * 0.18})`;
+            ctx.lineWidth = 2.5;
+            ctx.beginPath();
+            ctx.arc(diverPos.x, diverPos.y, 46, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.stroke();
+            ctx.restore();
+          }
+
+          for (const s of state.sharks) {
+            drawSharkSprite(ctx, s.x, s.y, state.animTime, s.speciesId, s.scale, {
+              isArmored: s.isArmored,
+              isBoss: s.isBoss,
+              isLocked: s.id === state.lockedSharkId,
+              hitFlash: s.hitFlash,
+              frenzyActive: s.frenzyActive,
+              inkCloaked: s.inkCloaked
+            });
+          }
+
+          drawBoltsParticlesAndEffects(dt);
+          drawSharkWordLabels();
+        } else if (state.phase === 'MENU') {
+          renderLoadoutPreviews(state.animTime);
+        }
+
+        ctx.restore();
         requestAnimationFrame(gameLoop);
       }
 
-      window.addEventListener('resize', () => {
-        resizeCanvas();
-      });
+      window.addEventListener('resize', resizeCanvas);
 
       window.onload = function () {
         resizeCanvas();
         initAmbientOcean();
         setupSelectionCards();
         applyDiverTheme(state.selectedDiver);
-        renderCardPreviews(0);
-        lastTimestamp = performance.now();
         requestAnimationFrame(gameLoop);
       };
     })();
